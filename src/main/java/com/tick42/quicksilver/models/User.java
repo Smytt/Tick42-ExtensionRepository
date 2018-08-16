@@ -1,9 +1,8 @@
 package com.tick42.quicksilver.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +11,15 @@ import java.util.List;
 public class User {
 
     @Id
+    @Column(name = "username")
     private String username;
 
     @OneToMany(mappedBy = "owner")
     private List<Extension> extensions = new ArrayList<>();
+
+    @Column(name = "enabled", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean isActive = true;
 
     public User() {
 
