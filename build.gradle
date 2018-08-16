@@ -31,6 +31,7 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
 
+
 	compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.2'
 	compile group: 'org.springframework', name: 'spring-jdbc', version: '5.0.8.RELEASE'
 	compile group: 'org.hibernate', name: 'hibernate-gradle-plugin', version: '5.3.5.Final'
