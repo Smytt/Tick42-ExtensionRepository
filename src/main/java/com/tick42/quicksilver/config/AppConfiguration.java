@@ -53,7 +53,7 @@ public class AppConfiguration {
 
         return securityDataSource;
     }
-    
+
     @Bean
     public UserDetailsManager userDetailsManager() {
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
