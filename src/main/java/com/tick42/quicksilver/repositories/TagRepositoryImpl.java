@@ -64,6 +64,17 @@ public class TagRepositoryImpl implements GenericRepository<Tag> {
 
     @Override
     public Tag findById(int id) {
-        return null;
+        Tag tag = null;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            tag = (Tag) session
+                    .createQuery("from Tags where id = :id")
+                    .setParameter("id", id)
+                    .list().get(0);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return tag;
     }
 }
