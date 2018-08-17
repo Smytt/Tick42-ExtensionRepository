@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public class TagRepositoryImpl implements GenericRepository<Tag> {
+
     private final SessionFactory sessionFactory;
 
     @Autowired
@@ -20,24 +21,22 @@ public class TagRepositoryImpl implements GenericRepository<Tag> {
 
     @Override
     public void create(Tag model) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.save(model);
             session.getTransaction().commit();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     @Override
     public void update(int id, Tag model) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.update(model);
             session.getTransaction().commit();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }

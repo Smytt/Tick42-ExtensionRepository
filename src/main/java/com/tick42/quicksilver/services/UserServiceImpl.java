@@ -9,16 +9,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
-private final GenericRepository<User> userRepository;
 
-@Autowired
-    public UserServiceImpl(UserRepositoryImpl genericRepository){
-    this.userRepository = genericRepository;
-}
+    private final GenericRepository<User> userRepository;
+
+    @Autowired
+    public UserServiceImpl(UserRepositoryImpl genericRepository) {
+        this.userRepository = genericRepository;
+    }
 
     @Override
     public void create(User user) {
-         userRepository.create(user);
+        userRepository.create(user);
     }
 
     @Override

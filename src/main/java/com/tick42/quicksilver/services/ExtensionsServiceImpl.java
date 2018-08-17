@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ExtensionsServiceImpl implements ExtensionService {
-private final GenericRepository<Extension> extensionRepository;
+
+    private final GenericRepository<Extension> extensionRepository;
 
     @Autowired
-    public ExtensionsServiceImpl(ExtensionRepositoryImpl genericRepository){
+    public ExtensionsServiceImpl(ExtensionRepositoryImpl genericRepository) {
         this.extensionRepository = genericRepository;
     }
 

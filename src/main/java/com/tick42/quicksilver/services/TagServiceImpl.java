@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TagServiceImpl implements TagService {
+
     private final GenericRepository<Tag> tagRepository;
 
     @Autowired
