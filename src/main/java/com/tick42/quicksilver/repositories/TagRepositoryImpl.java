@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -48,7 +49,17 @@ public class TagRepositoryImpl implements GenericRepository<Tag> {
 
     @Override
     public List<Tag> findAll() {
-        return null;
+        List<Tag> tags = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            tags = session
+                    .createQuery("from Tags")
+                    .list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return tags;
     }
 
     @Override
