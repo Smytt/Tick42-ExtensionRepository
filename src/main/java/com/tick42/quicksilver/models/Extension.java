@@ -1,5 +1,7 @@
 package com.tick42.quicksilver.models;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,10 @@ public class Extension {
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;
+
+    @Column(name = "is_pending", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean isPending = true;
 
 
     public Extension() {
@@ -117,5 +123,11 @@ public class Extension {
         this.owner = owner;
     }
 
-    
+    public boolean isPending() {
+        return isPending;
+    }
+
+    public void setPending(boolean pending) {
+        isPending = pending;
+    }
 }
