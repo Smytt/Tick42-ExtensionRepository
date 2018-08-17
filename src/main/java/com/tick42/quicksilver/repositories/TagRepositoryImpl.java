@@ -1,5 +1,6 @@
 package com.tick42.quicksilver.repositories;
 
+import com.tick42.quicksilver.models.Tag;
 import com.tick42.quicksilver.repositories.base.GenericRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,23 +10,36 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class RepositoryImpl<T> implements GenericRepository<T> {
+public class TagRepositoryImpl implements GenericRepository<Tag> {
     private final SessionFactory sessionFactory;
 
     @Autowired
-    public RepositoryImpl(SessionFactory sessionFactory) {
+    public TagRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-
     @Override
-    public void create(T model) {
-
+    public void create(Tag model) {
+        try(Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.save(model);
+            session.getTransaction().commit();
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
-    public void update(int id, T model) {
-
+    public void update(int id, Tag model) {
+        try(Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(model);
+            session.getTransaction().commit();
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
@@ -34,17 +48,12 @@ public class RepositoryImpl<T> implements GenericRepository<T> {
     }
 
     @Override
-    public List<T> findAll() {
+    public List<Tag> findAll() {
         return null;
     }
 
     @Override
-    public T findById(int id) {
-        T model = null;
-        try(Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            model = session.get(Class<T>, id);
-            session.getTransaction().commit();
-        }
+    public Tag findById(int id) {
+        return null;
     }
 }

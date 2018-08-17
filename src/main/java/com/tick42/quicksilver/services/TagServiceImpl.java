@@ -1,4 +1,6 @@
 package com.tick42.quicksilver.services;
 
-public class TagServiceImpl {
+import com.tick42.quicksilver.services.base.TagService;
+
+public class TagServiceImpl implements TagService {
 }

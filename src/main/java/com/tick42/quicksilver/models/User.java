@@ -17,7 +17,7 @@ public class User {
     @OneToMany(mappedBy = "owner")
     private List<Extension> extensions = new ArrayList<>();
 
-    @Column(name = "enabled", nullable = false) 
+    @Column(name = "enabled", nullable = false)
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean isActive = true;
 

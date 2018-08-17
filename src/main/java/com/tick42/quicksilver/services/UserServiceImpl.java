@@ -1,4 +1,6 @@
 package com.tick42.quicksilver.services;
 
-public class UserServiceImpl {
+import com.tick42.quicksilver.services.base.UserService;
+
+public class UserServiceImpl implements UserService {
 }

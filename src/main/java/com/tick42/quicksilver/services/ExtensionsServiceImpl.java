@@ -1,4 +1,6 @@
 package com.tick42.quicksilver.services;
 
-public class ExtensionsServiceImpl {
+import com.tick42.quicksilver.services.base.ExtensionService;
+
+public class ExtensionsServiceImpl implements ExtensionService {
 }
