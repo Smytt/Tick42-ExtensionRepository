@@ -8,7 +8,7 @@ import java.util.List;
 public class ExtensionRepositoryImpl implements GenericRepository<Extension> {
     @Override
     public void create(Extension model) {
-        
+
     }
 
     @Override
