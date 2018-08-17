@@ -17,6 +17,8 @@ import java.util.List;
 public class User {
 
     @Id
+    private int id;
+
     @NotNull(message="is required")
     @Size(min=1, message="is required")
     @Column(name = "username")
@@ -65,5 +67,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }
