@@ -1,7 +1,13 @@
 package com.tick42.quicksilver.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +17,15 @@ import java.util.List;
 public class User {
 
     @Id
+    @NotNull(message="is required")
+    @Size(min=1, message="is required")
     @Column(name = "username")
     private String username;
+
+    @NotNull(message="is required")
+    @Size(min=1, message="is required")
+    @JsonIgnore
+    private String password;
 
     @OneToMany(mappedBy = "owner")
     private List<Extension> extensions = new ArrayList<>();
@@ -23,6 +36,11 @@ public class User {
 
     public User() {
 
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     public String getUsername() {
@@ -39,5 +57,13 @@ public class User {
 
     public void setExtensions(List<Extension> extensions) {
         this.extensions = extensions;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
