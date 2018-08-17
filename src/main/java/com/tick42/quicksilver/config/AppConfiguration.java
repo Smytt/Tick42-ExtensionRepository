@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
@@ -37,4 +39,11 @@ public class AppConfiguration {
 
         return securityDataSource;
     }
+    @Bean
+    public UserDetailsManager userDetailsManager() {
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
+        jdbcUserDetailsManager.setDataSource(securityDataSource());
+        return jdbcUserDetailsManager;
+    }
+
 }
