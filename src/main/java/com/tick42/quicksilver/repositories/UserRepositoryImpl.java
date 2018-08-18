@@ -22,10 +22,10 @@ public class UserRepositoryImpl implements GenericRepository<User> {
     }
 
     @Override
-    public void create(User model) {
+    public void create(User user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.save(model);
+            session.save(user);
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -33,10 +33,10 @@ public class UserRepositoryImpl implements GenericRepository<User> {
     }
 
     @Override
-    public void update(int id, User model) {
+    public void update(User user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(model);
+            session.update(user);
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -45,12 +45,10 @@ public class UserRepositoryImpl implements GenericRepository<User> {
 
     @Override
     public void delete(int id) {
+        User user = findById(id);
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            Query query = session
-                    .createQuery("DELETE FROM Users WHERE id = :id")
-                    .setParameter("id", id);
-            query.executeUpdate();
+            session.delete(user);
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -63,7 +61,7 @@ public class UserRepositoryImpl implements GenericRepository<User> {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             users = session
-                    .createQuery("from Users")
+                    .createQuery("from User")
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -79,7 +77,6 @@ public class UserRepositoryImpl implements GenericRepository<User> {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             user = session.get(User.class, id);
-            user.getExtensions();
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());

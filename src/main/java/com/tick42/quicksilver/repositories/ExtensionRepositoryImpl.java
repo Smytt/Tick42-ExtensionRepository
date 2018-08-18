@@ -22,10 +22,10 @@ public class ExtensionRepositoryImpl implements GenericRepository<Extension> {
     }
 
     @Override
-    public void create(Extension model) {
+    public void create(Extension extension) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.save(model);
+            session.save(extension);
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -33,10 +33,10 @@ public class ExtensionRepositoryImpl implements GenericRepository<Extension> {
     }
 
     @Override
-    public void update(int id, Extension model) {
+    public void update(Extension extension) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(model);
+            session.update(extension);
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -45,12 +45,10 @@ public class ExtensionRepositoryImpl implements GenericRepository<Extension> {
 
     @Override
     public void delete(int id) {
+        Extension extension = findById(id);
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            Query query = session
-                    .createQuery("DELETE FROM Employee WHERE id = :id")
-                    .setParameter("id", id);
-            query.executeUpdate();
+            session.delete(extension);
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -63,7 +61,7 @@ public class ExtensionRepositoryImpl implements GenericRepository<Extension> {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
-                    .createQuery("from Extensions")
+                    .createQuery("from Extension")
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -78,10 +76,7 @@ public class ExtensionRepositoryImpl implements GenericRepository<Extension> {
         Extension extension = null;
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            extension = (Extension) session
-                    .createQuery("from Extensions where id = :id")
-                    .setParameter("id", id)
-                    .list().get(0);
+            extension = session.get(Extension.class, id);
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -21,10 +21,10 @@ public class TagRepositoryImpl implements GenericRepository<Tag> {
     }
 
     @Override
-    public void create(Tag model) {
+    public void create(Tag tag) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.save(model);
+            session.save(tag);
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -32,10 +32,10 @@ public class TagRepositoryImpl implements GenericRepository<Tag> {
     }
 
     @Override
-    public void update(int id, Tag model) {
+    public void update(Tag tag) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(model);
+            session.update(tag);
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -44,7 +44,14 @@ public class TagRepositoryImpl implements GenericRepository<Tag> {
 
     @Override
     public void delete(int id) {
-
+        Tag tag = findById(id);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.delete(tag);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
@@ -53,7 +60,7 @@ public class TagRepositoryImpl implements GenericRepository<Tag> {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             tags = session
-                    .createQuery("from Tags")
+                    .createQuery("from Tag")
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -67,10 +74,7 @@ public class TagRepositoryImpl implements GenericRepository<Tag> {
         Tag tag = null;
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            tag = (Tag) session
-                    .createQuery("from Tags where id = :id")
-                    .setParameter("id", id)
-                    .list().get(0);
+            tag = session.get(Tag.class, id);
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());

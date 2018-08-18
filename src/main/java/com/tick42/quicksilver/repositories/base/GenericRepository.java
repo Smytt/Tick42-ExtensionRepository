@@ -5,7 +5,7 @@ import java.util.List;
 public interface GenericRepository<T> {
     void create(T model);
 
-    void update(int id, T model);
+    void update(T model);
 
     void delete(int id);
 
