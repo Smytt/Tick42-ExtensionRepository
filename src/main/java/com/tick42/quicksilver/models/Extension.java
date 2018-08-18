@@ -4,6 +4,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -45,6 +46,15 @@ public class Extension {
     @Column(name = "is_pending", nullable = false)
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean isPending = true;
+
+    @Column(name = "last_commit")
+    private Date lastCommit;
+
+    @Column(name = "pull_requests")
+    private int pullRequests;
+
+    @Column(name = "open_issues")
+    private int openIssues;
 
 
     public Extension() {
@@ -129,5 +139,29 @@ public class Extension {
 
     public void setPending(boolean pending) {
         isPending = pending;
+    }
+
+    public Date getLastCommit() {
+        return lastCommit;
+    }
+
+    public void setLastCommit(Date lastCommit) {
+        this.lastCommit = lastCommit;
+    }
+
+    public int getPullRequests() {
+        return pullRequests;
+    }
+
+    public void setPullRequests(int pullRequests) {
+        this.pullRequests = pullRequests;
+    }
+
+    public int getOpenIssues() {
+        return openIssues;
+    }
+
+    public void setOpenIssues(int openIssues) {
+        this.openIssues = openIssues;
     }
 }
