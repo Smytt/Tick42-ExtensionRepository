@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.repositories;
 
 import com.tick42.quicksilver.models.Extension;
+import com.tick42.quicksilver.repositories.base.ExtensionRepository;
 import com.tick42.quicksilver.repositories.base.GenericRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ExtensionRepositoryImpl implements GenericRepository<Extension> {
+public class ExtensionRepositoryImpl implements ExtensionRepository {
 
     private final SessionFactory sessionFactory;
 
@@ -82,5 +83,21 @@ public class ExtensionRepositoryImpl implements GenericRepository<Extension> {
             System.out.println(e.getMessage());
         }
         return extension;
+    }
+
+    @Override
+    public List<Extension> findByName(String searchQuery) {
+        List<Extension> extensions = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            extensions = session
+                    .createQuery("from Extension where name like :name")
+                    .setParameter("name", "%" + searchQuery + "%")
+                    .list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return extensions;
     }
 }

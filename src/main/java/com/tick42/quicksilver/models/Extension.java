@@ -1,5 +1,7 @@
 package com.tick42.quicksilver.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.tick42.quicksilver.serializers.ExtensionSerializer;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -9,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "extensions")
+@JsonSerialize(using = ExtensionSerializer.class)
 public class Extension {
 
     @Id
@@ -32,14 +35,14 @@ public class Extension {
     @Column(name = "version")
     private double version;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "extension_tags",
             joinColumns = @JoinColumn(name = "extension_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner")
     private User owner;
 

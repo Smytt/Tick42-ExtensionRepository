@@ -29,7 +29,7 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Extension> extensions = new ArrayList<>();
 
     @Column(name = "enabled", nullable = false)

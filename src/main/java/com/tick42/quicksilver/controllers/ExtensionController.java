@@ -8,19 +8,32 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-@RequestMapping(name = "/api/extension")
-public class ExtensionConteroller {
+@RequestMapping(value = "/api/extension")
+public class ExtensionController {
 
     private final ExtensionService extensionService;
 
     @Autowired
-    public ExtensionConteroller(ExtensionService extensionService) {
+    public ExtensionController(ExtensionService extensionService) {
         this.extensionService = extensionService;
     }
 
-    @GetMapping(name = "/{id}")
-    public Extension getExtensionById(@PathVariable(name = "id") int id) {
+    @GetMapping(value = "/all")
+    public List<Extension> findAll() {
+        return extensionService.findAll();
+    }
+
+    @GetMapping(value = "/{id}")
+    public Extension findById(@PathVariable(name = "id") int id) {
         return extensionService.findById(id);
+    }
+
+    @GetMapping(value = "/search/{searchQuery}")
+    public List<Extension> findByName(@PathVariable(name = "searchQuery") String searchQuery) {
+        System.out.println(searchQuery);
+        return extensionService.findByName(searchQuery);
     }
 }
