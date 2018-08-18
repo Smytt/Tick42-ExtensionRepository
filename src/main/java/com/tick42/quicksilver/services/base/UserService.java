@@ -7,6 +7,4 @@ public interface UserService {
 
     User findById(int id);
 
-    void delete(int id);
-
 }

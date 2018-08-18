@@ -13,7 +13,7 @@ public class UserServiceImpl implements UserService {
     private final GenericRepository<User> userRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepositoryImpl genericRepository) {
+    public UserServiceImpl(GenericRepository<User> genericRepository) {
         this.userRepository = genericRepository;
     }
 
@@ -27,8 +27,4 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id);
     }
 
-    @Override
-    public void delete(int id) {
-        userRepository.delete(id);
-    }
 }
