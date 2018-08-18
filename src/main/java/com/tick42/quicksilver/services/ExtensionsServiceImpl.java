@@ -13,7 +13,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
     private final GenericRepository<Extension> extensionRepository;
 
     @Autowired
-    public ExtensionsServiceImpl(ExtensionRepositoryImpl genericRepository) {
+    public ExtensionsServiceImpl(GenericRepository<Extension> genericRepository) {
         this.extensionRepository = genericRepository;
     }
 

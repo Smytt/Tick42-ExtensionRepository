@@ -14,7 +14,7 @@ public class TagServiceImpl implements TagService {
     private final GenericRepository<Tag> tagRepository;
 
     @Autowired
-    public TagServiceImpl (TagRepositoryImpl genericRepository){
+    public TagServiceImpl (GenericRepository<Tag> genericRepository){
         this.tagRepository = genericRepository;
     }
 
