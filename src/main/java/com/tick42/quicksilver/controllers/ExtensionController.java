@@ -3,10 +3,7 @@ package com.tick42.quicksilver.controllers;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.services.base.ExtensionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,7 +23,7 @@ public class ExtensionController {
         return extensionService.findAll();
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/get/{id}")
     public Extension findById(@PathVariable(name = "id") int id) {
         return extensionService.findById(id);
     }
@@ -35,5 +32,11 @@ public class ExtensionController {
     public List<Extension> findByName(@PathVariable(name = "searchQuery") String searchQuery) {
         System.out.println(searchQuery);
         return extensionService.findByName(searchQuery);
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public void addExtension() {
+        System.out.println("test");
+//        extensionService.create(extension);
     }
 }
