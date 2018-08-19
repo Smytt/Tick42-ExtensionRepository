@@ -1,10 +1,13 @@
 package com.tick42.quicksilver.controllers;
 
+import com.sun.org.apache.regexp.internal.RE;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.services.base.ExtensionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -34,9 +37,11 @@ public class ExtensionController {
         return extensionService.findByName(searchQuery);
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public void addExtension() {
-        System.out.println("test");
-//        extensionService.create(extension);
+    @PostMapping(value = "/add")
+    @ResponseBody
+    public Extension addExtension(@RequestBody Extension extension) {
+        System.out.println(extension.getIsPending());
+        extensionService.create(extension);
+        return extension;
     }
 }

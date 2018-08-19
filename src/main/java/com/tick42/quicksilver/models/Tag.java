@@ -49,5 +49,8 @@ public class Tag {
         this.extensions = extensions;
     }
 
-
+    @Override
+    public String toString() {
+        return name;
+    }
 }

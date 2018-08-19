@@ -46,9 +46,8 @@ public class Extension {
     @JoinColumn(name = "owner")
     private User owner;
 
-    @Column(name = "is_pending", nullable = false)
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    private boolean isPending = true;
+    @Column(name = "is_pending")
+    private boolean isPending;
 
     @Column(name = "last_commit")
     private Date lastCommit;
@@ -136,11 +135,11 @@ public class Extension {
         this.owner = owner;
     }
 
-    public boolean isPending() {
+    public boolean getIsPending() {
         return isPending;
     }
 
-    public void setPending(boolean pending) {
+    public void setIsPending(boolean pending) {
         isPending = pending;
     }
 
@@ -167,4 +166,11 @@ public class Extension {
     public void setOpenIssues(int openIssues) {
         this.openIssues = openIssues;
     }
+
+    @Override
+    public String toString() {
+        return id + "; " + name + "; " + tags + "; " + lastCommit ;
+    }
+
+
 }
