@@ -5,9 +5,9 @@ import com.tick42.quicksilver.models.Extension;
 import java.util.List;
 
 public interface GenericRepository<T> {
-    void create(T model);
+    T create(T model);
 
-    void update(T model);
+    T update(T model);
 
     void delete(int id);
 

@@ -1,13 +1,18 @@
 package com.tick42.quicksilver.services.base;
 
+import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.Tag;
+
+import java.util.List;
 
 
 public interface TagService {
 
-    void create(Tag model);
+    Tag create(Tag model);
 
     Tag findById(int id);
 
-    void delete(int id);
+    Tag findByName(String name);
+
+    List<Extension> findByTag(List<String> tags);
 }

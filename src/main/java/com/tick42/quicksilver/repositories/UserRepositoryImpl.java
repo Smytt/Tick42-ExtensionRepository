@@ -22,7 +22,7 @@ public class UserRepositoryImpl implements GenericRepository<User> {
     }
 
     @Override
-    public void create(User user) {
+    public User create(User user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.save(user);
@@ -30,10 +30,11 @@ public class UserRepositoryImpl implements GenericRepository<User> {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        return user;
     }
 
     @Override
-    public void update(User user) {
+    public User update(User user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.update(user);
@@ -41,6 +42,7 @@ public class UserRepositoryImpl implements GenericRepository<User> {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        return user;
     }
 
     @Override

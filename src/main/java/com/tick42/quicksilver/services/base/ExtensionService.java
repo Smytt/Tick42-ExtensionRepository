@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ExtensionService {
 
-    void create(Extension model);
+    Extension create(Extension model);
 
     Extension findById(int id);
 

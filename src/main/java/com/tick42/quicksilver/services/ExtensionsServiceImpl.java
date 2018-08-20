@@ -1,27 +1,46 @@
 package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.models.Extension;
+import com.tick42.quicksilver.models.Tag;
 import com.tick42.quicksilver.repositories.base.ExtensionRepository;
-import com.tick42.quicksilver.repositories.base.GenericRepository;
+import com.tick42.quicksilver.repositories.base.TagRepository;
 import com.tick42.quicksilver.services.base.ExtensionService;
+import com.tick42.quicksilver.services.base.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ExtensionsServiceImpl implements ExtensionService {
 
     private final ExtensionRepository extensionRepository;
+    private final TagRepository tagRepository;
 
     @Autowired
-    public ExtensionsServiceImpl(ExtensionRepository extensionRepository) {
+    public ExtensionsServiceImpl(ExtensionRepository extensionRepository, TagRepository tagRepository) {
         this.extensionRepository = extensionRepository;
+        this.tagRepository = tagRepository;
     }
 
     @Override
-    public void create(Extension model) {
-        extensionRepository.create(model);
+    public Extension create(Extension extension) {
+        List<Tag> tags = extension.getTags();
+        extension.setTags(new ArrayList<>());
+        extensionRepository.create(extension);
+
+        for (Tag tag: tags) {
+            if (tagRepository.findByName(tag.getName()) == null) {
+                tagRepository.create(tag);
+            }
+        }
+
+        for (Tag tag: tags) {
+            extension.getTags().add(tagRepository.findByName(tag.getName()));
+        }
+
+        return extensionRepository.create(extension);
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.tick42.quicksilver.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.tick42.quicksilver.serializers.ExtensionSerializer;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import java.util.List;
 public class Extension {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "name")
@@ -36,7 +36,7 @@ public class Extension {
     private double version;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
+            @JoinTable(
             name = "extension_tags",
             joinColumns = @JoinColumn(name = "extension_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
@@ -169,7 +169,7 @@ public class Extension {
 
     @Override
     public String toString() {
-        return id + "; " + name + "; " + tags + "; " + lastCommit ;
+        return id + "; " + name + "; " + tags + "; " + lastCommit;
     }
 
 

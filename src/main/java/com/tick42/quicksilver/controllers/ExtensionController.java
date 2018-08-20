@@ -38,10 +38,7 @@ public class ExtensionController {
     }
 
     @PostMapping(value = "/add")
-    @ResponseBody
-    public Extension addExtension(@RequestBody Extension extension) {
-        System.out.println(extension.getIsPending());
-        extensionService.create(extension);
-        return extension;
+    public @ResponseBody Extension addExtension(@RequestBody Extension extension) {
+        return extensionService.create(extension);
     }
 }

@@ -2,6 +2,7 @@ package com.tick42.quicksilver.repositories;
 
 import com.tick42.quicksilver.models.Tag;
 import com.tick42.quicksilver.repositories.base.GenericRepository;
+import com.tick42.quicksilver.repositories.base.TagRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class TagRepositoryImpl implements GenericRepository<Tag> {
+public class TagRepositoryImpl implements TagRepository {
 
     private final SessionFactory sessionFactory;
 
@@ -21,7 +22,7 @@ public class TagRepositoryImpl implements GenericRepository<Tag> {
     }
 
     @Override
-    public void create(Tag tag) {
+    public Tag create(Tag tag) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.save(tag);
@@ -29,10 +30,11 @@ public class TagRepositoryImpl implements GenericRepository<Tag> {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        return tag;
     }
 
     @Override
-    public void update(Tag tag) {
+    public Tag update(Tag tag) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.update(tag);
@@ -40,6 +42,7 @@ public class TagRepositoryImpl implements GenericRepository<Tag> {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        return tag;
     }
 
     @Override
@@ -75,6 +78,22 @@ public class TagRepositoryImpl implements GenericRepository<Tag> {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             tag = session.get(Tag.class, id);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return tag;
+    }
+
+    @Override
+    public Tag findByName(String name) {
+        Tag tag = null;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            tag = (Tag) session
+                    .createQuery("from Tag where name = :name")
+                    .setParameter("name", name)
+                    .uniqueResult();
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());

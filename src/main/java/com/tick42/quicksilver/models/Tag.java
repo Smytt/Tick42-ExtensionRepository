@@ -1,5 +1,7 @@
 package com.tick42.quicksilver.models;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +11,13 @@ import java.util.List;
 public class Tag {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "extension_tags",
-            joinColumns = @JoinColumn(name = "tag_id"),
-            inverseJoinColumns = @JoinColumn(name = "extension_id"))
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
     private List<Extension> extensions = new ArrayList<>();
 
     public Tag() {

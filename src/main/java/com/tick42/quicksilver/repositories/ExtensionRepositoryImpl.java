@@ -23,7 +23,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
     }
 
     @Override
-    public void create(Extension extension) {
+    public Extension create(Extension extension) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.save(extension);
@@ -31,10 +31,11 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        return extension;
     }
 
     @Override
-    public void update(Extension extension) {
+    public Extension update(Extension extension) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.update(extension);
@@ -42,6 +43,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        return extension;
     }
 
     @Override
