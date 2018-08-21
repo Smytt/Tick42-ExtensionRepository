@@ -9,6 +9,7 @@ import com.tick42.quicksilver.services.base.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,13 +39,18 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Extension> findByTag(List<String> tags) {
-        //todo
-        return null;
+        List<Extension> extensions = new ArrayList<>();
+        for (String tagName:tags) {
+           Tag tag = tagRepository.findByName(tagName);
+           extensions.addAll(tag.getExtensions());
+        }
+
+        return extensions;
     }
 
     @Override
     public String normalize(String name) {
-        //todo REGEX - remove all non-word/digit characters, replace them with dashes
+        name = name.trim().replaceAll(" +", "-");
         name = name.toLowerCase();
         return name;
     }
