@@ -16,12 +16,12 @@ import java.util.List;
 public class ExtensionsServiceImpl implements ExtensionService {
 
     private final ExtensionRepository extensionRepository;
-    private final TagRepository tagRepository;
+    private final TagService tagService;
 
     @Autowired
-    public ExtensionsServiceImpl(ExtensionRepository extensionRepository, TagRepository tagRepository) {
+    public ExtensionsServiceImpl(ExtensionRepository extensionRepository, TagService tagService) {
         this.extensionRepository = extensionRepository;
-        this.tagRepository = tagRepository;
+        this.tagService = tagService;
     }
 
     @Override
@@ -31,13 +31,14 @@ public class ExtensionsServiceImpl implements ExtensionService {
         extensionRepository.create(extension);
 
         for (Tag tag: tags) {
-            if (tagRepository.findByName(tag.getName()) == null) {
-                tagRepository.create(tag);
+            tag.setName(tagService.normalize(tag.getName()));
+            if (tagService.findByName(tag.getName()) == null) {
+                tagService.create(tag);
             }
         }
 
         for (Tag tag: tags) {
-            extension.getTags().add(tagRepository.findByName(tag.getName()));
+            extension.getTags().add(tagService.findByName(tag.getName()));
         }
 
         return extensionRepository.update(extension);

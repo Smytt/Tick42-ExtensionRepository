@@ -42,4 +42,11 @@ public class TagServiceImpl implements TagService {
         return null;
     }
 
+    @Override
+    public String normalize(String name) {
+        //todo REGEX - remove all non-word/digit characters, replace them with dashes
+        name = name.toLowerCase();
+        return name;
+    }
+
 }

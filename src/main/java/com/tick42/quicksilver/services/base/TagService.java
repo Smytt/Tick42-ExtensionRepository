@@ -15,4 +15,6 @@ public interface TagService {
     Tag findByName(String name);
 
     List<Extension> findByTag(List<String> tags);
+
+    String normalize(String name);
 }
