@@ -23,8 +23,12 @@ public class Extension {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "download_link")
-    private String downloadLink;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "file_id")
+    private File file;
+
+    @Transient
+    private int fileId;
 
     @Column(name = "github")
     private String github;
@@ -85,14 +89,6 @@ public class Extension {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getDownloadLink() {
-        return downloadLink;
-    }
-
-    public void setDownloadLink(String downloadLink) {
-        this.downloadLink = downloadLink;
     }
 
     public String getGithub() {
@@ -165,6 +161,22 @@ public class Extension {
 
     public void setOpenIssues(int openIssues) {
         this.openIssues = openIssues;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public int getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(int fileId) {
+        this.fileId = fileId;
     }
 
     @Override

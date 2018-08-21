@@ -3,6 +3,8 @@ package com.tick42.quicksilver.services;
 import com.tick42.quicksilver.config.FileConfig;
 import com.tick42.quicksilver.exceptions.FileStorageException;
 import com.tick42.quicksilver.exceptions.MyFileNotFoundException;
+import com.tick42.quicksilver.models.File;
+import com.tick42.quicksilver.repositories.FileRepositoryImpl;
 import com.tick42.quicksilver.services.base.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -10,8 +12,8 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.jnlp.FileSaveService;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -22,10 +24,12 @@ import java.nio.file.StandardCopyOption;
 @Service
 public class FileServiceImpl implements FileService {
     private final Path fileLocation;
+    private final FileRepositoryImpl fileRepository;
 
     @Autowired
-    public FileServiceImpl(FileConfig fileConfig) {
-        this.fileLocation = Paths.get(fileConfig.getUploadDir())
+    public FileServiceImpl(FileConfig fileConfig, FileRepositoryImpl fileRepository) {
+        this.fileRepository = fileRepository;
+        this.fileLocation = Paths.get("./uploads")
                 .toAbsolutePath().normalize();
 
         try {
@@ -35,8 +39,19 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    public String storeFile(MultipartFile file) {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+    public File storeFile(MultipartFile receivedFile) {
+
+        String fileName = StringUtils.cleanPath(receivedFile.getOriginalFilename());
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/download/")
+                .path(fileName)
+                .toUriString();
+
+        File file = new File();
+        file.setName(fileName);
+        file.setLocation(fileDownloadUri);
+        file.setSize(receivedFile.getSize());
+        file.setType(receivedFile.getContentType());
 
         try {
             if(fileName.contains("..")) {
@@ -44,8 +59,9 @@ public class FileServiceImpl implements FileService {
             }
 
             Path targetLocation = this.fileLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
+            Files.copy(receivedFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            fileRepository.create(file);
+            return file;
         }
         catch (IOException e) {
             throw new FileStorageException("Couldn't store file");
