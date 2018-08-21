@@ -4,6 +4,7 @@ import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.Tag;
 import com.tick42.quicksilver.models.User;
 import org.hibernate.SessionFactory;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;

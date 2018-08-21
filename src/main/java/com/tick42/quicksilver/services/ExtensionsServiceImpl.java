@@ -40,7 +40,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
             extension.getTags().add(tagRepository.findByName(tag.getName()));
         }
 
-        return extensionRepository.create(extension);
+        return extensionRepository.update(extension);
     }
 
     @Override
