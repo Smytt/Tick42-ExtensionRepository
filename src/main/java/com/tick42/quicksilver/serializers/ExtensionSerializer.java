@@ -15,7 +15,7 @@ public class ExtensionSerializer extends StdSerializer<Extension> {
         this(null);
     }
 
-    protected ExtensionSerializer(Class<Extension> t) {
+    private ExtensionSerializer(Class<Extension> t) {
         super(t);
     }
 
@@ -29,11 +29,13 @@ public class ExtensionSerializer extends StdSerializer<Extension> {
         jsonGenerator.writeStringField("description", extension.getDescription());
         jsonGenerator.writeStringField("description", extension.getDescription());
 
-        jsonGenerator.writeObjectFieldStart("file");
-        jsonGenerator.writeNumberField("id", extension.getFile().getId());
-        jsonGenerator.writeStringField("location", extension.getFile().getLocation());
-        jsonGenerator.writeStringField("name", extension.getFile().getName());
-        jsonGenerator.writeEndObject();
+        if (extension.getFile() != null) {
+            jsonGenerator.writeObjectFieldStart("file");
+            jsonGenerator.writeNumberField("id", extension.getFile().getId());
+            jsonGenerator.writeStringField("location", extension.getFile().getLocation());
+            jsonGenerator.writeStringField("name", extension.getFile().getName());
+            jsonGenerator.writeEndObject();
+        }
 
         jsonGenerator.writeStringField("github", extension.getGithub());
         jsonGenerator.writeNumberField("timesDownloaded", extension.getTimesDownloaded());

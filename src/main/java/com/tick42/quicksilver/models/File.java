@@ -17,7 +17,8 @@ public class File {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(mappedBy = "file", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne
+    @PrimaryKeyJoinColumn
     private Extension extension;
 
     @Column(name = "size")

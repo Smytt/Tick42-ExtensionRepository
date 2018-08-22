@@ -3,8 +3,10 @@ package com.tick42.quicksilver.services;
 import com.tick42.quicksilver.config.FileConfig;
 import com.tick42.quicksilver.exceptions.FileStorageException;
 import com.tick42.quicksilver.exceptions.MyFileNotFoundException;
+import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.File;
 import com.tick42.quicksilver.repositories.FileRepositoryImpl;
+import com.tick42.quicksilver.repositories.base.ExtensionRepository;
 import com.tick42.quicksilver.services.base.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -23,12 +25,17 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 public class FileServiceImpl implements FileService {
+
     private final Path fileLocation;
     private final FileRepositoryImpl fileRepository;
+    private final ExtensionsServiceImpl extensionsService;
+    private final ExtensionRepository extensionRepository;
 
     @Autowired
-    public FileServiceImpl(FileConfig fileConfig, FileRepositoryImpl fileRepository) {
+    public FileServiceImpl(FileConfig fileConfig, FileRepositoryImpl fileRepository, ExtensionsServiceImpl extensionsService, ExtensionRepository extensionRepository) {
         this.fileRepository = fileRepository;
+        this.extensionsService = extensionsService;
+        this.extensionRepository = extensionRepository;
         this.fileLocation = Paths.get("./uploads")
                 .toAbsolutePath().normalize();
 
@@ -39,7 +46,8 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    public File storeFile(MultipartFile receivedFile) {
+    @Override
+    public File storeFile(MultipartFile receivedFile, int extensionId) {
 
         String fileName = StringUtils.cleanPath(receivedFile.getOriginalFilename());
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -47,11 +55,14 @@ public class FileServiceImpl implements FileService {
                 .path(fileName)
                 .toUriString();
 
+        Extension extension = extensionsService.findById(extensionId);
+
         File file = new File();
         file.setName(fileName);
         file.setLocation(fileDownloadUri);
         file.setSize(receivedFile.getSize());
         file.setType(receivedFile.getContentType());
+        extension.setFile(file);
 
         try {
             if(fileName.contains("..")) {
@@ -60,7 +71,8 @@ public class FileServiceImpl implements FileService {
 
             Path targetLocation = this.fileLocation.resolve(fileName);
             Files.copy(receivedFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            fileRepository.create(file);
+
+            extensionRepository.update(extension);
             return file;
         }
         catch (IOException e) {
@@ -68,6 +80,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    @Override
     public Resource loadFileAsResource(String fileName) {
         try {
             Path filePath = this.fileLocation.resolve(fileName).normalize();

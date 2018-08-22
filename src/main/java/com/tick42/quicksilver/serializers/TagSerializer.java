@@ -13,7 +13,7 @@ public class TagSerializer extends StdSerializer<Tag> {
         this(null);
     }
 
-    protected TagSerializer(Class<Tag> t) {
+    private TagSerializer(Class<Tag> t) {
         super(t);
     }
 

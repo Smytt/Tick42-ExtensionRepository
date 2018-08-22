@@ -23,12 +23,9 @@ public class Extension {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "file_id")
     private File file;
-
-    @Transient
-    private int fileId;
 
     @Column(name = "github")
     private String github;
@@ -64,6 +61,9 @@ public class Extension {
 
     @Column(name = "upload_date")
     private Date uploadDate;
+
+    @Column(name = "is_featured")
+    private boolean isFeatured;
 
     public Extension() {
 
@@ -173,21 +173,20 @@ public class Extension {
         this.file = file;
     }
 
-    public int getFileId() {
-        return fileId;
-    }
-
-    public void setFileId(int fileId) {
-        this.fileId = fileId;
-    }
-
-
     public Date getUploadDate() {
         return uploadDate;
     }
 
     public void setUploadDate(Date uploadDate) {
         this.uploadDate = uploadDate;
+    }
+
+    public boolean getIsFeatured() {
+        return isFeatured;
+    }
+
+    public void setIsFeatured(boolean featured) {
+        isFeatured = featured;
     }
 
     @Override

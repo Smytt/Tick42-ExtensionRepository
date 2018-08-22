@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,6 +27,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
 
     @Override
     public Extension create(Extension extension) {
+        extension.setUploadDate(new Date());
         List<Tag> tags = extension.getTags();
         extension.setTags(new ArrayList<>());
         extensionRepository.create(extension);
