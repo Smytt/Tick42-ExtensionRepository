@@ -56,6 +56,9 @@ public class Extension {
     @Column(name = "last_commit")
     private Date lastCommit;
 
+    @Column(name = "upload_date")
+    private Date uploadDate;
+
     @Column(name = "pull_requests")
     private int pullRequests;
 
@@ -179,10 +182,17 @@ public class Extension {
         this.fileId = fileId;
     }
 
+    public Date getUploadDate() {
+        return uploadDate;
+    }
+
+    public void setUploadDate(Date uploadDate) {
+        this.uploadDate = uploadDate;
+    }
+
     @Override
     public String toString() {
         return id + "; " + name + "; " + tags + "; " + lastCommit;
     }
-
 
 }

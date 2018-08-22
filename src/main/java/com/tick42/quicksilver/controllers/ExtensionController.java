@@ -36,12 +36,32 @@ public class ExtensionController {
         return extensionService.findByName(searchQuery);
     }
 
+    @GetMapping(value = "/mostDownloads/{count}")
+    public List<Extension> mostDownloaded(@PathVariable(name = "count") int count) {
+        return extensionService.findTopMostDownloaded(count);
+    }
+
+    @GetMapping(value = "/mostRecentUploads/{count}")
+    public List<Extension> latestUploads(@PathVariable(name = "count") int count) {
+        return extensionService.findMostRecentUploads(count);
+    }
+
+    @GetMapping(value = "/sortByUploadDate")
+    public List<Extension> sortByUploadDate() {
+        return extensionService.sortByUploadDate();
+    }
+
+    @GetMapping(value = "/sortByMostDownloads")
+    public List<Extension> sortByMostDownloads() {
+        return extensionService.sortByMostDownloads();
+    }
+
+    @GetMapping(value = "/sortByCommitDate")
+    public List<Extension> sortByCommitDate() {
+        return extensionService.sortByCommitDate();
+    }
     @PostMapping(value = "/add")
     public @ResponseBody Extension addExtension(@RequestBody Extension extension) {
         return extensionService.create(extension);
-    }
-    @GetMapping(value = "/mostDownloaded/{count}")
-    public List<Extension> mostDownloaded(@PathVariable(name = "count") int count) {
-        return extensionService.findTopMostDownloaded(count);
     }
 }

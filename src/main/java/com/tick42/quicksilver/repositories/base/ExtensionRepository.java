@@ -9,5 +9,11 @@ public interface ExtensionRepository extends GenericRepository<Extension> {
 
     List<Extension> findTopMostDownloaded(int count);
 
-    List<Extension> findLatestUploads(int count);
+    List<Extension> findMostRecentUploads(int count);
+
+    List<Extension> sortByUploadDate();
+
+    List<Extension> sortByMostDownloads();
+
+    List<Extension> sortByCommitDate();
 }

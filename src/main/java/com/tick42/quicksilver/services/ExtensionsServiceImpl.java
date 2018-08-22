@@ -69,4 +69,24 @@ public class ExtensionsServiceImpl implements ExtensionService {
     public List<Extension> findTopMostDownloaded(int count) {
         return extensionRepository.findTopMostDownloaded(count);
     }
+
+    @Override
+    public List<Extension> findMostRecentUploads(int count) {
+        return extensionRepository.findMostRecentUploads(count);
+    }
+
+    @Override
+    public List<Extension> sortByUploadDate() {
+        return extensionRepository.sortByUploadDate();
+    }
+
+    @Override
+    public List<Extension> sortByMostDownloads() {
+        return extensionRepository.sortByMostDownloads();
+    }
+
+    @Override
+    public List<Extension> sortByCommitDate() {
+        return extensionRepository.sortByCommitDate();
+    }
 }
