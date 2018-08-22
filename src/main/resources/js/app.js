@@ -2,6 +2,8 @@ var app = (() => {
 
     var home = (e) => {
         preventDefault(e);
+        remote.mostRecentUploads(10);
+        remote.mostDownloads(10);
     }
 
     var start = () => {
@@ -19,8 +21,10 @@ var app = (() => {
         if (!hitEnter(e)) return;
 
         var extensionName = $('#name').val();
-        remote.searchByName(extensionName);
+        remote.searchByName(extensionName, searchCallback);
     }
+
+    function searchCallback(response) { render.searchResults(response,"dsadas") }
 
     function preventDefault(e) {
         if (e) {

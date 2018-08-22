@@ -2,16 +2,27 @@
 
 </div>
 
-<div class="mostRecentUploads">
-    <h2>Top{{count}} results &quot;:</h2>
+<div class="mostDownloads">
+    <h2>Top {{count}} most downloaded extensions:</h2>
     {{#results}}
     <div class="one-item" extensionId="{{id}}">
         <div class="movie-info">
             <h1>{{title}}</h1>
-            <span>{{downloads}}</span>
+            <h2>{{timesDownloaded}}</h2>
         </div>
     </div>
     {{/results}}
+</div>
+<div class="mostRecentUploads">
+    <h2>The {{countUploads}} most recent uploads:</h2>
+    {{#resultsUpload}}
+    <div class="one-item" extensionId="{{id}}">
+        <div class="movie-info">
+            <h1>{{title}}</h1>
+            <span>{{uploadDate}}</span>
+        </div>
+    </div>
+    {{/resultsUpload}}
 </div>
 
 <div class="featured">

@@ -31,4 +31,8 @@ public interface ExtensionService {
 
     List<Extension> findByTag(String tagName);
 
+    void approveExtension(int id);
+
+    void changeFeaturedState(int id);
+
 }

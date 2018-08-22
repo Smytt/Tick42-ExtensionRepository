@@ -89,4 +89,23 @@ public class ExtensionsServiceImpl implements ExtensionService {
     public List<Extension> findByTag(String tagName) {
         return tagService.findByName(tagName).getExtensions();
     }
+
+    @Override
+    public void approveExtension(int id) {
+        Extension extension = extensionRepository.findById(id);
+        extension.setIsPending(false);
+        extensionRepository.update(extension);
+    }
+
+    @Override
+    public void changeFeaturedState(int id){
+        Extension extension = extensionRepository.findById(id);
+        if (extension.getIsFeatured()){
+            extension.setIsFeatured(false);
+            extensionRepository.update(extension);
+        }else {
+            extension.setIsFeatured(true);
+            extensionRepository.update(extension);
+        }
+    }
 }

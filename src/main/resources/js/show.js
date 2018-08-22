@@ -35,8 +35,42 @@ var show = (() => {
             },
         })
     }
+    var mostDownloadsResult = (extensions) => {
+            $.ajax({
+                url: './templates/home-page-results.html',
+                success: (tmpl) => {
+                    var $html = Mustache.render(tmpl, extensions);
+                    $content.find("#home-page-results").remove();
+                    $content.append($html);
+                    $('#home-page-results .one-item').on('click', app.getMovieView)
+                },
+                error: () => {
+                    var err = "Could not load extension page";
+                    console.log(err);
+                    $content.prepend(err);
+                },
+            })
+        }
+            var uploadsResult = (uploadsResults) => {
+                    $.ajax({
+                        url: './templates/home-page-results.html',
+                        success: (tmpl) => {
+                            var $html = Mustache.render(tmpl, uploadsResults);
+                            $content.find("#home-page-results").remove();
+                            $content.append($html);
+                            $('#home-page-results .one-item').on('click', app.getMovieView)
+                        },
+                        error: () => {
+                            var err = "Could not load extension page";
+                            console.log(err);
+                            $content.prepend(err);
+                        },
+                    })
+                }
     return {
         searchView,
-        searchResults
+        searchResults,
+        mostDownloadsResult,
+        uploadsResult
     }
 })()
