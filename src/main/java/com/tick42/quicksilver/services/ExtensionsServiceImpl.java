@@ -27,23 +27,24 @@ public class ExtensionsServiceImpl implements ExtensionService {
 
     @Override
     public Extension create(Extension extension) {
+
         extension.setUploadDate(new Date());
+
         List<Tag> tags = extension.getTags();
         extension.setTags(new ArrayList<>());
-        extensionRepository.create(extension);
 
         for (Tag tag: tags) {
             tag.setName(tagService.normalize(tag.getName()));
-            if (tagService.findByName(tag.getName()) == null) {
-                tagService.create(tag);
+            Tag existingTag = tagService.findByName(tag.getName());
+            if (existingTag != null) {
+                extension.getTags().add(existingTag);
+            }
+            else {
+                extension.getTags().add(tag);
             }
         }
 
-        for (Tag tag: tags) {
-            extension.getTags().add(tagService.findByName(tag.getName()));
-        }
-
-        return extensionRepository.update(extension);
+        return extensionRepository.create(extension);
     }
 
     @Override

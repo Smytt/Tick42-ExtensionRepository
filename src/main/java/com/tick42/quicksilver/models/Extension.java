@@ -36,7 +36,7 @@ public class Extension {
     @Column(name = "version")
     private double version;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
             @JoinTable(
             name = "extension_tags",
             joinColumns = @JoinColumn(name = "extension_id"),
