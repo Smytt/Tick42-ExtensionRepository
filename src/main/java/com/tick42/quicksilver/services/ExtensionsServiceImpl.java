@@ -49,8 +49,39 @@ public class ExtensionsServiceImpl implements ExtensionService {
         return extensionRepository.findByName(searchQuery);
     }
 
+
     @Override
     public List<Extension> findAll() {
         return extensionRepository.findAll();
+    }
+
+    @Override
+    public List<Extension> findTopMostDownloaded(int count) {
+        return extensionRepository.findTopMostDownloaded(count);
+    }
+
+    @Override
+    public List<Extension> findMostRecentUploads(int count) {
+        return extensionRepository.findMostRecentUploads(count);
+    }
+
+    @Override
+    public List<Extension> findFeatured(int count) {
+        return extensionRepository.findFeatured(count);
+    }
+
+    @Override
+    public List<Extension> sortByUploadDate() {
+        return extensionRepository.sortByUploadDate();
+    }
+
+    @Override
+    public List<Extension> sortByMostDownloads() {
+        return extensionRepository.sortByMostDownloads();
+    }
+
+    @Override
+    public List<Extension> sortByCommitDate() {
+        return extensionRepository.sortByCommitDate();
     }
 }

@@ -50,8 +50,14 @@ public class Extension {
     @Column(name = "is_pending")
     private boolean isPending;
 
+    @Column(name = "is_featured")
+    private boolean isFeatured;
+
     @Column(name = "last_commit")
     private Date lastCommit;
+
+    @Column(name = "upload_date")
+    private Date uploadDate;
 
     @Column(name = "pull_requests")
     private int pullRequests;
@@ -141,6 +147,14 @@ public class Extension {
         isPending = pending;
     }
 
+    public boolean getIsFeatured() {
+        return isFeatured;
+    }
+
+    public void setIsFeatured(boolean featured) {
+        isFeatured = featured;
+    }
+
     public Date getLastCommit() {
         return lastCommit;
     }
@@ -189,10 +203,17 @@ public class Extension {
         isFeatured = featured;
     }
 
+    public Date getUploadDate() {
+        return uploadDate;
+    }
+
+    public void setUploadDate(Date uploadDate) {
+        this.uploadDate = uploadDate;
+    }
+
     @Override
     public String toString() {
         return id + "; " + name + "; " + tags + "; " + lastCommit;
     }
-
 
 }

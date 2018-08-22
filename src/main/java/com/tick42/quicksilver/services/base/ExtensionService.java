@@ -16,4 +16,16 @@ public interface ExtensionService {
     List<Extension> findByName(String searchQuery);
 
     List<Extension> findAll();
+
+    List<Extension> findTopMostDownloaded(int count);
+
+    List<Extension> findMostRecentUploads(int count);
+
+    List<Extension> findFeatured(int count);
+
+    List<Extension> sortByUploadDate();
+
+    List<Extension> sortByMostDownloads();
+
+    List<Extension> sortByCommitDate();
 }

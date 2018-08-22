@@ -40,9 +40,11 @@ public class ExtensionSerializer extends StdSerializer<Extension> {
         jsonGenerator.writeStringField("github", extension.getGithub());
         jsonGenerator.writeNumberField("timesDownloaded", extension.getTimesDownloaded());
         jsonGenerator.writeStringField("lastCommit", extension.getLastCommit().toString());
+        jsonGenerator.writeStringField("uploadDate", extension.getUploadDate().toString());
         jsonGenerator.writeNumberField("pullRequests", extension.getPullRequests());
         jsonGenerator.writeNumberField("openIssues", extension.getOpenIssues());
         jsonGenerator.writeBooleanField("isPending", extension.getIsPending());
+        jsonGenerator.writeBooleanField("isFeatured",extension.getIsFeatured());
 
         jsonGenerator.writeArrayFieldStart("tags");
         for (Tag tag : extension.getTags()) {
