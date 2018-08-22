@@ -28,4 +28,7 @@ public interface ExtensionService {
     List<Extension> sortByMostDownloads();
 
     List<Extension> sortByCommitDate();
+
+    List<Extension> findByTag(String tagName);
+
 }

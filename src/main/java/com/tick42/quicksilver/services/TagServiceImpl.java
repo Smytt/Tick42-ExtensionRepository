@@ -37,12 +37,6 @@ public class TagServiceImpl implements TagService {
         return tagRepository.findByName(name);
     }
 
-    @Override
-    public List<Extension> findByTag(String tagName) {
-        return tagRepository.findByName(tagName).getExtensions();
-    }
-
-    @Override
     public String normalize(String name) {
         name = name.trim().replaceAll(" +", "-");
         name = name.toLowerCase();

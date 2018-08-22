@@ -84,4 +84,9 @@ public class ExtensionsServiceImpl implements ExtensionService {
     public List<Extension> sortByCommitDate() {
         return extensionRepository.sortByCommitDate();
     }
+
+    @Override
+    public List<Extension> findByTag(String tagName) {
+        return tagService.findByName(tagName).getExtensions();
+    }
 }

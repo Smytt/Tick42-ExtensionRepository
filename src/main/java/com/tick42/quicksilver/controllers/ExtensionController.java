@@ -65,6 +65,7 @@ public class ExtensionController {
     public List<Extension> sortByCommitDate() {
         return extensionService.sortByCommitDate();
     }
+
     @PostMapping(value = "/add")
     public @ResponseBody Extension addExtension(@RequestBody Extension extension) {
         return extensionService.create(extension);
