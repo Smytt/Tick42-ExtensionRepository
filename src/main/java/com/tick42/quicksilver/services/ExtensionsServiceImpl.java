@@ -59,8 +59,14 @@ public class ExtensionsServiceImpl implements ExtensionService {
         return extensionRepository.findByName(searchQuery);
     }
 
+
     @Override
     public List<Extension> findAll() {
         return extensionRepository.findAll();
+    }
+
+    @Override
+    public List<Extension> findTopMostDownloaded(int count) {
+        return extensionRepository.findTopMostDownloaded(count);
     }
 }

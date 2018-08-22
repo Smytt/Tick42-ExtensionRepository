@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface ExtensionRepository extends GenericRepository<Extension> {
     List<Extension> findByName(String searchQuery);
+
+    List<Extension> findTopMostDownloaded(int count);
+
+    List<Extension> findLatestUploads(int count);
 }

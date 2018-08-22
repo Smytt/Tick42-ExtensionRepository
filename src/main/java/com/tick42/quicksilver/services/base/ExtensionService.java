@@ -16,4 +16,6 @@ public interface ExtensionService {
     List<Extension> findByName(String searchQuery);
 
     List<Extension> findAll();
+
+    List<Extension> findTopMostDownloaded(int count);
 }

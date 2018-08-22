@@ -38,14 +38,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Extension> findByTag(List<String> tags) {
-        List<Extension> extensions = new ArrayList<>();
-        for (String tagName:tags) {
-           Tag tag = tagRepository.findByName(tagName);
-           extensions.addAll(tag.getExtensions());
-        }
-
-        return extensions;
+    public List<Extension> findExtensionsByTag(String tagName) {
+        return tagRepository.findByName(tagName).getExtensions();
     }
 
     @Override

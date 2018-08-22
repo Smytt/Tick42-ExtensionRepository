@@ -1,5 +1,6 @@
 package com.tick42.quicksilver.repositories;
 
+import com.sun.org.apache.xalan.internal.lib.Extensions;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.repositories.base.ExtensionRepository;
 import com.tick42.quicksilver.repositories.base.GenericRepository;
@@ -95,6 +96,35 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
             extensions = session
                     .createQuery("from Extension where name like :name")
                     .setParameter("name", "%" + searchQuery + "%")
+                    .list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return extensions;
+    }
+    @Override
+    public List<Extension> findTopMostDownloaded(int count){
+        List<Extension> extensions = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            extensions = session
+                    .createQuery("from Extension order by times_downloaded desc")
+                    .setMaxResults(count)
+                    .list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+            return extensions;
+    }
+    public List<Extension> findLatestUploads(int count){
+        List<Extension> extensions = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            extensions = session
+                    .createQuery("from Extension order by last_commit desc")
+                    .setMaxResults(count)
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {

@@ -21,9 +21,13 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @GetMapping(value = "/{tags}")
-    public List<Extension> findByTag(@PathVariable String allTags) {
-        List<String> tags = Arrays.stream(allTags.split(",")).collect(Collectors.toList());
-        return tagService.findByTag(tags);
+    @GetMapping(value = "/{tag}")
+    public List<Extension> findByTag(@PathVariable String tag) {
+        tagService.normalize(tag);
+        return tagService.findExtensionsByTag(tag);
     }
+//    @PostMapping(value = "/add")
+//    public @ResponseBody Extension addExtension(@RequestBody Tag tag) {
+//        return tagService.create(tag);
+//    }
 }

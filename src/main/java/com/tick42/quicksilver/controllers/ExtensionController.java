@@ -33,12 +33,15 @@ public class ExtensionController {
 
     @GetMapping(value = "/search/{searchQuery}")
     public List<Extension> findByName(@PathVariable(name = "searchQuery") String searchQuery) {
-        System.out.println(searchQuery);
         return extensionService.findByName(searchQuery);
     }
 
     @PostMapping(value = "/add")
     public @ResponseBody Extension addExtension(@RequestBody Extension extension) {
         return extensionService.create(extension);
+    }
+    @GetMapping(value = "/mostDownloaded/{count}")
+    public List<Extension> mostDownloaded(@PathVariable(name = "count") int count) {
+        return extensionService.findTopMostDownloaded(count);
     }
 }
