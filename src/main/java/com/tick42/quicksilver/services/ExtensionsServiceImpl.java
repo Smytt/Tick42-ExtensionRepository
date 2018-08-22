@@ -30,17 +30,11 @@ public class ExtensionsServiceImpl implements ExtensionService {
 
         extension.setUploadDate(new Date());
 
-        List<Tag> tags = extension.getTags();
-        extension.setTags(new ArrayList<>());
-
-        for (Tag tag: tags) {
-            tag.setName(tagService.normalize(tag.getName()));
+        for (int i = 0; i< extension.getTags().size(); i++) {
+            Tag tag = extension.getTags().get(i);
             Tag existingTag = tagService.findByName(tag.getName());
             if (existingTag != null) {
-                extension.getTags().add(existingTag);
-            }
-            else {
-                extension.getTags().add(tag);
+                extension.getTags().set(i, existingTag);
             }
         }
 
