@@ -32,7 +32,7 @@ public class FileServiceImpl implements FileService {
     private final ExtensionRepository extensionRepository;
 
     @Autowired
-    public FileServiceImpl(FileConfig fileConfig, FileRepositoryImpl fileRepository, ExtensionsServiceImpl extensionsService, ExtensionRepository extensionRepository) {
+    public FileServiceImpl(FileRepositoryImpl fileRepository, ExtensionsServiceImpl extensionsService, ExtensionRepository extensionRepository) {
         this.fileRepository = fileRepository;
         this.extensionsService = extensionsService;
         this.extensionRepository = extensionRepository;

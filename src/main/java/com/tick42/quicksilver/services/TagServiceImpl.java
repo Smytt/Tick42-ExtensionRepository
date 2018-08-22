@@ -18,7 +18,7 @@ public class TagServiceImpl implements TagService {
     private final TagRepository tagRepository;
 
     @Autowired
-    public TagServiceImpl(TagRepository tagRepository){
+    public TagServiceImpl(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
     }
 
@@ -40,9 +40,9 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Extension> findByTag(List<String> tags) {
         List<Extension> extensions = new ArrayList<>();
-        for (String tagName:tags) {
-           Tag tag = tagRepository.findByName(tagName);
-           extensions.addAll(tag.getExtensions());
+        for (String tagName : tags) {
+            Tag tag = tagRepository.findByName(tagName);
+            extensions.addAll(tag.getExtensions());
         }
 
         return extensions;
@@ -53,6 +53,18 @@ public class TagServiceImpl implements TagService {
         name = name.trim().replaceAll(" +", "-");
         name = name.toLowerCase();
         return name;
+    }
+
+    @Override
+    public List<Tag> prepareTags(List<Tag> tags) {
+        for (int i = 0; i < tags.size(); i++) {
+            Tag tag = tags.get(i);
+            Tag existingTag = tagRepository.findByName(tag.getName());
+            if (existingTag != null) {
+                tags.set(i, existingTag);
+            }
+        }
+        return tags;
     }
 
 }
