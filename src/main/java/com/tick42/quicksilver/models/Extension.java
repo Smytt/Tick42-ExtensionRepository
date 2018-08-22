@@ -62,6 +62,8 @@ public class Extension {
     @Column(name = "open_issues")
     private int openIssues;
 
+    @Column(name = "upload_date")
+    private Date uploadDate;
 
     public Extension() {
 
@@ -177,6 +179,15 @@ public class Extension {
 
     public void setFileId(int fileId) {
         this.fileId = fileId;
+    }
+
+
+    public Date getUploadDate() {
+        return uploadDate;
+    }
+
+    public void setUploadDate(Date uploadDate) {
+        this.uploadDate = uploadDate;
     }
 
     @Override
