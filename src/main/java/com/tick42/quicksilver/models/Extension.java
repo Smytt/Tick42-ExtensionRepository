@@ -53,6 +53,9 @@ public class Extension {
     @Column(name = "is_pending")
     private boolean isPending;
 
+    @Column(name = "is_featured")
+    private boolean isFeatured;
+
     @Column(name = "last_commit")
     private Date lastCommit;
 
@@ -140,6 +143,14 @@ public class Extension {
 
     public void setIsPending(boolean pending) {
         isPending = pending;
+    }
+
+    public boolean getIsFeatured() {
+        return isFeatured;
+    }
+
+    public void setIsFeatured(boolean featured) {
+        isFeatured = featured;
     }
 
     public Date getLastCommit() {

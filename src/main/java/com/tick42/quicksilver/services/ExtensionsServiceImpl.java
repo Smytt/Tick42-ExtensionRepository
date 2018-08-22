@@ -76,6 +76,11 @@ public class ExtensionsServiceImpl implements ExtensionService {
     }
 
     @Override
+    public List<Extension> findFeatured(int count) {
+        return extensionRepository.findFeatured(count);
+    }
+
+    @Override
     public List<Extension> sortByUploadDate() {
         return extensionRepository.sortByUploadDate();
     }

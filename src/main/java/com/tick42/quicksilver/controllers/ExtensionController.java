@@ -46,6 +46,11 @@ public class ExtensionController {
         return extensionService.findMostRecentUploads(count);
     }
 
+    @GetMapping(value = "/featured/{count}")
+    public List<Extension> featured(@PathVariable(name = "count") int count) {
+        return extensionService.findFeatured(count);
+    }
+
     @GetMapping(value = "/sortByUploadDate")
     public List<Extension> sortByUploadDate() {
         return extensionService.sortByUploadDate();

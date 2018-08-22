@@ -134,6 +134,21 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         return extensions;
     }
     @Override
+    public List<Extension> findFeatured(int count){
+        List<Extension> extensions = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            extensions = session
+                    .createQuery("from Extension where is_featured = 1")
+                    .setMaxResults(count)
+                    .list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return extensions;
+    }
+    @Override
     public List<Extension> sortByUploadDate(){
         List<Extension> extensions = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {

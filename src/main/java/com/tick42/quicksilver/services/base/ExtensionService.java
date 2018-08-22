@@ -21,6 +21,8 @@ public interface ExtensionService {
 
     List<Extension> findMostRecentUploads(int count);
 
+    List<Extension> findFeatured(int count);
+
     List<Extension> sortByUploadDate();
 
     List<Extension> sortByMostDownloads();
