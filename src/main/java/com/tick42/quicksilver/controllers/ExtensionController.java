@@ -70,6 +70,11 @@ public class ExtensionController {
         extensionService.approveExtension(id);
     }
 
+    @PatchMapping(value = "/changeFeaturedState/{id}")
+    void changeFeaturedState(@PathVariable(name = "id") int id){
+        extensionService.changeFeaturedState(id);
+    }
+
     @PostMapping(value = "/add")
     public @ResponseBody Extension addExtension(@RequestBody Extension extension) {
         return extensionService.create(extension);
