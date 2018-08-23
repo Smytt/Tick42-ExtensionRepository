@@ -65,18 +65,20 @@ public class ExtensionController {
     public List<Extension> sortByCommitDate() {
         return extensionService.sortByCommitDate();
     }
+
     @PatchMapping(value = "/approveExtension/{id}")
-    void acceptExtension(@PathVariable(name = "id") int id){
+    void acceptExtension(@PathVariable(name = "id") int id) {
         extensionService.approveExtension(id);
     }
 
     @PatchMapping(value = "/changeFeaturedState/{id}")
-    void changeFeaturedState(@PathVariable(name = "id") int id){
+    void changeFeaturedState(@PathVariable(name = "id") int id) {
         extensionService.changeFeaturedState(id);
     }
 
     @PostMapping(value = "/add")
-    public @ResponseBody Extension addExtension(@RequestBody Extension extension) {
+    public @ResponseBody
+    Extension addExtension(@RequestBody Extension extension) {
         return extensionService.create(extension);
     }
 }

@@ -27,7 +27,6 @@ public class ExtensionSerializer extends StdSerializer<Extension> {
         jsonGenerator.writeStringField("title", extension.getName());
         jsonGenerator.writeNumberField("version", extension.getVersion());
         jsonGenerator.writeStringField("description", extension.getDescription());
-        jsonGenerator.writeStringField("description", extension.getDescription());
 
         if (extension.getFile() != null) {
             jsonGenerator.writeObjectFieldStart("file");

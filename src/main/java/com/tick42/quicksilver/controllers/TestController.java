@@ -27,7 +27,6 @@ public class TestController {
 
     @GetMapping()
     public void test() {
-        ObjectMapper om = new ObjectMapper();
         HttpClient client = HttpClientBuilder.create().build();
         HttpHead request = new HttpHead("https://api.github.com/repos/eugenp/REST-With-Spring/pulls?per_page=1");
         try {

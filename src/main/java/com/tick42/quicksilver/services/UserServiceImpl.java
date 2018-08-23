@@ -5,6 +5,7 @@ import com.tick42.quicksilver.repositories.UserRepositoryImpl;
 import com.tick42.quicksilver.repositories.base.GenericRepository;
 import com.tick42.quicksilver.services.base.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service

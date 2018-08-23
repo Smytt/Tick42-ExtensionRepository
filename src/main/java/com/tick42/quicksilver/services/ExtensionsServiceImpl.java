@@ -1,15 +1,13 @@
 package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.models.Extension;
-import com.tick42.quicksilver.models.Tag;
 import com.tick42.quicksilver.repositories.base.ExtensionRepository;
-import com.tick42.quicksilver.repositories.base.TagRepository;
 import com.tick42.quicksilver.services.base.ExtensionService;
+import com.tick42.quicksilver.services.base.GitHubService;
 import com.tick42.quicksilver.services.base.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,17 +16,20 @@ public class ExtensionsServiceImpl implements ExtensionService {
 
     private final ExtensionRepository extensionRepository;
     private final TagService tagService;
+    private final GitHubService gitHubService;
 
     @Autowired
-    public ExtensionsServiceImpl(ExtensionRepository extensionRepository, TagService tagService) {
+    public ExtensionsServiceImpl(ExtensionRepository extensionRepository, TagService tagService, GitHubService gitHubService) {
         this.extensionRepository = extensionRepository;
         this.tagService = tagService;
+        this.gitHubService = gitHubService;
     }
 
     @Override
     public Extension create(Extension extension) {
 
         extension.setUploadDate(new Date());
+        gitHubService.getDetails(extension);
         extension.setTags(tagService.prepareTags(extension.getTags()));
 
         return extensionRepository.create(extension);
