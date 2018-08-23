@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/api/file")
+@RequestMapping(value = "/api")
 public class FileController {
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
@@ -30,36 +30,36 @@ public class FileController {
         this.fileService = fileService;
     }
 
-    @PostMapping(value = "/upload/{id}")
+    @PostMapping(value = "upload/file/{id}")
     @ResponseBody
     public File uploadFile(@RequestParam("file") MultipartFile receivedFile, @PathVariable(name = "id") int extensionId) {
         return fileService.storeFile(receivedFile, extensionId);
     }
 
-    @PostMapping("/uploadMany/{id}")
-    public List<File> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, @PathVariable int extensionId) {
-        return Arrays.asList(files)
+    @PostMapping("upload/images/{id}")
+    public List<File> uploadImages(@RequestParam("images") MultipartFile[] images, @PathVariable(name = "id") int extensionId) {
+        return Arrays.asList(images)
                 .stream()
-                .map(file -> uploadFile(file, extensionId))
+                .map(image -> fileService.storeImage(image, extensionId))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         Resource resource = fileService.loadFileAsResource(fileName);
-        String ccontentType = null;
+        String contentType = null;
         try {
-            ccontentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException e) {
             logger.info("Could not get file type");
         }
 
-        if(ccontentType == null) {
-            ccontentType = "application/octet-stream";
+        if(contentType == null) {
+            contentType = "application/octet-stream";
         }
 
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(ccontentType))
+                .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +
                  resource.getFilename() + "\"")
                 .body(resource);

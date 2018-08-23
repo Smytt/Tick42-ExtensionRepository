@@ -1,6 +1,5 @@
 package com.tick42.quicksilver.services;
 
-import com.tick42.quicksilver.config.FileConfig;
 import com.tick42.quicksilver.exceptions.FileStorageException;
 import com.tick42.quicksilver.exceptions.MyFileNotFoundException;
 import com.tick42.quicksilver.models.Extension;
@@ -8,6 +7,7 @@ import com.tick42.quicksilver.models.File;
 import com.tick42.quicksilver.repositories.FileRepositoryImpl;
 import com.tick42.quicksilver.repositories.base.ExtensionRepository;
 import com.tick42.quicksilver.services.base.FileService;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -49,35 +49,47 @@ public class FileServiceImpl implements FileService {
     @Override
     public File storeFile(MultipartFile receivedFile, int extensionId) {
 
-        String fileName = StringUtils.cleanPath(receivedFile.getOriginalFilename());
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/download/")
-                .path(fileName)
-                .toUriString();
-
         Extension extension = extensionsService.findById(extensionId);
-
-        File file = new File();
-        file.setName(fileName);
-        file.setLocation(fileDownloadUri);
-        file.setSize(receivedFile.getSize());
-        file.setType(receivedFile.getContentType());
-        extension.setFile(file);
+        File file = generateFile(receivedFile, "file", extensionId);
 
         try {
-            if(fileName.contains("..")) {
-                throw new FileStorageException("Filename contains invalid path sequence");
-            }
+            saveFile(file, receivedFile);
 
-            Path targetLocation = this.fileLocation.resolve(fileName);
-            Files.copy(receivedFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
+            extension.setFile(file);
             extensionRepository.update(extension);
             return file;
-        }
-        catch (IOException e) {
+
+        } catch (IOException e) {
             throw new FileStorageException("Couldn't store file");
         }
+    }
+
+
+    @Override
+    public File storeImage(MultipartFile receivedFile, int extensionId) {
+
+        File image = generateFile(receivedFile, "image", extensionId);
+        Extension extension = extensionsService.findById(extensionId);
+
+        try {
+            if (!image.getType().startsWith("image/")) {
+                throw new FileStorageException("File should be of type IMAGE");
+            }
+
+            saveFile(image, receivedFile);
+
+            extension.setImage(image);
+            extensionRepository.update(extension);
+            return image;
+
+        } catch (IOException e) {
+            throw new FileStorageException("Couldn't store image.");
+        }
+    }
+
+    private void saveFile(File image, MultipartFile receivedFile) throws IOException {
+        Path targetLocation = this.fileLocation.resolve(image.getName());
+        Files.copy(receivedFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
     }
 
     @Override
@@ -87,13 +99,26 @@ public class FileServiceImpl implements FileService {
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
                 return resource;
-            }
-            else  {
+            } else {
                 throw new MyFileNotFoundException("File not found");
             }
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             throw new MyFileNotFoundException("File not found " + e);
         }
+    }
+
+    private File generateFile(MultipartFile receivedFile, String type, int extensionId) {
+        String fileType = FilenameUtils.getExtension(receivedFile.getOriginalFilename());
+        String fileName = extensionId + "_" + type + "." + fileType;
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/download/")
+                .path(fileName)
+                .toUriString();
+        File file = new File();
+        file.setName(fileName);
+        file.setLocation(fileDownloadUri);
+        file.setSize(receivedFile.getSize());
+        file.setType(receivedFile.getContentType());
+        return file;
     }
 }

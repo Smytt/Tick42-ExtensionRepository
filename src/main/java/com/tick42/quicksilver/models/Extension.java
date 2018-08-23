@@ -27,6 +27,10 @@ public class Extension {
     @JoinColumn(name = "file_id")
     private File file;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private File image;
+
     @Column(name = "github")
     private String github;
 
@@ -187,6 +191,14 @@ public class Extension {
 
     public void setUploadDate(Date uploadDate) {
         this.uploadDate = uploadDate;
+    }
+
+    public File getImage() {
+        return image;
+    }
+
+    public void setImage(File image) {
+        this.image = image;
     }
 
     @Override

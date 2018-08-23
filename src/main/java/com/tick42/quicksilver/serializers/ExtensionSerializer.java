@@ -37,6 +37,14 @@ public class ExtensionSerializer extends StdSerializer<Extension> {
             jsonGenerator.writeEndObject();
         }
 
+        if (extension.getImage() != null) {
+            jsonGenerator.writeObjectFieldStart("image");
+            jsonGenerator.writeNumberField("id", extension.getFile().getId());
+            jsonGenerator.writeStringField("location", extension.getFile().getLocation());
+            jsonGenerator.writeStringField("name", extension.getFile().getName());
+            jsonGenerator.writeEndObject();
+        }
+
         jsonGenerator.writeStringField("github", extension.getGithub());
         jsonGenerator.writeNumberField("timesDownloaded", extension.getTimesDownloaded());
         jsonGenerator.writeStringField("lastCommit", extension.getLastCommit().toString());
