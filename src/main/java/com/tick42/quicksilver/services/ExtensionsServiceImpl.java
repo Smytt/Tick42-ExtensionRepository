@@ -29,7 +29,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
     }
 
     @Override
-    public Extension create(ExtensionSpec extensionSpec) {
+    public ExtensionDTO create(ExtensionSpec extensionSpec) {
 
         Extension extension = new Extension(extensionSpec);
 
@@ -42,7 +42,9 @@ public class ExtensionsServiceImpl implements ExtensionService {
         extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
         extension.setTags(tagService.generateTags(extensionSpec.getTags()));
 
-        return extensionRepository.create(extension);
+        System.out.println(extension);
+
+        return new ExtensionDTO(extensionRepository.create(extension));
     }
 
     @Override

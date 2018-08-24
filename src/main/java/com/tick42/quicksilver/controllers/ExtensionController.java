@@ -77,7 +77,7 @@ public class ExtensionController {
 
     @PostMapping(value = "/add")
     public @ResponseBody
-    Extension addExtension(@RequestBody ExtensionSpec extension) {
+    ExtensionDTO addExtension(@RequestBody ExtensionSpec extension) {
         return extensionService.create(extension);
     }
 }
