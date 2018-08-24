@@ -34,6 +34,12 @@ public class Extension {
     @Column(name = "github")
     private String github;
 
+    @Column(name = "github_user")
+    private String githubUser;
+
+    @Column(name = "github_repo")
+    private String githubRepo;
+
     @Column(name = "times_downloaded")
     private int timesDownloaded;
 
@@ -206,4 +212,19 @@ public class Extension {
         return id + "; " + name + "; " + tags + "; " + lastCommit;
     }
 
+    public String getGithubUser() {
+        return githubUser;
+    }
+
+    public void setGithubUser(String githubUser) {
+        this.githubUser = githubUser;
+    }
+
+    public String getGithubRepo() {
+        return githubRepo;
+    }
+
+    public void setGithubRepo(String githubRepo) {
+        this.githubRepo = githubRepo;
+    }
 }

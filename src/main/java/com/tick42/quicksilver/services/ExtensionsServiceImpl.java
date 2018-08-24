@@ -6,6 +6,7 @@ import com.tick42.quicksilver.services.base.ExtensionService;
 import com.tick42.quicksilver.services.base.GitHubService;
 import com.tick42.quicksilver.services.base.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -99,14 +100,25 @@ public class ExtensionsServiceImpl implements ExtensionService {
     }
 
     @Override
-    public void changeFeaturedState(int id){
+    public void changeFeaturedState(int id) {
         Extension extension = extensionRepository.findById(id);
-        if (extension.getIsFeatured()){
+        if (extension.getIsFeatured()) {
             extension.setIsFeatured(false);
             extensionRepository.update(extension);
-        }else {
+        } else {
             extension.setIsFeatured(true);
             extensionRepository.update(extension);
         }
+    }
+
+    @Override
+    @Scheduled(fixedDelay = 360000) //todo -- one day?
+    public void updateExtensionDetails() {
+        List<Extension> extensions = extensionRepository.findAll();
+        extensions.forEach(extension -> {
+            System.out.println("updating... " + extension.getId());
+            gitHubService.getDetails(extension);
+            extensionRepository.update(extension);
+        });
     }
 }

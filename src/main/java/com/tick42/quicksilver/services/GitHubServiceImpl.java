@@ -51,6 +51,7 @@ public class GitHubServiceImpl implements GitHubService{
     private Date getLastCommit(String user, String repo) {
         Date date = null;
         HttpGet request = new HttpGet("https://api.github.com/repos/" + user + "/" + repo + "/commits?per_page=1");
+        request.addHeader("Authorization", "Bearer 5c1a77eec3047ae6b562a55a7c0e4d4735cb38ef ");
         try {
             HttpResponse response = httpClient.execute(request);
             HttpEntity entity = response.getEntity();
@@ -83,6 +84,7 @@ public class GitHubServiceImpl implements GitHubService{
     private int getPullRequests(String user, String repo) {
         int pulls = 0;
         HttpHead request = new HttpHead("https://api.github.com/repos/" + user + "/" + repo + "/pulls?per_page=1");
+        request.addHeader("Authorization", "Bearer 5c1a77eec3047ae6b562a55a7c0e4d4735cb38ef ");
         try {
             HttpResponse response = httpClient.execute(request);
             Header[] headers = response.getHeaders("link");
@@ -110,6 +112,7 @@ public class GitHubServiceImpl implements GitHubService{
     private int getOpenIssues(String user, String repo) {
         int issues = 0;
         HttpGet request = new HttpGet("https://api.github.com/repos/" + user + "/" + repo);
+        request.addHeader("Authorization", "Bearer 5c1a77eec3047ae6b562a55a7c0e4d4735cb38ef ");
         try {
             HttpResponse response = httpClient.execute(request);
             HttpEntity entity = response.getEntity();
