@@ -9,21 +9,21 @@ import java.util.List;
 
 public interface ExtensionService {
 
-    Extension create(ExtensionSpec model);
+    ExtensionDTO create(ExtensionSpec model);
 
     ExtensionDTO findById(int id);
 
     void delete(int id);
 
-    List<Extension> findByName(String searchQuery);
+    List<ExtensionDTO> findByName(String searchQuery);
 
-    List<Extension> findAll();
+    List<ExtensionDTO> findAll();
 
-    List<Extension> findTopMostDownloaded(int count);
+    List<ExtensionDTO> findTopMostDownloaded(int count);
 
-    List<Extension> findMostRecentUploads(int count);
+    List<ExtensionDTO> findMostRecentUploads(int count);
 
-    List<Extension> findFeatured(int count);
+    List<ExtensionDTO> findFeatured(int count);
 
     List<Extension> sortByUploadDate();
 
@@ -35,5 +35,5 @@ public interface ExtensionService {
 
     void approveExtension(int id);
 
-    void changeFeaturedState(int id);
+    void changeFeaturedState(int id, String newState);
 }

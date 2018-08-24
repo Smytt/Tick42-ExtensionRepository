@@ -11,6 +11,7 @@ import com.tick42.quicksilver.services.base.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
     }
 
     @Override
-    public Extension create(ExtensionSpec extensionSpec) {
+    public ExtensionDTO create(ExtensionSpec extensionSpec) {
 
         Extension extension = new Extension(extensionSpec);
 
@@ -42,7 +43,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
         extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
         extension.setTags(tagService.generateTags(extensionSpec.getTags()));
 
-        return extensionRepository.create(extension);
+        return new ExtensionDTO(extensionRepository.create(extension));
     }
 
     @Override
@@ -58,29 +59,54 @@ public class ExtensionsServiceImpl implements ExtensionService {
     }
 
     @Override
-    public List<Extension> findByName(String searchQuery) {
-        return extensionRepository.findByName(searchQuery);
+    public List<ExtensionDTO> findByName(String name) {
+        List<Extension> extensions = extensionRepository.findByName(name);
+        List<ExtensionDTO> extensionsDto = new ArrayList<>();
+        for (Extension extension:extensions) {
+            extensionsDto.add(new ExtensionDTO(extension));
+        }
+        return extensionsDto;
     }
 
 
     @Override
-    public List<Extension> findAll() {
-        return extensionRepository.findAll();
+    public List<ExtensionDTO> findAll() {
+        List<Extension> extensions = extensionRepository.findAll();
+        List<ExtensionDTO> extensionsDTO = new ArrayList<>();
+        for (Extension extension:extensions) {
+            extensionsDTO.add(new ExtensionDTO(extension));
+        }
+        return extensionsDTO;
     }
 
     @Override
-    public List<Extension> findTopMostDownloaded(int count) {
-        return extensionRepository.findTopMostDownloaded(count);
+    public List<ExtensionDTO> findTopMostDownloaded(int count) {
+        List<Extension> extensions = extensionRepository.findTopMostDownloaded(count);
+        List<ExtensionDTO> extensionsDTO = new ArrayList<>();
+        for (Extension extension:extensions) {
+            extensionsDTO.add(new ExtensionDTO(extension));
+        }
+        return extensionsDTO;
     }
 
     @Override
-    public List<Extension> findMostRecentUploads(int count) {
-        return extensionRepository.findMostRecentUploads(count);
+    public List<ExtensionDTO> findMostRecentUploads(int count) {
+        List<Extension> extensions = extensionRepository.findMostRecentUploads(count);
+        List<ExtensionDTO> extensionsDTO = new ArrayList<>();
+        for (Extension extension : extensions) {
+            extensionsDTO.add(new ExtensionDTO(extension));
+        }
+        return extensionsDTO;
     }
 
     @Override
-    public List<Extension> findFeatured(int count) {
-        return extensionRepository.findFeatured(count);
+    public List<ExtensionDTO> findFeatured(int count) {
+        List<Extension> extensions = extensionRepository.findFeatured(count);
+        List<ExtensionDTO> extensionsDTO = new ArrayList<>();
+        for (Extension extension:extensions) {
+            extensionsDTO.add(new ExtensionDTO(extension));
+        }
+        return extensionsDTO;
     }
 
     @Override
@@ -111,7 +137,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
     }
 
     @Override
-    public void changeFeaturedState(int id) {
+    public void changeFeaturedState(int id, String state) {
         Extension extension = extensionRepository.findById(id);
         if (extension.getIsFeatured()) {
             extension.setIsFeatured(false);

@@ -49,9 +49,9 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
 
     @Override
     public void delete(int id) {
-        Extension extension = findById(id);
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
+            Extension extension = session.get(Extension.class, id);
             session.delete(extension);
             session.getTransaction().commit();
         } catch (Exception e) {

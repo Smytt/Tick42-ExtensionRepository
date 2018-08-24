@@ -21,7 +21,7 @@ public class ExtensionController {
     }
 
     @GetMapping(value = "/all")
-    public List<Extension> findAll() {
+    public List<ExtensionDTO> findAll() {
         return extensionService.findAll();
     }
 
@@ -30,23 +30,23 @@ public class ExtensionController {
         return extensionService.findById(id);
     }
 
-    @GetMapping(value = "/search/{searchQuery}")
-    public List<Extension> findByName(@PathVariable(name = "searchQuery") String searchQuery) {
-        return extensionService.findByName(searchQuery);
+    @GetMapping(value = "/search/{name}")
+    public List<ExtensionDTO> findByName(@PathVariable(name = "name") String name) {
+        return extensionService.findByName(name);
     }
 
     @GetMapping(value = "/mostDownloads/{count}")
-    public List<Extension> mostDownloaded(@PathVariable(name = "count") int count) {
+    public List<ExtensionDTO> mostDownloaded(@PathVariable(name = "count") int count) {
         return extensionService.findTopMostDownloaded(count);
     }
 
     @GetMapping(value = "/mostRecentUploads/{count}")
-    public List<Extension> latestUploads(@PathVariable(name = "count") int count) {
+    public List<ExtensionDTO> latestUploads(@PathVariable(name = "count") int count) {
         return extensionService.findMostRecentUploads(count);
     }
 
     @GetMapping(value = "/featured/{count}")
-    public List<Extension> featured(@PathVariable(name = "count") int count) {
+    public List<ExtensionDTO> featured(@PathVariable(name = "count") int count) {
         return extensionService.findFeatured(count);
     }
 
@@ -71,13 +71,18 @@ public class ExtensionController {
     }
 
     @PatchMapping(value = "/changeFeaturedState/{id}/{newState}")
-    void changeFeaturedState(@PathVariable(name = "id") int id){
-        extensionService.changeFeaturedState(id);
+    void changeFeaturedState(@PathVariable("id") int id, @PathVariable("newState") String newState){
+        extensionService.changeFeaturedState(id, newState);
     }
 
     @PostMapping(value = "/add")
     public @ResponseBody
-    Extension addExtension(@RequestBody ExtensionSpec extension) {
+    ExtensionDTO addExtension(@RequestBody ExtensionSpec extension) {
         return extensionService.create(extension);
     }
+
+    //    @DeleteMapping(value = "/delete/{id}")
+//    void deleteExtension(@PathVariable int id) {
+//        extensionService.delete(id);
+//    }
 }
