@@ -27,7 +27,6 @@ public class ExtensionSerializer extends StdSerializer<Extension> {
         jsonGenerator.writeStringField("title", extension.getName());
         jsonGenerator.writeNumberField("version", extension.getVersion());
         jsonGenerator.writeStringField("description", extension.getDescription());
-        jsonGenerator.writeStringField("description", extension.getDescription());
 
         if (extension.getFile() != null) {
             jsonGenerator.writeObjectFieldStart("file");
@@ -46,13 +45,16 @@ public class ExtensionSerializer extends StdSerializer<Extension> {
         }
 
         jsonGenerator.writeStringField("github", extension.getGithub());
-        jsonGenerator.writeNumberField("timesDownloaded", extension.getTimesDownloaded());
-        jsonGenerator.writeStringField("lastCommit", extension.getLastCommit().toString());
-        jsonGenerator.writeStringField("uploadDate", extension.getUploadDate().toString());
-        jsonGenerator.writeNumberField("pullRequests", extension.getPullRequests());
-        jsonGenerator.writeNumberField("openIssues", extension.getOpenIssues());
-        jsonGenerator.writeBooleanField("isPending", extension.getIsPending());
-        jsonGenerator.writeBooleanField("isFeatured",extension.getIsFeatured());
+        jsonGenerator.writeStringField("github_user", extension.getGithubUser());
+        jsonGenerator.writeStringField("github_repo", extension.getGithubRepo());
+        jsonGenerator.writeStringField("github", extension.getGithub());
+        jsonGenerator.writeNumberField("times_downloaded", extension.getTimesDownloaded());
+        jsonGenerator.writeStringField("last_commit", extension.getLastCommit().toString());
+        jsonGenerator.writeStringField("upload_date", extension.getUploadDate().toString());
+        jsonGenerator.writeNumberField("pull_requests", extension.getPullRequests());
+        jsonGenerator.writeNumberField("open_issues", extension.getOpenIssues());
+        jsonGenerator.writeBooleanField("is_pending", extension.getIsPending());
+        jsonGenerator.writeBooleanField("is_featured",extension.getIsFeatured());
 
         jsonGenerator.writeArrayFieldStart("tags");
         for (Tag tag : extension.getTags()) {

@@ -35,4 +35,5 @@ public interface ExtensionService {
 
     void changeFeaturedState(int id);
 
+    void updateExtensionDetails();
 }

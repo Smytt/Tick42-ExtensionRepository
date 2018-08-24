@@ -65,8 +65,9 @@ public class ExtensionController {
     public List<Extension> sortByCommitDate() {
         return extensionService.sortByCommitDate();
     }
+
     @PatchMapping(value = "/approveExtension/{id}")
-    void acceptExtension(@PathVariable(name = "id") int id){
+    void acceptExtension(@PathVariable(name = "id") int id) {
         extensionService.approveExtension(id);
     }
 
