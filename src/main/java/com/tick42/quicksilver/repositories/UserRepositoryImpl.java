@@ -88,7 +88,7 @@ public class UserRepositoryImpl implements UserRepository {
         return user;
     }
     @Override
-    public User authenticate(String username, String password){
+    public User findByUserName(String username){
         User user = null;
         try(Session session = sessionFactory.openSession()){
             session.beginTransaction();

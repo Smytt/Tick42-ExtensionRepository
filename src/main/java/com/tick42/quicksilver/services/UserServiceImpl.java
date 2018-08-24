@@ -35,7 +35,10 @@ public class UserServiceImpl implements UserService {
     public String createTokenData(User user){
         String username = user.getUsername();
         String password = user.getPassword();
-        User user1 = userRepository.authenticate(username,password);
-        return jwtGenerator.generate(user1);
+        User foundUser = userRepository.findByUserName(username);
+        if (password.equals(foundUser.getPassword())){
+            return jwtGenerator.generate(foundUser);
+        }
+        return null;
     }
 }
