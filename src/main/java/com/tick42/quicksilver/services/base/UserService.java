@@ -7,5 +7,5 @@ public interface UserService {
 
     User findById(int id);
 
-    void createTokenData(User user);
+    String createTokenData(User user);
 }

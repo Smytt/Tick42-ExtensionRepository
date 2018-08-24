@@ -24,6 +24,10 @@ public class Tag {
 
     }
 
+    public Tag(String name) {
+        this.setName(name);
+    }
+
     public int getId() {
         return id;
     }

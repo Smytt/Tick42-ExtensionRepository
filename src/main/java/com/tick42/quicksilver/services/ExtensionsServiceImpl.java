@@ -1,6 +1,9 @@
 package com.tick42.quicksilver.services;
 
+import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.Extension;
+import com.tick42.quicksilver.models.GitHub;
+import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.ExtensionRepository;
 import com.tick42.quicksilver.services.base.ExtensionService;
 import com.tick42.quicksilver.services.base.GitHubService;
@@ -27,11 +30,18 @@ public class ExtensionsServiceImpl implements ExtensionService {
     }
 
     @Override
-    public Extension create(Extension extension) {
+    public Extension create(ExtensionDTO extensionDTO) {
 
+        Extension extension = new Extension(extensionDTO);
+
+        User mockUser = new User();
+        mockUser.setId(3);
+
+        extension.setIsPending(true);
+        extension.setOwner(mockUser);
         extension.setUploadDate(new Date());
-        gitHubService.getDetails(extension);
-        extension.setTags(tagService.prepareTags(extension.getTags()));
+        extension.setGithub(gitHubService.generateGitHub(extensionDTO.getGithub()));
+        extension.setTags(tagService.generateTags(extensionDTO.getTags()));
 
         return extensionRepository.create(extension);
     }
@@ -109,16 +119,5 @@ public class ExtensionsServiceImpl implements ExtensionService {
             extension.setIsFeatured(true);
             extensionRepository.update(extension);
         }
-    }
-
-    @Override
-    @Scheduled(fixedDelay = 360000) //todo -- one day?
-    public void updateExtensionDetails() {
-        List<Extension> extensions = extensionRepository.findAll();
-        extensions.forEach(extension -> {
-            System.out.println("updating... " + extension.getId());
-            gitHubService.getDetails(extension);
-            extensionRepository.update(extension);
-        });
     }
 }
