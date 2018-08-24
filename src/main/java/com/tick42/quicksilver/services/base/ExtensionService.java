@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.services.base;
 
 
+import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.models.Extension;
 
@@ -10,7 +11,7 @@ public interface ExtensionService {
 
     Extension create(ExtensionSpec model);
 
-    Extension findById(int id);
+    ExtensionDTO findById(int id);
 
     void delete(int id);
 

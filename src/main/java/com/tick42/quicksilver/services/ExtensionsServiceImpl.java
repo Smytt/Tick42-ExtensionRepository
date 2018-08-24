@@ -1,5 +1,6 @@
 package com.tick42.quicksilver.services;
 
+import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.User;
@@ -45,8 +46,10 @@ public class ExtensionsServiceImpl implements ExtensionService {
     }
 
     @Override
-    public Extension findById(int id) {
-        return extensionRepository.findById(id);
+    public ExtensionDTO findById(int id) {
+        Extension extension = extensionRepository.findById(id);
+        ExtensionDTO extensionDTO = new ExtensionDTO(extension);
+        return extensionDTO;
     }
 
     @Override

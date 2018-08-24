@@ -49,7 +49,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public File storeFile(MultipartFile receivedFile, int extensionId) {
 
-        Extension extension = extensionsService.findById(extensionId);
+        Extension extension = extensionRepository.findById(extensionId);
         File file = generateFile(receivedFile, "file", extensionId);
 
         try {
@@ -69,7 +69,7 @@ public class FileServiceImpl implements FileService {
     public File storeImage(MultipartFile receivedFile, int extensionId) {
 
         File image = generateFile(receivedFile, "image", extensionId);
-        Extension extension = extensionsService.findById(extensionId);
+        Extension extension = extensionRepository.findById(extensionId);
 
         try {
             if (!image.getType().startsWith("image/")) {
