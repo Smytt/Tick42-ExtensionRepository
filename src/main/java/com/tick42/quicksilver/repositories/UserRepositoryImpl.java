@@ -2,6 +2,7 @@ package com.tick42.quicksilver.repositories;
 
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.GenericRepository;
+import com.tick42.quicksilver.repositories.base.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class UserRepositoryImpl implements GenericRepository<User> {
+public class UserRepositoryImpl implements UserRepository {
 
     private final SessionFactory sessionFactory;
 
@@ -84,6 +85,21 @@ public class UserRepositoryImpl implements GenericRepository<User> {
             System.out.println(e.getMessage());
         }
 
+        return user;
+    }
+    @Override
+    public User authenticate(String username, String password){
+        User user = null;
+        try(Session session = sessionFactory.openSession()){
+            session.beginTransaction();
+            user = (User)session
+                    .createQuery("from User where username = :name")
+                    .setParameter("name", username)
+                    .uniqueResult();
+            session.getTransaction().commit();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return user;
     }
 }

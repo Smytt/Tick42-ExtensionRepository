@@ -27,8 +27,8 @@ public class User {
 
     @NotNull(message="is required")
     @Size(min=1, message="is required")
-    @JsonIgnore
     private String password;
+
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Extension> extensions = new ArrayList<>();
@@ -37,10 +37,10 @@ public class User {
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean isActive = true;
 
-    public User() {
+    private String role;
+    public User(){
 
     }
-
     public User(String username, String password) {
         this.username = username;
         this.password = password;

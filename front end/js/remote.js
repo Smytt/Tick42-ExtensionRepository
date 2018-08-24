@@ -15,7 +15,7 @@ remote = (() => {
         })
     }
 
-    var searchByName = (extensionTitle, callBack) => {
+    var searchByName = (extensionTitle) => {
         $.ajax({
             type: 'GET',
             url: base + "/api/extension/search/" + extensionTitle,
@@ -26,7 +26,7 @@ remote = (() => {
         })
     }
 
-    var mostDownloads = (count, callBack) => {
+    var mostDownloads = (count) => {
         $.ajax({
             type: 'GET',
             url: base + "/api/extension/mostDownloads/" + count,

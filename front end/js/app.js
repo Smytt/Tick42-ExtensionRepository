@@ -3,20 +3,10 @@ var app = (() => {
     var count = 10;
     var home = (e) => {
         preventDefault(e);
-        remote.mostRecentUploads(count,uploadsCallBack);
-        remote.mostDownloads(count, downloadsCallBack);
+        remote.mostRecentUploads(count,remote.mostRecentUploads);
+        remote.mostDownloads(count,remote.mostDownloads);
     }
 
-    function uploadsCallBack(response) {
-    console.log(count);
-        render.downloadsResult(response,count)
-
-    }
-
-    function downloadsCallBack(response) {
-        render.uploadsResult(response,count)
-
-    }
 
     var start = () => {
 
@@ -37,12 +27,7 @@ var app = (() => {
         if (!hitEnter(e)) return;
 
         searchFieldName = $('#name').val();
-        remote.searchByName(searchFieldName, searchCallback);
-    }
-
-    function searchCallback(response) {
-        render.searchResults(response,searchFieldName)
-
+        remote.searchByName(searchFieldName, remote);
     }
 
     function preventDefault(e) {

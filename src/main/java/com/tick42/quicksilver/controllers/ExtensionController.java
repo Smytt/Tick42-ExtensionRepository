@@ -70,7 +70,7 @@ public class ExtensionController {
         extensionService.approveExtension(id);
     }
 
-    @PatchMapping(value = "/changeFeaturedState/{id}")
+    @PatchMapping(value = "/changeFeaturedState/{id}/{newState}")
     void changeFeaturedState(@PathVariable(name = "id") int id){
         extensionService.changeFeaturedState(id);
     }
