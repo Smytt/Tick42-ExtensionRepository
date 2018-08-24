@@ -25,7 +25,7 @@ public class ExtensionSerializer extends StdSerializer<Extension> {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("id", extension.getId());
         jsonGenerator.writeStringField("title", extension.getName());
-        jsonGenerator.writeNumberField("version", extension.getVersion());
+        jsonGenerator.writeStringField("version", extension.getVersion());
         jsonGenerator.writeStringField("description", extension.getDescription());
 
         if (extension.getFile() != null) {
@@ -44,17 +44,19 @@ public class ExtensionSerializer extends StdSerializer<Extension> {
             jsonGenerator.writeEndObject();
         }
 
-        jsonGenerator.writeStringField("github", extension.getGithub());
-        jsonGenerator.writeStringField("github_user", extension.getGithubUser());
-        jsonGenerator.writeStringField("github_repo", extension.getGithubRepo());
-        jsonGenerator.writeStringField("github", extension.getGithub());
-        jsonGenerator.writeNumberField("times_downloaded", extension.getTimesDownloaded());
-        jsonGenerator.writeStringField("last_commit", extension.getLastCommit().toString());
+        if (extension.getGithub() != null) {
+            jsonGenerator.writeNumberField("times_downloaded", extension.getTimesDownloaded());
+            jsonGenerator.writeStringField("github", extension.getGithub().getLink());
+            jsonGenerator.writeStringField("github_user", extension.getGithub().getLink());
+            jsonGenerator.writeStringField("github_repo", extension.getGithub().getRepo());
+            jsonGenerator.writeStringField("last_commit", extension.getGithub().getLastCommit().toString());
+            jsonGenerator.writeNumberField("pull_requests", extension.getGithub().getPullRequests());
+            jsonGenerator.writeNumberField("open_issues", extension.getGithub().getOpenIssues());
+        }
+
         jsonGenerator.writeStringField("upload_date", extension.getUploadDate().toString());
-        jsonGenerator.writeNumberField("pull_requests", extension.getPullRequests());
-        jsonGenerator.writeNumberField("open_issues", extension.getOpenIssues());
         jsonGenerator.writeBooleanField("is_pending", extension.getIsPending());
-        jsonGenerator.writeBooleanField("is_featured",extension.getIsFeatured());
+        jsonGenerator.writeBooleanField("is_featured", extension.getIsFeatured());
 
         jsonGenerator.writeArrayFieldStart("tags");
         for (Tag tag : extension.getTags()) {
@@ -63,7 +65,7 @@ public class ExtensionSerializer extends StdSerializer<Extension> {
         jsonGenerator.writeEndArray();
 
         jsonGenerator.writeObjectFieldStart("owner");
-        jsonGenerator.writeStringField("owner", extension.getOwner().getUsername());
+        jsonGenerator.writeStringField("username", extension.getOwner().getUsername());
         jsonGenerator.writeNumberField("id", extension.getOwner().getId());
         jsonGenerator.writeEndObject();
 

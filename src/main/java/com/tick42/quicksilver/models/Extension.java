@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.serializers.ExtensionSerializer;
 
 import javax.persistence.*;
@@ -31,20 +32,15 @@ public class Extension {
     @JoinColumn(name = "image_id")
     private File image;
 
-    @Column(name = "github")
-    private String github;
-
-    @Column(name = "github_user")
-    private String githubUser;
-
-    @Column(name = "github_repo")
-    private String githubRepo;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "github_id")
+    private GitHub github;
 
     @Column(name = "times_downloaded")
     private int timesDownloaded;
 
     @Column(name = "version")
-    private double version;
+    private String version;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
             @JoinTable(
@@ -60,15 +56,6 @@ public class Extension {
     @Column(name = "is_pending")
     private boolean isPending;
 
-    @Column(name = "last_commit")
-    private Date lastCommit;
-
-    @Column(name = "pull_requests")
-    private int pullRequests;
-
-    @Column(name = "open_issues")
-    private int openIssues;
-
     @Column(name = "upload_date")
     private Date uploadDate;
 
@@ -77,6 +64,12 @@ public class Extension {
 
     public Extension() {
 
+    }
+
+    public Extension(ExtensionDTO extensionDTO) {
+        this.setName(extensionDTO.getName());
+        this.setVersion(extensionDTO.getVersion());
+        this.setDescription(extensionDTO.getDescription());
     }
 
     public int getId() {
@@ -103,14 +96,6 @@ public class Extension {
         this.description = description;
     }
 
-    public String getGithub() {
-        return github;
-    }
-
-    public void setGithub(String github) {
-        this.github = github;
-    }
-
     public int getTimesDownloaded() {
         return timesDownloaded;
     }
@@ -119,11 +104,11 @@ public class Extension {
         this.timesDownloaded = timesDownloaded;
     }
 
-    public double getVersion() {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(double version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 
@@ -149,30 +134,6 @@ public class Extension {
 
     public void setIsPending(boolean pending) {
         isPending = pending;
-    }
-
-    public Date getLastCommit() {
-        return lastCommit;
-    }
-
-    public void setLastCommit(Date lastCommit) {
-        this.lastCommit = lastCommit;
-    }
-
-    public int getPullRequests() {
-        return pullRequests;
-    }
-
-    public void setPullRequests(int pullRequests) {
-        this.pullRequests = pullRequests;
-    }
-
-    public int getOpenIssues() {
-        return openIssues;
-    }
-
-    public void setOpenIssues(int openIssues) {
-        this.openIssues = openIssues;
     }
 
     public File getFile() {
@@ -207,24 +168,11 @@ public class Extension {
         this.image = image;
     }
 
-    @Override
-    public String toString() {
-        return id + "; " + name + "; " + tags + "; " + lastCommit;
+    public GitHub getGithub() {
+        return github;
     }
 
-    public String getGithubUser() {
-        return githubUser;
-    }
-
-    public void setGithubUser(String githubUser) {
-        this.githubUser = githubUser;
-    }
-
-    public String getGithubRepo() {
-        return githubRepo;
-    }
-
-    public void setGithubRepo(String githubRepo) {
-        this.githubRepo = githubRepo;
+    public void setGithub(GitHub github) {
+        this.github = github;
     }
 }

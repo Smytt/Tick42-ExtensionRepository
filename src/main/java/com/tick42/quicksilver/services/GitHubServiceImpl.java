@@ -1,7 +1,8 @@
 package com.tick42.quicksilver.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tick42.quicksilver.models.Extension;
+import com.tick42.quicksilver.models.GitHub;
+import com.tick42.quicksilver.repositories.base.GenericRepository;
 import com.tick42.quicksilver.services.base.GitHubService;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -10,18 +11,18 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,27 +31,35 @@ public class GitHubServiceImpl implements GitHubService{
 
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
+    private final GenericRepository<GitHub> gitHubRepository;
 
     @Autowired
-    public GitHubServiceImpl(HttpClient httpClient, ObjectMapper objectMapper) {
+    public GitHubServiceImpl(HttpClient httpClient, ObjectMapper objectMapper, GenericRepository<GitHub> gitHubRepository) {
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
+        this.gitHubRepository = gitHubRepository;
     }
 
     @Override
-    public void getDetails(Extension extension) {
-        String githubLink = extension.getGithub();
-        String[] githubCred = githubLink.replaceAll("https://github.com/", "").split("/");
-        String user = githubCred[0];
-        String repo = githubCred[1];
-        extension.setPullRequests(getPullRequests(user, repo));
-        extension.setLastCommit(getLastCommit(user, repo));
-        extension.setOpenIssues(getOpenIssues(user, repo));
+    public void getDetails(GitHub gitHub) {
+        loadPullRequests(gitHub);
+        loadLastCommit(gitHub);
+        loadOpenIssues(gitHub);
     }
 
-    private Date getLastCommit(String user, String repo) {
+    @Override
+    public GitHub generateGitHub(String link) {
+        String[] githubCred = link.replaceAll("https://github.com/", "").split("/");
+        String user = githubCred[0];
+        String repo = githubCred[1];
+        GitHub gitHub = new GitHub(link, user, repo);
+        getDetails(gitHub);
+        return gitHub;
+    }
+
+    private void loadLastCommit(GitHub gitHub) {
         Date date = null;
-        HttpGet request = new HttpGet("https://api.github.com/repos/" + user + "/" + repo + "/commits?per_page=1");
+        HttpGet request = new HttpGet("https://api.github.com/repos/" + gitHub.getUser() + "/" + gitHub.getRepo() + "/commits?per_page=1");
         request.addHeader("Authorization", "Bearer 5c1a77eec3047ae6b562a55a7c0e4d4735cb38ef ");
         try {
             HttpResponse response = httpClient.execute(request);
@@ -78,19 +87,19 @@ public class GitHubServiceImpl implements GitHubService{
         catch (IOException e) {
             e.printStackTrace();
         }
-        return date;
+        gitHub.setLastCommit(date);
     }
 
-    private int getPullRequests(String user, String repo) {
+    private void loadPullRequests(GitHub gitHub) {
         int pulls = 0;
-        HttpHead request = new HttpHead("https://api.github.com/repos/" + user + "/" + repo + "/pulls?per_page=1");
+        HttpHead request = new HttpHead("https://api.github.com/repos/" + gitHub.getUser() + "/" + gitHub.getRepo() + "/pulls?per_page=1");
         request.addHeader("Authorization", "Bearer 5c1a77eec3047ae6b562a55a7c0e4d4735cb38ef ");
         try {
             HttpResponse response = httpClient.execute(request);
             Header[] headers = response.getHeaders("link");
 
             if (headers.length == 0) {
-                System.out.println(0);
+                pulls = 0;
             }
 
             else {
@@ -106,12 +115,12 @@ public class GitHubServiceImpl implements GitHubService{
             e.printStackTrace();
         }
 
-        return pulls;
+        gitHub.setPullRequests(pulls);
     }
 
-    private int getOpenIssues(String user, String repo) {
+    private void loadOpenIssues(GitHub gitHub) {
         int issues = 0;
-        HttpGet request = new HttpGet("https://api.github.com/repos/" + user + "/" + repo);
+        HttpGet request = new HttpGet("https://api.github.com/repos/" + gitHub.getUser() + "/" + gitHub.getRepo());
         request.addHeader("Authorization", "Bearer 5c1a77eec3047ae6b562a55a7c0e4d4735cb38ef ");
         try {
             HttpResponse response = httpClient.execute(request);
@@ -132,6 +141,17 @@ public class GitHubServiceImpl implements GitHubService{
             e.printStackTrace();
         }
 
-        return issues;
+        gitHub.setOpenIssues(issues);
+    }
+
+    @Override
+    @Scheduled(fixedDelay = 360000) //todo -- one day?
+    public void updateExtensionDetails() {
+        List<GitHub> gitHubs = gitHubRepository.findAll();
+        gitHubs.forEach(gitHub -> {
+            System.out.println("updating... " + gitHub.getId());
+            getDetails(gitHub);
+            gitHubRepository.update(gitHub);
+        });
     }
 }

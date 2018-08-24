@@ -1,13 +1,14 @@
 package com.tick42.quicksilver.services.base;
 
 
+import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.Extension;
 
 import java.util.List;
 
 public interface ExtensionService {
 
-    Extension create(Extension model);
+    Extension create(ExtensionDTO model);
 
     Extension findById(int id);
 
@@ -34,6 +35,4 @@ public interface ExtensionService {
     void approveExtension(int id);
 
     void changeFeaturedState(int id);
-
-    void updateExtensionDetails();
 }

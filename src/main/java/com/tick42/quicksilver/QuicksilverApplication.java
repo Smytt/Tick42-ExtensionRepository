@@ -13,5 +13,4 @@ public class QuicksilverApplication {
 		SpringApplication.run(QuicksilverApplication.class, args);
 	}
 
-	// 5c1a77eec3047ae6b562a55a7c0e4d4735cb38ef
 }

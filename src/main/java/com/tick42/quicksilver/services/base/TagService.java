@@ -15,4 +15,6 @@ public interface TagService {
     Tag findByName(String name);
 
     List<Tag> prepareTags(List<Tag> tags);
+
+    List<Tag> generateTags(String tags);
 }

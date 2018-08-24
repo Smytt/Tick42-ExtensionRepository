@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.controllers;
 
 import com.sun.org.apache.regexp.internal.RE;
+import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.services.base.ExtensionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +79,7 @@ public class ExtensionController {
 
     @PostMapping(value = "/add")
     public @ResponseBody
-    Extension addExtension(@RequestBody Extension extension) {
+    Extension addExtension(@RequestBody ExtensionDTO extension) {
         return extensionService.create(extension);
     }
 }

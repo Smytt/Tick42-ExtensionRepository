@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TagServiceImpl implements TagService {
@@ -18,7 +20,7 @@ public class TagServiceImpl implements TagService {
     private final TagRepository tagRepository;
 
     @Autowired
-    public TagServiceImpl(TagRepository tagRepository){
+    public TagServiceImpl(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
     }
 
@@ -52,6 +54,29 @@ public class TagServiceImpl implements TagService {
                 tags.set(i, existingTag);
             }
         }
+        return tags;
+    }
+
+    @Override
+    public List<Tag> generateTags(String TagString) {
+        List<String> tagNames =
+                Arrays.stream(TagString.split(", "))
+                        .map(String::toLowerCase)
+                        .map(String::trim)
+                        .collect(Collectors.toList());
+
+        List<Tag> tags = new ArrayList<>();
+
+        tagNames.forEach(tagName -> {
+            Tag existingTag = tagRepository.findByName(tagName);
+            if (existingTag != null) {
+                tags.add(existingTag);
+            }
+            else {
+                tags.add(new Tag(tagName));
+            }
+        });
+
         return tags;
     }
 
