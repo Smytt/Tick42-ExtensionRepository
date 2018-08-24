@@ -1,14 +1,14 @@
 package com.tick42.quicksilver.services.base;
 
 
-import com.tick42.quicksilver.models.DTO.ExtensionDTO;
+import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.models.Extension;
 
 import java.util.List;
 
 public interface ExtensionService {
 
-    Extension create(ExtensionDTO model);
+    Extension create(ExtensionSpec model);
 
     Extension findById(int id);
 

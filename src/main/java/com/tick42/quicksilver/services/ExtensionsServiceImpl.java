@@ -1,15 +1,13 @@
 package com.tick42.quicksilver.services;
 
-import com.tick42.quicksilver.models.DTO.ExtensionDTO;
+import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.models.Extension;
-import com.tick42.quicksilver.models.GitHub;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.ExtensionRepository;
 import com.tick42.quicksilver.services.base.ExtensionService;
 import com.tick42.quicksilver.services.base.GitHubService;
 import com.tick42.quicksilver.services.base.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -30,9 +28,9 @@ public class ExtensionsServiceImpl implements ExtensionService {
     }
 
     @Override
-    public Extension create(ExtensionDTO extensionDTO) {
+    public Extension create(ExtensionSpec extensionSpec) {
 
-        Extension extension = new Extension(extensionDTO);
+        Extension extension = new Extension(extensionSpec);
 
         User mockUser = new User();
         mockUser.setId(3);
@@ -40,8 +38,8 @@ public class ExtensionsServiceImpl implements ExtensionService {
         extension.setIsPending(true);
         extension.setOwner(mockUser);
         extension.setUploadDate(new Date());
-        extension.setGithub(gitHubService.generateGitHub(extensionDTO.getGithub()));
-        extension.setTags(tagService.generateTags(extensionDTO.getTags()));
+        extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
+        extension.setTags(tagService.generateTags(extensionSpec.getTags()));
 
         return extensionRepository.create(extension);
     }

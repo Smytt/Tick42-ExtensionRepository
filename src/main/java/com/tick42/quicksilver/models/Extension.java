@@ -1,8 +1,6 @@
 package com.tick42.quicksilver.models;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.tick42.quicksilver.models.DTO.ExtensionDTO;
-import com.tick42.quicksilver.serializers.ExtensionSerializer;
+import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "extensions")
-@JsonSerialize(using = ExtensionSerializer.class)
 public class Extension {
 
     @Id
@@ -66,10 +63,10 @@ public class Extension {
 
     }
 
-    public Extension(ExtensionDTO extensionDTO) {
-        this.setName(extensionDTO.getName());
-        this.setVersion(extensionDTO.getVersion());
-        this.setDescription(extensionDTO.getDescription());
+    public Extension(ExtensionSpec extensionSpec) {
+        this.setName(extensionSpec.getName());
+        this.setVersion(extensionSpec.getVersion());
+        this.setDescription(extensionSpec.getDescription());
     }
 
     public int getId() {

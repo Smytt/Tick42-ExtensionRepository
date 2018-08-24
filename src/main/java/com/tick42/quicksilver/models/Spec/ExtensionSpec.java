@@ -1,10 +1,10 @@
-package com.tick42.quicksilver.models.DTO;
+package com.tick42.quicksilver.models.Spec;
 
 import com.tick42.quicksilver.models.Extension;
 
 import javax.persistence.Entity;
 
-public class ExtensionDTO {
+public class ExtensionSpec {
 
     private String name;
     private String version;
@@ -12,7 +12,7 @@ public class ExtensionDTO {
     private String github;
     private String tags;
 
-    public ExtensionDTO() {
+    public ExtensionSpec() {
     }
 
     public String getName() {
