@@ -1,6 +1,6 @@
 package com.tick42.quicksilver.repositories;
 
-import com.tick42.quicksilver.models.GitHub;
+import com.tick42.quicksilver.models.GitHubModel;
 import com.tick42.quicksilver.repositories.base.GenericRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class GitHubRepositoryImpl implements GenericRepository<GitHub> {
+public class GitHubRepositoryImpl implements GenericRepository<GitHubModel> {
 
     private final SessionFactory sessionFactory;
 
@@ -21,20 +21,20 @@ public class GitHubRepositoryImpl implements GenericRepository<GitHub> {
     }
 
     @Override
-    public GitHub create(GitHub model) {
+    public GitHubModel create(GitHubModel model) {
         return null;
     }
 
     @Override
-    public GitHub update(GitHub gitHub) {
+    public GitHubModel update(GitHubModel gitHubModel) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(gitHub);
+            session.update(gitHubModel);
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return gitHub;
+        return gitHubModel;
     }
 
     @Override
@@ -43,22 +43,22 @@ public class GitHubRepositoryImpl implements GenericRepository<GitHub> {
     }
 
     @Override
-    public List<GitHub> findAll() {
-        List<GitHub> gitHubs = new ArrayList<>();
+    public List<GitHubModel> findAll() {
+        List<GitHubModel> gitHubModels = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            gitHubs = session
+            gitHubModels = session
                     .createQuery("from GitHub")
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return gitHubs;
+        return gitHubModels;
     }
 
     @Override
-    public GitHub findById(int id) {
+    public GitHubModel findById(int id) {
         return null;
     }
 }

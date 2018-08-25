@@ -14,11 +14,11 @@ public class ExtensionDTO {
     private int timesDownloaded;
     private boolean isPending;
     private boolean isFeatured;
-    private Date uploadDate;
+    private String uploadDate;
     private String ownerName;
     private int ownerId;
     private String gitHubLink;
-    private Date lastCommit;
+    private String lastCommit;
     private int openIssues;
     private int pullRequests;
     private String fileLocation;
@@ -104,12 +104,12 @@ public class ExtensionDTO {
         isFeatured = featured;
     }
 
-    public Date getUploadDate() {
+    public String getUploadDate() {
         return uploadDate;
     }
 
     public void setUploadDate(Date uploadDate) {
-        this.uploadDate = uploadDate;
+        this.uploadDate = uploadDate.toString();
     }
 
     public String getOwnerName() {
@@ -136,12 +136,12 @@ public class ExtensionDTO {
         this.gitHubLink = gitHubLink;
     }
 
-    public Date getLastCommit() {
+    public String getLastCommit() {
         return lastCommit;
     }
 
     public void setLastCommit(Date lastCommit) {
-        this.lastCommit = lastCommit;
+        this.lastCommit = lastCommit.toString();
     }
 
     public int getOpenIssues() {

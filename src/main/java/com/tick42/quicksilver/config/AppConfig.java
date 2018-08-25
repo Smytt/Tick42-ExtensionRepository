@@ -5,10 +5,12 @@ import com.tick42.quicksilver.models.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.hibernate.SessionFactory;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.kohsuke.github.GitHub;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import java.io.IOException;
 
 @Configuration
 @EnableWebMvc
@@ -22,17 +24,17 @@ public class AppConfig {
                 .addAnnotatedClass(User.class)
                 .addAnnotatedClass(Tag.class)
                 .addAnnotatedClass(File.class)
-                .addAnnotatedClass(GitHub.class)
+                .addAnnotatedClass(GitHubModel.class)
                 .buildSessionFactory();
     }
 
     @Bean
-    public HttpClient createHttpClient() {
-        return HttpClientBuilder.create().build();
-    }
-
-    @Bean
-    public ObjectMapper createObjectMapper() {
-        return new ObjectMapper();
+    public GitHub createGitHub() {
+        try {
+            return GitHub.connect("Smytt", "5c1a77eec3047ae6b562a55a7c0e4d4735cb38ef");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

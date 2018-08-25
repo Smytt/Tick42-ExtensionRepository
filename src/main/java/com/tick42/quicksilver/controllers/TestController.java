@@ -8,6 +8,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.kohsuke.github.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,39 +29,19 @@ public class TestController {
 
     @GetMapping()
     public void test() {
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpHead request = new HttpHead("https://api.github.com/repos/eugenp/REST-With-Spring/pulls?per_page=1");
         try {
-            HttpResponse response = client.execute(request);
-            HttpEntity entity = response.getEntity();
-            Header[] headers = response.getHeaders("link");
-
-            if (headers.length == 0) {
-                System.out.println(0);
-            }
-
-            else {
-                String value = headers[0].getElements()[1].getValue();
-                Pattern pattern = Pattern.compile("&page=(\\d+)>");
-                Matcher matcher = pattern.matcher(value);
-                while (matcher.find()) {
-                    System.out.println(matcher.group(1));
+            GitHub gitHub = GitHub.connect("Smytt", "5c1a77eec3047ae6b562a55a7c0e4d4735cb38ef");
+            GHRepository repo = gitHub.getRepository("octocat/Hello-World");
+            System.out.println(repo.getPullRequests(GHIssueState.OPEN).size());
+            System.out.println(repo.getIssues(GHIssueState.OPEN).size());
+            repo.listCommits().forEach(commit -> {
+                try {
+                    System.out.println(commit.getCommitDate());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            }
-//            if (entity != null) {
-//                try (InputStream stream = entity.getContent()) {
-//                    BufferedReader reader =
-//                            new BufferedReader(new InputStreamReader(stream));
-//                    String line;
-//                    while ((line = reader.readLine()) != null) {
-//                        System.out.println(line);
-////                        List<String> test = om.readValue(line, ArrayList.class);
-////                        System.out.println(test.size());
-//                    }
-//                }
-//            }
-        }
-        catch (IOException e) {
+            });
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
