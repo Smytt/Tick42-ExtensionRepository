@@ -31,12 +31,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String createTokenData(User user){
+
         String username = user.getUsername();
         String password = user.getPassword();
         User foundUser = userRepository.findByUserName(username);
         if (password.equals(foundUser.getPassword())){
-            return jwtGenerator.generate(foundUser);
+            jwtGenerator.generate(foundUser);
         }
         return null;
+    }
+
+    public boolean registered(User user){
+
+        String userName = user.getUsername();
+        String password = user.getPassword();
+        User registeredUser = null;
+        registeredUser = userRepository.findByUserName(userName);
+        if(registeredUser != null){
+            return false;
+        }
+        userRepository.create(user);
+        return true;
     }
 }

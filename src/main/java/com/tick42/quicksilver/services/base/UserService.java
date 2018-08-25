@@ -8,4 +8,6 @@ public interface UserService {
     User findById(int id);
 
     String createTokenData(User user);
+
+    boolean registered(User user);
 }
