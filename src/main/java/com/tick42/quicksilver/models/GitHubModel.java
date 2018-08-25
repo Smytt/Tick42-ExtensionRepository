@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "github")
-public class GitHub {
+public class GitHubModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,11 +33,11 @@ public class GitHub {
     @Column(name = "open_issues")
     private int openIssues;
 
-    public GitHub() {
+    public GitHubModel() {
 
     }
 
-    public GitHub(String link, String user, String repo) {
+    public GitHubModel(String link, String user, String repo) {
         this.setLink(link);
         this.setUser(user);
         this.setRepo(repo);
