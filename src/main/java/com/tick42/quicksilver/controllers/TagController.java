@@ -20,9 +20,4 @@ public class TagController {
         this.tagService = tagService;
         this.extensionService = extensionService;
     }
-
-    @GetMapping(value = "/{tag}")
-    public List<Extension> findByTag(@PathVariable String tag) {
-        return extensionService.findByTag(tag);
-    }
 }

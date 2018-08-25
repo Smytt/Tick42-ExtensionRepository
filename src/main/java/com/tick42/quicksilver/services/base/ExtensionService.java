@@ -3,7 +3,6 @@ package com.tick42.quicksilver.services.base;
 
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
-import com.tick42.quicksilver.models.Extension;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ public interface ExtensionService {
 //
 //    List<Extension> sortByCommitDate();
 
-    List<Extension> findByTag(String tagName);
+    List<ExtensionDTO> findByTag(String tagName);
 
     void approveExtension(int id);
 

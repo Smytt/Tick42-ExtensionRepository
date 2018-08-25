@@ -110,8 +110,13 @@ public class ExtensionsServiceImpl implements ExtensionService {
     }
 
     @Override
-    public List<Extension> findByTag(String tagName) {
-        return tagService.findByName(tagName).getExtensions();
+    public List<ExtensionDTO> findByTag(String tagName) {
+        List<Extension> extensions = tagService.findByName(tagName).getExtensions();
+        List<ExtensionDTO> extensionsDTO = new ArrayList<>();
+        for (Extension extension:extensions) {
+            extensionsDTO.add(new ExtensionDTO(extension));
+        }
+        return extensionsDTO;
     }
 
     @Override

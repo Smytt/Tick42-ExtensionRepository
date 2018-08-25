@@ -61,6 +61,11 @@ public class ExtensionController {
         extensionService.changeFeaturedState(id, newState);
     }
 
+    @GetMapping(value = "/findByTag/{tag}")
+    public List<ExtensionDTO> findByTag(@PathVariable String tag) {
+        return extensionService.findByTag(tag);
+    }
+
     @PostMapping(value = "/add")
     public @ResponseBody
     ExtensionDTO addExtension(@RequestBody ExtensionSpec extension) {
