@@ -22,9 +22,10 @@ var render = (() => {
         show.mostDownloadsResult(extensions)
     }
 
-    var submiteMove = (movie) => {
+    var submitExtension = (movie) => {
         formatTags(movie)
         var movie
+        remote.submitExtension
 
     }
 

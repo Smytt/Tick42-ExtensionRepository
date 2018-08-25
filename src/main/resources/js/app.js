@@ -52,7 +52,7 @@ var app = (() => {
             tags
         }
 
-//        render.submitMovie(extension)
+        render.submitExtension(extension)
     }
 
     function preventDefault(e) {

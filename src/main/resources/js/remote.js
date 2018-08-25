@@ -36,7 +36,7 @@ remote = (() => {
             url: base + "/api/extension/mostDownloads/" + count,
             success: (res) => {
 
-            show.mostDownloadsUpload(res)
+            render.downloadsResult(res)
 
             },
             error: (e) => {
@@ -50,7 +50,7 @@ remote = (() => {
             url: base + "/api/extension/mostRecentUploads/" + count,
             success: (res) => {
 
-            show.uploadsResult(res)
+            render.uploadsResult(res)
 
             },
             error: (e) => {
@@ -58,10 +58,24 @@ remote = (() => {
             }
         })
     }
+    var submitExtension = (extension) => {
+            $.ajax({
+                type: 'POST',
+                url: base + "/api/extension/add",
+                data: JSON.stringify(extension),
+                contentType: 'application/json',
+                success: () => {
+                },
+                error: (e) => {
+                    console.log("Couldn't submit extension");
+                }
+            })
+        }
     return {
         searchByName,
         searchByTag,
         mostRecentUploads,
-        mostDownloads
+        mostDownloads,
+        submitExtension
     }
 })()
