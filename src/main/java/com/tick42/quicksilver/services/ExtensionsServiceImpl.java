@@ -110,21 +110,6 @@ public class ExtensionsServiceImpl implements ExtensionService {
     }
 
     @Override
-    public List<Extension> sortByUploadDate() {
-        return extensionRepository.sortByUploadDate();
-    }
-
-    @Override
-    public List<Extension> sortByMostDownloads() {
-        return extensionRepository.sortByMostDownloads();
-    }
-
-    @Override
-    public List<Extension> sortByCommitDate() {
-        return extensionRepository.sortByCommitDate();
-    }
-
-    @Override
     public List<Extension> findByTag(String tagName) {
         return tagService.findByName(tagName).getExtensions();
     }
@@ -147,4 +132,19 @@ public class ExtensionsServiceImpl implements ExtensionService {
             extensionRepository.update(extension);
         }
     }
+
+    //    @Override
+//    public List<Extension> sortByUploadDate() {
+//        return extensionRepository.sortByUploadDate();
+//    }
+//
+//    @Override
+//    public List<Extension> sortByMostDownloads() {
+//        return extensionRepository.sortByMostDownloads();
+//    }
+//
+//    @Override
+//    public List<Extension> sortByCommitDate() {
+//        return extensionRepository.sortByCommitDate();
+//    }
 }

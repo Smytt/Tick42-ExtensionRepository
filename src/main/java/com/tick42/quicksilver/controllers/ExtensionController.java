@@ -4,6 +4,7 @@ import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.services.base.ExtensionService;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class ExtensionController {
 
     private final ExtensionService extensionService;
-
+    private HttpServletRequest request;
     @Autowired
     public ExtensionController(ExtensionService extensionService) {
         this.extensionService = extensionService;
@@ -50,21 +51,6 @@ public class ExtensionController {
         return extensionService.findFeatured(count);
     }
 
-    @GetMapping(value = "/sortByUploadDate")
-    public List<Extension> sortByUploadDate() {
-        return extensionService.sortByUploadDate();
-    }
-
-    @GetMapping(value = "/sortByMostDownloads")
-    public List<Extension> sortByMostDownloads() {
-        return extensionService.sortByMostDownloads();
-    }
-
-    @GetMapping(value = "/sortByCommitDate")
-    public List<Extension> sortByCommitDate() {
-        return extensionService.sortByCommitDate();
-    }
-
     @PatchMapping(value = "/approveExtension/{id}")
     void acceptExtension(@PathVariable(name = "id") int id) {
         extensionService.approveExtension(id);
@@ -80,6 +66,22 @@ public class ExtensionController {
     ExtensionDTO addExtension(@RequestBody ExtensionSpec extension) {
         return extensionService.create(extension);
     }
+
+
+//    @GetMapping(value = "/sortByUploadDate")
+//    public List<Extension> sortByUploadDate() {
+//        return extensionService.sortByUploadDate();
+//    }
+//
+//    @GetMapping(value = "/sortByMostDownloads")
+//    public List<Extension> sortByMostDownloads() {
+//        return extensionService.sortByMostDownloads();
+//    }
+//
+//    @GetMapping(value = "/sortByCommitDate")
+//    public List<Extension> sortByCommitDate() {
+//        return extensionService.sortByCommitDate();
+//    }
 
     //    @DeleteMapping(value = "/delete/{id}")
 //    void deleteExtension(@PathVariable int id) {

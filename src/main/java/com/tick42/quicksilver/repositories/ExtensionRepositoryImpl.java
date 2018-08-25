@@ -148,47 +148,47 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         }
         return extensions;
     }
-    @Override
-    public List<Extension> sortByUploadDate(){
-        List<Extension> extensions = new ArrayList<>();
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            extensions = session
-                    .createQuery("from Extension order by upload_date desc")
-                    .list();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return extensions;
-    }
-    @Override
-    public List<Extension> sortByMostDownloads(){
-        List<Extension> extensions = new ArrayList<>();
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            extensions = session
-                    .createQuery("from Extension order by times_downloaded desc")
-                    .list();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return extensions;
-    }
-
-    @Override
-    public List<Extension> sortByCommitDate(){
-        List<Extension> extensions = new ArrayList<>();
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            extensions = session
-                    .createQuery("from Extension order by last_commit desc")
-                    .list();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return extensions;
-    }
+//    @Override
+//    public List<Extension> sortByUploadDate(){
+//        List<Extension> extensions = new ArrayList<>();
+//        try (Session session = sessionFactory.openSession()) {
+//            session.beginTransaction();
+//            extensions = session
+//                    .createQuery("from Extension order by upload_date desc")
+//                    .list();
+//            session.getTransaction().commit();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return extensions;
+//    }
+//    @Override
+//    public List<Extension> sortByMostDownloads(){
+//        List<Extension> extensions = new ArrayList<>();
+//        try (Session session = sessionFactory.openSession()) {
+//            session.beginTransaction();
+//            extensions = session
+//                    .createQuery("from Extension order by times_downloaded desc")
+//                    .list();
+//            session.getTransaction().commit();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return extensions;
+//    }
+//
+//    @Override
+//    public List<Extension> sortByCommitDate(){
+//        List<Extension> extensions = new ArrayList<>();
+//        try (Session session = sessionFactory.openSession()) {
+//            session.beginTransaction();
+//            extensions = session
+//                    .createQuery("from Extension order by last_commit desc")
+//                    .list();
+//            session.getTransaction().commit();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return extensions;
+//    }
 }

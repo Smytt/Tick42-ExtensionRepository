@@ -24,12 +24,12 @@ public interface ExtensionService {
     List<ExtensionDTO> findMostRecentUploads(int count);
 
     List<ExtensionDTO> findFeatured(int count);
-
-    List<Extension> sortByUploadDate();
-
-    List<Extension> sortByMostDownloads();
-
-    List<Extension> sortByCommitDate();
+//
+//    List<Extension> sortByUploadDate();
+//
+//    List<Extension> sortByMostDownloads();
+//
+//    List<Extension> sortByCommitDate();
 
     List<Extension> findByTag(String tagName);
 
