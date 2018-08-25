@@ -11,7 +11,7 @@ var app = (() => {
     var start = () => {
 
         $("#search").on('click', getSearchView);
-
+        $("#submit").on('click', getSubmitView);
         home();
     }
 
@@ -19,6 +19,11 @@ var app = (() => {
         preventDefault(e);
         show.searchView();
     }
+
+     var getSubmitView = (e) => {
+            preventDefault(e);
+            show.submitView();
+     }
 
     var searchFieldName;
 
@@ -28,6 +33,26 @@ var app = (() => {
 
         searchFieldName = $('#name').val();
         remote.searchByName(searchFieldName, remote);
+    }
+
+    var submit = (e) => {
+        preventDefault(e);
+        if (!hitEnter(e)) return;
+
+        var name = $('#title').val();
+        var version = $('#version').val();
+        var description = $('#description').val();
+        var github = $('#github').val();
+        var tags = $('#tags').val();
+
+        var extension = {
+            name,
+            version,
+            description,
+            tags
+        }
+
+//        render.submitMovie(extension)
     }
 
     function preventDefault(e) {
@@ -48,7 +73,8 @@ var app = (() => {
     return {
         start,
         home,
-        search
+        search,
+        submit
     }
 })();
 

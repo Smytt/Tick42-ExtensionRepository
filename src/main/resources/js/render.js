@@ -22,6 +22,12 @@ var render = (() => {
         show.mostDownloadsResult(extensions)
     }
 
+    var submiteMove = (movie) => {
+        formatTags(movie)
+        var movie
+
+    }
+
     return {
         searchResults,
         uploadsResult,

@@ -14,7 +14,22 @@ var show = (() => {
             error: () => {
                 var err = "Could not load search page";
                 console.log(err);
-                $content.prepend(err);
+            },
+        })
+    }
+
+    var submitView = () => {
+        $.ajax({
+            url: './templates/submit-view.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl);
+                $content.empty();
+                $content.append($html);
+                $content.find('button').on('click', app.submit)
+            },
+            error: () => {
+                var err = "Could not load submit page";
+                console.log(err);
             },
         })
     }
@@ -71,6 +86,7 @@ var show = (() => {
         searchView,
         searchResults,
         mostDownloadsResult,
-        uploadsResult
+        uploadsResult,
+        submitView
     }
 })()

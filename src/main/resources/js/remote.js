@@ -19,7 +19,11 @@ remote = (() => {
         $.ajax({
             type: 'GET',
             url: base + "/api/extension/search/" + extensionTitle,
-            success: callBack,
+            success: (res) => {
+
+            show.searchResults(res)
+
+            },
             error: (e) => {
                 console.log("Couldn't retrieve extensions")
             }
@@ -30,7 +34,11 @@ remote = (() => {
         $.ajax({
             type: 'GET',
             url: base + "/api/extension/mostDownloads/" + count,
-            success: callBack,
+            success: (res) => {
+
+            show.mostDownloadsUpload(res)
+
+            },
             error: (e) => {
                 console.log("Couldn't retrieve extensions")
             }
@@ -40,7 +48,11 @@ remote = (() => {
         $.ajax({
             type: 'GET',
             url: base + "/api/extension/mostRecentUploads/" + count,
-            success: callBack,
+            success: (res) => {
+
+            show.uploadsResult(res)
+
+            },
             error: (e) => {
                 console.log("Couldn't retrieve extensions")
             }
