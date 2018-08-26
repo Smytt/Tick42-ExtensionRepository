@@ -48,7 +48,7 @@ public class GitHubRepositoryImpl implements GenericRepository<GitHubModel> {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             gitHubModels = session
-                    .createQuery("from GitHub")
+                    .createQuery("from GitHubModel")
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
