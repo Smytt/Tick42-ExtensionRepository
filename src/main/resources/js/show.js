@@ -65,6 +65,24 @@ var show = (() => {
             },
         })
     }
+
+    var loginView = () => {
+        $.ajax({
+            url: './templates/login-view.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl);
+                $content.empty();
+                $content.append($html);
+                $content.find('button').on('click', app.login)
+            },
+            error: () => {
+                var err = "Could not load login page";
+                console.log(err);
+                $content.prepend(err);
+            },
+        })
+    }
+
     var mostDownloadsResult = (extensions) => {
         $.ajax({
             url: './templates/top-downloads.html',
@@ -119,6 +137,7 @@ var show = (() => {
         mostDownloadsResult,
         uploadsResult,
         submitView,
-        userExtensions
+        userExtensions,
+        loginView
     }
 })()

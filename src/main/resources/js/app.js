@@ -9,7 +9,7 @@ var app = (() => {
 
 
     var start = () => {
-
+        $("#login").on('click', getLoginView);
         $("#search").on('click', getSearchView);
         $("#submit").on('click', getSubmitView);
         $("#user-results").on('click', getUserExtensions)
@@ -20,6 +20,12 @@ var app = (() => {
         preventDefault(e);
         show.searchView();
     }
+
+    var getLoginView = (e) => {
+        preventDefault(e);
+        show.loginView();
+    }
+
     var getUserExtensions = (e) => {
         preventDefault(e);
         remote.getUserExtensions();
@@ -37,6 +43,20 @@ var app = (() => {
 
         searchFieldName = $('#name').val();
         remote.searchByName(searchFieldName, remote);
+    }
+
+    var login = function (e) {
+        preventDefault(e);
+        if (!hitEnter(e)) return;
+
+        var username = $('#username').val();
+        var password = $('#password').val();
+
+        var user = {
+            username,
+            password,
+        }
+        remote.login(user);
     }
 
     var submit = (e) => {
@@ -78,7 +98,8 @@ var app = (() => {
         start,
         home,
         search,
-        submit
+        submit,
+        login
     }
 })();
 

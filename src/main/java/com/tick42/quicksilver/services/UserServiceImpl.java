@@ -6,6 +6,7 @@ import com.tick42.quicksilver.security.JwtGenerator;
 import com.tick42.quicksilver.services.base.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import javax.servlet.http.HttpServletResponse;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,13 +31,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String createTokenData(User user){
+    public String createTokenData(User user, HttpServletResponse response){
 
         String username = user.getUsername();
         String password = user.getPassword();
         User foundUser = userRepository.findByUserName(username);
         if (password.equals(foundUser.getPassword())){
-            return jwtGenerator.generate(foundUser);
+            String token = jwtGenerator.generate(foundUser);
+            response.addHeader("Authorization", "Token " + token);
+            return token;
         }
         return null;
     }

@@ -6,6 +6,9 @@ import com.tick42.quicksilver.services.base.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/token")
 public class LoginController {
@@ -17,9 +20,8 @@ public class LoginController {
     }
     @PostMapping
     @ResponseBody
-    public String generate(@RequestBody User user) {
-        System.out.println(userService.createTokenData(user));
-        return userService.createTokenData(user);
+    public String generate(@RequestBody User user,HttpServletResponse response) {
+        return userService.createTokenData(user, response);
 
     }
 }

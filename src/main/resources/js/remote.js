@@ -18,7 +18,7 @@ remote = (() => {
     var searchByName = (extensionTitle) => {
         $.ajax({
             type: 'GET',
-            url: base + "/api/extension/search/" + extensionTitle,
+            url: base + "/rest/api/extension/search/" + extensionTitle,
             success: (res) => {
 
             show.searchResults(res)
@@ -33,7 +33,7 @@ remote = (() => {
     var mostDownloads = (count) => {
         $.ajax({
             type: 'GET',
-            url: base + "/api/extension/mostDownloads/" + count,
+            url: base + "/rest/api/extension/mostDownloads/" + count,
             success: (res) => {
 
             render.downloadsResult(res)
@@ -47,7 +47,7 @@ remote = (() => {
     var mostRecentUploads = (count, callBack) => {
         $.ajax({
             type: 'GET',
-            url: base + "/api/extension/mostRecentUploads/" + count,
+            url: base + "/rest/api/extension/mostRecentUploads/" + count,
             success: (res) => {
 
             render.uploadsResult(res)
@@ -87,6 +87,20 @@ remote = (() => {
         })
     }
 
+    var login = (user) => {
+            $.ajax({
+                type: 'POST',
+                url: base + "/token",
+                data: JSON.stringify(user),
+                contentType: 'application/json',
+                success: () => {
+                },
+                error: (e) => {
+                    console.log("Couldn't submit extension");
+                }
+            })
+        }
+
     return {
         searchByName,
         searchByTag,
@@ -94,6 +108,6 @@ remote = (() => {
         mostDownloads,
         submitExtension,
         getUserExtensions,
-
+        login
     }
 })()

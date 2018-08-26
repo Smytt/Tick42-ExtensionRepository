@@ -92,10 +92,7 @@ public class UserRepositoryImpl implements UserRepository {
         User user = null;
         try(Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            user = (User)session
-                    .createQuery("from User where username = :name")
-                    .setParameter("name", username)
-                    .uniqueResult();
+            user = session.get(User.class, username);
             session.getTransaction().commit();
         }catch (Exception e) {
             System.out.println(e.getMessage());
