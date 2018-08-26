@@ -71,11 +71,29 @@ remote = (() => {
                 }
             })
         }
+
+    var getUserExtensions = () => {
+        $.ajax({
+            type: 'GET',
+            url: base + "/api/extension/userExtensions",
+            success: (res) => {
+
+            render.userExtensions(res)
+
+            },
+            error: (e) => {
+                console.log("Couldn't retrieve user's extensions")
+            }
+        })
+    }
+
     return {
         searchByName,
         searchByTag,
         mostRecentUploads,
         mostDownloads,
-        submitExtension
+        submitExtension,
+        getUserExtensions,
+
     }
 })()

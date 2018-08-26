@@ -4,6 +4,8 @@ package com.tick42.quicksilver.services.base;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface ExtensionService {
@@ -23,6 +25,8 @@ public interface ExtensionService {
     List<ExtensionDTO> findMostRecentUploads(int count);
 
     List<ExtensionDTO> findFeatured(int count);
+
+    List<ExtensionDTO> findUserExtensions(HttpServletRequest request, HttpServletResponse response);
 //
 //    List<Extension> sortByUploadDate();
 //

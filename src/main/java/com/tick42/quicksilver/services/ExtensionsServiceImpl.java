@@ -5,12 +5,16 @@ import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.ExtensionRepository;
+import com.tick42.quicksilver.repositories.base.UserRepository;
+import com.tick42.quicksilver.security.JwtValidator;
 import com.tick42.quicksilver.services.base.ExtensionService;
 import com.tick42.quicksilver.services.base.GitHubService;
 import com.tick42.quicksilver.services.base.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,12 +25,17 @@ public class ExtensionsServiceImpl implements ExtensionService {
     private final ExtensionRepository extensionRepository;
     private final TagService tagService;
     private final GitHubService gitHubService;
+    private JwtValidator validator;
+    private UserRepository userRepository;
 
     @Autowired
-    public ExtensionsServiceImpl(ExtensionRepository extensionRepository, TagService tagService, GitHubService gitHubService) {
+    public ExtensionsServiceImpl(ExtensionRepository extensionRepository, TagService tagService,
+                                 GitHubService gitHubService,JwtValidator jwtValidator, UserRepository userRepository) {
         this.extensionRepository = extensionRepository;
         this.tagService = tagService;
         this.gitHubService = gitHubService;
+        this.validator = jwtValidator;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -62,7 +71,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
     public List<ExtensionDTO> findByName(String name) {
         List<Extension> extensions = extensionRepository.findByName(name);
         List<ExtensionDTO> extensionsDto = new ArrayList<>();
-        for (Extension extension:extensions) {
+        for (Extension extension : extensions) {
             extensionsDto.add(new ExtensionDTO(extension));
         }
         return extensionsDto;
@@ -73,7 +82,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
     public List<ExtensionDTO> findAll() {
         List<Extension> extensions = extensionRepository.findAll();
         List<ExtensionDTO> extensionsDTO = new ArrayList<>();
-        for (Extension extension:extensions) {
+        for (Extension extension : extensions) {
             extensionsDTO.add(new ExtensionDTO(extension));
         }
         return extensionsDTO;
@@ -83,7 +92,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
     public List<ExtensionDTO> findTopMostDownloaded(int count) {
         List<Extension> extensions = extensionRepository.findTopMostDownloaded(count);
         List<ExtensionDTO> extensionsDTO = new ArrayList<>();
-        for (Extension extension:extensions) {
+        for (Extension extension : extensions) {
             extensionsDTO.add(new ExtensionDTO(extension));
         }
         return extensionsDTO;
@@ -103,7 +112,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
     public List<ExtensionDTO> findFeatured(int count) {
         List<Extension> extensions = extensionRepository.findFeatured(count);
         List<ExtensionDTO> extensionsDTO = new ArrayList<>();
-        for (Extension extension:extensions) {
+        for (Extension extension : extensions) {
             extensionsDTO.add(new ExtensionDTO(extension));
         }
         return extensionsDTO;
@@ -113,7 +122,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
     public List<ExtensionDTO> findByTag(String tagName) {
         List<Extension> extensions = tagService.findByName(tagName).getExtensions();
         List<ExtensionDTO> extensionsDTO = new ArrayList<>();
-        for (Extension extension:extensions) {
+        for (Extension extension : extensions) {
             extensionsDTO.add(new ExtensionDTO(extension));
         }
         return extensionsDTO;
@@ -137,7 +146,17 @@ public class ExtensionsServiceImpl implements ExtensionService {
             extensionRepository.update(extension);
         }
     }
-
+    @Override
+    public List<ExtensionDTO> findUserExtensions(HttpServletRequest request, HttpServletResponse response){
+        int id = validator.getUserIdFromToken(request, response);
+        User user = userRepository.findById(id);
+        List<Extension> extensions = user.getExtensions();
+        List<ExtensionDTO> extensionsDTO = new ArrayList<>();
+        for (Extension extension:extensions) {
+            extensionsDTO.add(new ExtensionDTO(extension));
+        }
+        return extensionsDTO;
+    }
 
     //    @Override
 //    public List<Extension> sortByUploadDate() {

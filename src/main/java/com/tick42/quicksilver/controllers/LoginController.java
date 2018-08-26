@@ -18,6 +18,7 @@ public class LoginController {
     @PostMapping
     @ResponseBody
     public String generate(@RequestBody User user) {
+        System.out.println(userService.createTokenData(user));
         return userService.createTokenData(user);
 
     }

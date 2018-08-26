@@ -22,16 +22,22 @@ var render = (() => {
         show.mostDownloadsResult(extensions)
     }
 
-    var submitExtension = (movie) => {
-        formatTags(movie)
-        var movie
-        remote.submitExtension
+    var submitExtension = (extension) => {
+//        formatTags(extensions)
+        remote.submitExtension(extension)
 
+    }
+    var userExtensions = (extensions) => {
+        var extension = {
+        results
+        }
+        show.userExtensions(extensions)
     }
 
     return {
         searchResults,
         uploadsResult,
-        downloadsResult
+        downloadsResult,
+        submitExtension
     }
 })();

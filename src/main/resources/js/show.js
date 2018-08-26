@@ -33,6 +33,21 @@ var show = (() => {
             },
         })
     }
+    var submitView = () => {
+        $.ajax({
+            url: './templates/submit-view.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl);
+                $content.empty();
+                $content.append($html);
+                remote.getUserExtensions();
+            },
+            error: () => {
+                var err = "Could not load submit page";
+                console.log(err);
+            },
+        })
+    }
 
     var searchResults = (extensions) => {
         $.ajax({
@@ -41,7 +56,7 @@ var show = (() => {
                 var $html = Mustache.render(tmpl, extensions);
                 $content.find("#search-results").remove();
                 $content.append($html);
-                $('#search-results .one-item').on('click', app.getMovieView)
+                $('#search-results .one-item').on('click', app.getExtensionView)
             },
             error: () => {
                 var err = "Could not load extension page";
@@ -57,7 +72,7 @@ var show = (() => {
                 var $html = Mustache.render(tmpl, extensions);
                 $content.find("#top-downloads").remove();
                 $content.append($html);
-                $('#top-downloads .one-item').on('click', app.getMovieView)
+                $('#top-downloads .one-item').on('click', app.getExtensionView)
             },
             error: () => {
                 var err = "Could not load extension page";
@@ -73,7 +88,23 @@ var show = (() => {
                 var $html = Mustache.render(tmpl, uploadsResults);
                 $content.find("#most-recent-uploads").remove();
                 $content.append($html);
-                $('#most-recent-uploads .one-item').on('click', app.getMovieView)
+                $('#most-recent-uploads .one-item').on('click', app.getExtensionView)
+            },
+            error: () => {
+                var err = "Could not load extension page";
+                console.log(err);
+                $content.prepend(err);
+            },
+        })
+    }
+    var userExtensions = (extensions) => {
+        $.ajax({
+            url: './templates/user-extensions.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl, extensions);
+                $content.find("#user-extensions").remove();
+                $content.append($html);
+                $('#user-extensions .one-item').on('click', app.getExtensionView)
             },
             error: () => {
                 var err = "Could not load extension page";
@@ -87,6 +118,7 @@ var show = (() => {
         searchResults,
         mostDownloadsResult,
         uploadsResult,
-        submitView
+        submitView,
+        userExtensions
     }
 })()

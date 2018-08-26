@@ -12,6 +12,7 @@ var app = (() => {
 
         $("#search").on('click', getSearchView);
         $("#submit").on('click', getSubmitView);
+        $("#user-results").on('click', getUserExtensions)
         home();
     }
 
@@ -19,11 +20,14 @@ var app = (() => {
         preventDefault(e);
         show.searchView();
     }
-
-     var getSubmitView = (e) => {
-            preventDefault(e);
-            show.submitView();
-     }
+    var getUserExtensions = (e) => {
+        preventDefault(e);
+        remote.getUserExtensions();
+    }
+    var getSubmitView = (e) => {
+        preventDefault(e);
+        show.submitView();
+    }
 
     var searchFieldName;
 

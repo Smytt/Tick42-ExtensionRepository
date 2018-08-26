@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         String password = user.getPassword();
         User foundUser = userRepository.findByUserName(username);
         if (password.equals(foundUser.getPassword())){
-            jwtGenerator.generate(foundUser);
+            return jwtGenerator.generate(foundUser);
         }
         return null;
     }

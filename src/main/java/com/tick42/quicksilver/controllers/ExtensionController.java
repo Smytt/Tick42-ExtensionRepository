@@ -4,7 +4,10 @@ import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.services.base.ExtensionService;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +19,7 @@ public class ExtensionController {
 
     private final ExtensionService extensionService;
     private HttpServletRequest request;
+
     @Autowired
     public ExtensionController(ExtensionService extensionService) {
         this.extensionService = extensionService;
@@ -51,13 +55,18 @@ public class ExtensionController {
         return extensionService.findFeatured(count);
     }
 
+    @GetMapping(value = "/userExtensions")
+    public List<ExtensionDTO> featured(HttpServletRequest request, HttpServletResponse response){
+        return extensionService.findUserExtensions(request, response);
+    }
+
     @PatchMapping(value = "/approveExtension/{id}")
     void acceptExtension(@PathVariable(name = "id") int id) {
         extensionService.approveExtension(id);
     }
 
     @PatchMapping(value = "/changeFeaturedState/{id}/{newState}")
-    void changeFeaturedState(@PathVariable("id") int id, @PathVariable("newState") String newState){
+    void changeFeaturedState(@PathVariable("id") int id, @PathVariable("newState") String newState) {
         extensionService.changeFeaturedState(id, newState);
     }
 
@@ -72,6 +81,13 @@ public class ExtensionController {
         return extensionService.create(extension);
     }
 
+
+//    @GetMapping(value = "/httpRequest")
+//    public @ResponseBody
+//    void generateReport(HttpServletRequest request, HttpServletResponse response) {
+//        System.out.println(request.getHeader("Authorization"));
+//        System.out.println(response.getHeader("Authorization"));
+//    }
 
 //    @GetMapping(value = "/sortByUploadDate")
 //    public List<Extension> sortByUploadDate() {

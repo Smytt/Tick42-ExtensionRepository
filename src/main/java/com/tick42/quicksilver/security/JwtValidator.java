@@ -6,6 +6,8 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Base64;
 
 @Component
@@ -26,15 +28,34 @@ public class JwtValidator {
             jwtUser = new User();
 
             jwtUser.setUsername(body.getSubject());
-            System.out.println(body.getSubject());
             jwtUser.setId(Integer.parseInt((String) body.get("userId")));
-            System.out.println(body.get("userId"));
             jwtUser.setRole((String) body.get("role"));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
 
         return jwtUser;
+    }
+
+    public int getUserIdFromToken(HttpServletRequest request, HttpServletResponse response) {
+        int id = 0;
+        System.out.println(request);
+        String header = request.getHeader("Authorization");
+        System.out.println(request);
+        if (header == null || !header.startsWith("Token ")) {
+            throw new RuntimeException("JWT Token is missing");
+        }
+        String token = header.substring(6);
+        try {
+            Claims body = Jwts.parser()
+                    .setSigningKey(new String(encodedBytes))
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            id = Integer.parseInt((String) body.get("userId"));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return id;
     }
 }

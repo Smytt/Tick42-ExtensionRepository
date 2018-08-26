@@ -4,6 +4,7 @@ package com.tick42.quicksilver.security;
 import com.tick42.quicksilver.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -27,12 +28,10 @@ public class JwtGenerator {
         Claims claims = Jwts.claims()
                 .setSubject(user.getUsername());
         claims.put("userId", String.valueOf(user.getId()));
-        claims.put("role", "ROLE_ADMIN");
-
-        System.out.println(new String(encodedBytes));
+        claims.put("role", user.getRole());
         return Jwts.builder()
                 .setClaims(claims)
-                .signWith(io.jsonwebtoken.SignatureAlgorithm.HS512, new String(encodedBytes))
+                .signWith(SignatureAlgorithm.HS512, new String(encodedBytes))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .compact();
