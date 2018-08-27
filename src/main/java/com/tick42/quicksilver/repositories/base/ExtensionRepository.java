@@ -11,7 +11,7 @@ public interface ExtensionRepository extends GenericRepository<Extension> {
 
     List<Extension> findMostRecentUploads(int count);
 
-    List<Extension> findFeatured(int count);
+    List<Extension> findFeatured();
 
 //    List<Extension> sortByUploadDate();
 //

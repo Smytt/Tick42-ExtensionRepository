@@ -109,8 +109,8 @@ public class ExtensionsServiceImpl implements ExtensionService {
     }
 
     @Override
-    public List<ExtensionDTO> findFeatured(int count) {
-        List<Extension> extensions = extensionRepository.findFeatured(count);
+    public List<ExtensionDTO> findFeatured() {
+        List<Extension> extensions = extensionRepository.findFeatured();
         List<ExtensionDTO> extensionsDTO = new ArrayList<>();
         for (Extension extension : extensions) {
             extensionsDTO.add(new ExtensionDTO(extension));

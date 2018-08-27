@@ -22,6 +22,13 @@ var render = (() => {
         show.mostDownloadsResult(extensions);
     }
 
+    var featuredResults = (results) => {
+        var results = {
+            results,
+        }
+        show.featuredResults(results);
+    }
+
     var submitExtension = (extension) => {
 //        formatTags(extensions)
         remote.submitExtension(extension);
@@ -44,6 +51,7 @@ var render = (() => {
         uploadsResult,
         downloadsResult,
         submitExtension,
-        extensionInfo
+        extensionInfo,
+        featuredResults
     }
 })();

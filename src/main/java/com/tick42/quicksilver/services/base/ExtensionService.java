@@ -24,7 +24,7 @@ public interface ExtensionService {
 
     List<ExtensionDTO> findMostRecentUploads(int count);
 
-    List<ExtensionDTO> findFeatured(int count);
+    List<ExtensionDTO> findFeatured();
 
     List<ExtensionDTO> findUserExtensions(HttpServletRequest request, HttpServletResponse response);
 //

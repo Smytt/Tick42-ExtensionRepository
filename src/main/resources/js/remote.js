@@ -44,7 +44,7 @@ remote = (() => {
             }
         })
     }
-    var mostRecentUploads = (count, callBack) => {
+    var mostRecentUploads = (count) => {
         $.ajax({
             type: 'GET',
             url: base + "/api/extension/mostRecentUploads/" + count,
@@ -58,6 +58,21 @@ remote = (() => {
             }
         })
     }
+    var featuredExtensions = () => {
+        $.ajax({
+            type: 'GET',
+            url: base + "/api/extension/featured",
+            success: (res) => {
+
+            render.featuredResults(res);
+
+            },
+            error: (e) => {
+                console.log("Couldn't retrieve extensions")
+            }
+        })
+    }
+
     var submitExtension = (extension) => {
             $.ajax({
                 type: 'POST',
@@ -123,6 +138,7 @@ remote = (() => {
         submitExtension,
         getUserExtensions,
         login,
-        getExtension
+        getExtension,
+        featuredExtensions
     }
 })()

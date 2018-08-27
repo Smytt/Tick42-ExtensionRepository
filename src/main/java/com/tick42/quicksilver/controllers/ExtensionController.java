@@ -50,9 +50,9 @@ public class ExtensionController {
         return extensionService.findMostRecentUploads(count);
     }
 
-    @GetMapping(value = "/featured/{count}")
-    public List<ExtensionDTO> featured(@PathVariable(name = "count") int count) {
-        return extensionService.findFeatured(count);
+    @GetMapping(value = "/featured")
+    public List<ExtensionDTO> featured() {
+        return extensionService.findFeatured();
     }
 
     @GetMapping(value = "/userExtensions")

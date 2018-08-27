@@ -5,6 +5,7 @@ var app = (() => {
         preventDefault(e);
         remote.mostRecentUploads(count,remote.mostRecentUploads);
         remote.mostDownloads(count,remote.mostDownloads);
+        remote.featuredExtensions();
     }
 
 

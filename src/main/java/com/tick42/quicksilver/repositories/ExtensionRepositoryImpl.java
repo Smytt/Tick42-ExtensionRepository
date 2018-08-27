@@ -134,13 +134,12 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         return extensions;
     }
     @Override
-    public List<Extension> findFeatured(int count){
+    public List<Extension> findFeatured(){
         List<Extension> extensions = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
                     .createQuery("from Extension where is_featured = 1")
-                    .setMaxResults(count)
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {

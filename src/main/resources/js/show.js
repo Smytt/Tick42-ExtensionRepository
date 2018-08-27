@@ -110,7 +110,23 @@ var show = (() => {
                 $('#most-recent-uploads .one-item').on('click', app.getExtensionView)
             },
             error: () => {
-                var err = "Could not load extension page";
+                var err = "Could not load upload extensions";
+                console.log(err);
+                $content.prepend(err);
+            },
+        })
+    }
+    var featuredResults = (featuredResults) => {
+        $.ajax({
+            url: './templates/featured-results.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl, featuredResults);
+                $content.find("#featured-results").remove();
+                $content.append($html);
+                $('#featured-results .one-item').on('click', app.getExtensionView)
+            },
+            error: () => {
+                var err = "Could not load featured extensions";
                 console.log(err);
                 $content.prepend(err);
             },
@@ -158,6 +174,7 @@ var show = (() => {
         submitView,
         userExtensions,
         loginView,
-        extensionView
+        extensionView,
+        featuredResults
     }
 })()
