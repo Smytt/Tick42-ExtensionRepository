@@ -44,16 +44,18 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    public boolean registered(User user){
+    public User register(User user){
 
         String userName = user.getUsername();
-        String password = user.getPassword();
-        User registeredUser = null;
-        registeredUser = userRepository.findByUserName(userName);
-        if(registeredUser != null){
-            return false;
+        User registeredUser = userRepository.findByUserName(userName);
+        try {
+            if (registeredUser != null) {
+                throw new Exception("e");
+            }
+             userRepository.create(user);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        userRepository.create(user);
-        return true;
+        return user;
     }
 }

@@ -1,27 +1,33 @@
 package com.tick42.quicksilver.controllers;
 
+
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.security.JwtGenerator;
 import com.tick42.quicksilver.services.base.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/token")
-public class LoginController {
+@RequestMapping("/auth")
+public class UserController {
     private JwtGenerator jwtGenerator;
     private final UserService userService;
 
-    public LoginController(JwtGenerator jwtGenerator, UserService userService) {
+    public UserController(JwtGenerator jwtGenerator, UserService userService) {
         this.userService = userService;
     }
-    @PostMapping
+
+    @PostMapping(value = "/login")
     @ResponseBody
-    public String generate(@RequestBody User user,HttpServletResponse response) {
+    public String generate(@RequestBody User user, HttpServletResponse response) {
         return userService.createTokenData(user, response);
+
+    }
+
+    @PostMapping(value = "/register")
+    public User registered(@RequestBody User user) {
+        return userService.register(user);
 
     }
 }

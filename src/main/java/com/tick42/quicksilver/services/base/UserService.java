@@ -12,5 +12,5 @@ public interface UserService {
 
     String createTokenData(User user, HttpServletResponse response);
 
-    boolean registered(User user);
+    User register(User user);
 }
