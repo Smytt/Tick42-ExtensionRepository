@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ExtensionsServiceImpl implements ExtensionService {
@@ -70,62 +71,38 @@ public class ExtensionsServiceImpl implements ExtensionService {
     @Override
     public List<ExtensionDTO> findByName(String name) {
         List<Extension> extensions = extensionRepository.findByName(name);
-        List<ExtensionDTO> extensionsDto = new ArrayList<>();
-        for (Extension extension : extensions) {
-            extensionsDto.add(new ExtensionDTO(extension));
-        }
-        return extensionsDto;
+        return createDTO(extensions);
     }
 
 
     @Override
     public List<ExtensionDTO> findAll() {
         List<Extension> extensions = extensionRepository.findAll();
-        List<ExtensionDTO> extensionsDTO = new ArrayList<>();
-        for (Extension extension : extensions) {
-            extensionsDTO.add(new ExtensionDTO(extension));
-        }
-        return extensionsDTO;
+        return createDTO(extensions);
     }
 
     @Override
     public List<ExtensionDTO> findTopMostDownloaded(int count) {
         List<Extension> extensions = extensionRepository.findTopMostDownloaded(count);
-        List<ExtensionDTO> extensionsDTO = new ArrayList<>();
-        for (Extension extension : extensions) {
-            extensionsDTO.add(new ExtensionDTO(extension));
-        }
-        return extensionsDTO;
+        return createDTO(extensions);
     }
 
     @Override
     public List<ExtensionDTO> findMostRecentUploads(int count) {
         List<Extension> extensions = extensionRepository.findMostRecentUploads(count);
-        List<ExtensionDTO> extensionsDTO = new ArrayList<>();
-        for (Extension extension : extensions) {
-            extensionsDTO.add(new ExtensionDTO(extension));
-        }
-        return extensionsDTO;
+        return createDTO(extensions);
     }
 
     @Override
     public List<ExtensionDTO> findFeatured() {
         List<Extension> extensions = extensionRepository.findFeatured();
-        List<ExtensionDTO> extensionsDTO = new ArrayList<>();
-        for (Extension extension : extensions) {
-            extensionsDTO.add(new ExtensionDTO(extension));
-        }
-        return extensionsDTO;
+        return createDTO(extensions);
     }
 
     @Override
     public List<ExtensionDTO> findByTag(String tagName) {
         List<Extension> extensions = tagService.findByName(tagName).getExtensions();
-        List<ExtensionDTO> extensionsDTO = new ArrayList<>();
-        for (Extension extension : extensions) {
-            extensionsDTO.add(new ExtensionDTO(extension));
-        }
-        return extensionsDTO;
+        return createDTO(extensions);
     }
 
     @Override
@@ -150,13 +127,14 @@ public class ExtensionsServiceImpl implements ExtensionService {
     public List<ExtensionDTO> findUserExtensions(int id){
         User user = userRepository.findById(id);
         List<Extension> extensions = user.getExtensions();
-        List<ExtensionDTO> extensionsDTO = new ArrayList<>();
-        for (Extension extension:extensions) {
-            extensionsDTO.add(new ExtensionDTO(extension));
-        }
+        return createDTO(extensions);
+    }
+    private List<ExtensionDTO> createDTO(List<Extension> extensions){
+        List<ExtensionDTO> extensionsDTO =
+                extensions.stream().map(ExtensionDTO::new)
+                        .collect(Collectors.toList());
         return extensionsDTO;
     }
-
     //    @Override
 //    public List<Extension> sortByUploadDate() {
 //        return extensionRepository.sortByUploadDate();
