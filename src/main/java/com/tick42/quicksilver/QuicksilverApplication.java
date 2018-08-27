@@ -6,7 +6,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-//@EnableScheduling
+@EnableScheduling
+@EnableConfigurationProperties
 public class QuicksilverApplication {
 
 	public static void main(String[] args) {

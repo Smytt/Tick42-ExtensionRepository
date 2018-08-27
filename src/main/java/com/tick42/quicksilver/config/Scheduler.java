@@ -4,19 +4,19 @@ import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Task {
+public class Scheduler {
 
-    private ScheduledTask scheduledTask;
+    private ScheduledTask task;
 
-    public Task() {
+    public Scheduler() {
 
     }
 
-    public ScheduledTask getScheduledTask() {
-        return scheduledTask;
+    public ScheduledTask getTask() {
+        return task;
     }
 
-    public void setScheduledTask(ScheduledTask scheduledTask) {
-        this.scheduledTask = scheduledTask;
+    public void setTask(ScheduledTask task) {
+        this.task = task;
     }
 }

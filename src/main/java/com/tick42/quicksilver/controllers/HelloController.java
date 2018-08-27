@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/rest/hello")
+
 public class HelloController {
     @Secured("ROLE_ADMIN")
     @GetMapping
