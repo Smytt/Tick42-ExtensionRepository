@@ -36,7 +36,6 @@ dependencies {
 	compile group: 'org.springframework', name: 'spring-jdbc', version: '5.0.8.RELEASE'
 	compile group: 'org.hibernate', name: 'hibernate-gradle-plugin', version: '5.3.5.Final'
 	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
-//	compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity4', version: '3.0.2.RELEASE'
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.6.0'
 	compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '0.0.1.RELEASE'
 	// https://mvnrepository.com/artifact/log4j/log4j
@@ -61,22 +60,11 @@ dependencies {
 	compile group: 'org.springframework', name: 'spring-orm', version: '5.0.8.RELEASE'
 	compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: '1.0.1.Final'
 
-	// https://mvnrepository.com/artifact/org.springframework/spring-core
-//	compile group: 'org.springframework', name: 'spring-core', version: '5.0.8.RELEASE'
-//    // https://mvnrepository.com/artifact/org.springframework/spring-context
-//    compile group: 'org.springframework', name: 'spring-context', version: '5.0.8.RELEASE'
-//
-//	// https://mvnrepository.com/artifact/org.springframework/spring-tx
-//	compile group: 'org.springframework', name: 'spring-tx', version: '5.0.8.RELEASE'
-//	// https://mvnrepository.com/artifact/org.springframework/spring-orm
-//	compile group: 'org.springframework', name: 'spring-orm', version: '5.0.8.RELEASE'
-//	// https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp
-//	compile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.2.2'
-//	// https://mvnrepository.com/artifact/javax.persistence/persistence-api
-//	compile group: 'javax.persistence', name: 'persistence-api', version: '1.0'
-//	// https://mvnrepository.com/artifact/org.hibernate/hibernate-core
-//
-//	testCompile group: 'junit', name: 'junit', version: '4.10'
+	 https://mvnrepository.com/artifact/org.springframework/spring-core
+	compile group: 'org.springframework', name: 'spring-core', version: '5.0.8.RELEASE'
+     https://mvnrepository.com/artifact/org.springframework/spring-context
+    compile group: 'org.springframework', name: 'spring-context', version: '5.0.8.RELEASE'
+
 
 
 
