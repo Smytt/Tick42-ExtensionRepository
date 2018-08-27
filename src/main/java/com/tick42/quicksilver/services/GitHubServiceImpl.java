@@ -55,7 +55,7 @@ public class GitHubServiceImpl implements GitHubService{
     }
 
     @Override
-    @Scheduled(fixedDelay = 360000) //todo -- one day?
+    @Scheduled(fixedDelay = 5000) //todo -- one day?
     public void updateExtensionDetails() {
         List<GitHubModel> gitHubModels = gitHubRepository.findAll();
         gitHubModels.forEach(gitHub -> {
