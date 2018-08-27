@@ -26,7 +26,7 @@ public interface ExtensionService {
 
     List<ExtensionDTO> findFeatured();
 
-    List<ExtensionDTO> findUserExtensions(HttpServletRequest request, HttpServletResponse response);
+    List<ExtensionDTO> findUserExtensions(int id);
 //
 //    List<Extension> sortByUploadDate();
 //

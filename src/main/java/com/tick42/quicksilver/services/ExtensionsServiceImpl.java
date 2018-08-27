@@ -147,8 +147,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
         }
     }
     @Override
-    public List<ExtensionDTO> findUserExtensions(HttpServletRequest request, HttpServletResponse response){
-        int id = validator.getUserIdFromToken(request, response);
+    public List<ExtensionDTO> findUserExtensions(int id){
         User user = userRepository.findById(id);
         List<Extension> extensions = user.getExtensions();
         List<ExtensionDTO> extensionsDTO = new ArrayList<>();
