@@ -12,7 +12,7 @@ var app = (() => {
         $("#login").on('click', getLoginView);
         $("#search").on('click', getSearchView);
         $("#submit").on('click', getSubmitView);
-        $("#user-results").on('click', getUserExtensions)
+        $("#user-results").on('click', getUserExtensions);
         home();
     }
 
@@ -29,6 +29,11 @@ var app = (() => {
     var getUserExtensions = (e) => {
         preventDefault(e);
         remote.getUserExtensions();
+    }
+    var getExtensionView = function (e){
+        preventDefault(e);
+        var id = $(this).attr('extensionId');
+        remote.getExtension(id);
     }
     var getSubmitView = (e) => {
         preventDefault(e);
@@ -99,7 +104,8 @@ var app = (() => {
         home,
         search,
         submit,
-        login
+        login,
+        getExtensionView
     }
 })();
 

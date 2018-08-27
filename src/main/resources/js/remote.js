@@ -18,10 +18,10 @@ remote = (() => {
     var searchByName = (extensionTitle) => {
         $.ajax({
             type: 'GET',
-            url: base + "/rest/api/extension/search/" + extensionTitle,
+            url: base + "/api/extension/search/" + extensionTitle,
             success: (res) => {
 
-            show.searchResults(res)
+            show.searchResults(res);
 
             },
             error: (e) => {
@@ -33,10 +33,10 @@ remote = (() => {
     var mostDownloads = (count) => {
         $.ajax({
             type: 'GET',
-            url: base + "/rest/api/extension/mostDownloads/" + count,
+            url: base + "/api/extension/mostDownloads/" + count,
             success: (res) => {
 
-            render.downloadsResult(res)
+            render.downloadsResult(res);
 
             },
             error: (e) => {
@@ -47,10 +47,10 @@ remote = (() => {
     var mostRecentUploads = (count, callBack) => {
         $.ajax({
             type: 'GET',
-            url: base + "/rest/api/extension/mostRecentUploads/" + count,
+            url: base + "/api/extension/mostRecentUploads/" + count,
             success: (res) => {
 
-            render.uploadsResult(res)
+            render.uploadsResult(res);
 
             },
             error: (e) => {
@@ -78,7 +78,7 @@ remote = (() => {
             url: base + "/api/extension/userExtensions",
             success: (res) => {
 
-            render.userExtensions(res)
+            render.userExtensions(res);
 
             },
             error: (e) => {
@@ -100,6 +100,20 @@ remote = (() => {
                 }
             })
         }
+    var getExtension = (id) => {
+        $.ajax({
+            type: 'GET',
+            url: base + "/api/extension/get/" + id,
+            success: (res) => {
+
+            render.extensionInfo(res);
+
+            },
+            error: (e) => {
+                console.log("Couldn't retrieve user's extensions")
+            }
+        })
+    }
 
     return {
         searchByName,
@@ -108,6 +122,7 @@ remote = (() => {
         mostDownloads,
         submitExtension,
         getUserExtensions,
-        login
+        login,
+        getExtension
     }
 })()

@@ -125,7 +125,25 @@ var show = (() => {
                 $('#user-extensions .one-item').on('click', app.getExtensionView)
             },
             error: () => {
-                var err = "Could not load extension page";
+                var err = "Could not load user extensions";
+                console.log(err);
+                $content.prepend(err);
+            },
+        })
+    }
+    var extensionView = (extension) => {
+        $.ajax({
+            url: './templates/extension-view.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl, extension);
+                $content.empty();
+                $content.append($html);
+                console.log(extension);
+                console.log(extension['name'])
+
+            },
+            error: () => {
+                var err = "Could not load extension view";
                 console.log(err);
                 $content.prepend(err);
             },
@@ -138,6 +156,7 @@ var show = (() => {
         uploadsResult,
         submitView,
         userExtensions,
-        loginView
+        loginView,
+        extensionView
     }
 })()

@@ -4,14 +4,14 @@ var render = (() => {
             results,
             title
         }
-        show.searchResults(extensions)
+        show.searchResults(extensions);
     }
     var uploadsResult = (results, count) => {
         var extensions = {
             results,
             count
         }
-        show.uploadsResult(extensions)
+        show.uploadsResult(extensions);
     }
 
     var downloadsResult = (results, count) => {
@@ -19,25 +19,31 @@ var render = (() => {
             results,
             count
         }
-        show.mostDownloadsResult(extensions)
+        show.mostDownloadsResult(extensions);
     }
 
     var submitExtension = (extension) => {
 //        formatTags(extensions)
-        remote.submitExtension(extension)
+        remote.submitExtension(extension);
 
     }
     var userExtensions = (extensions) => {
-        var extension = {
+    //if some render required
+        var extensions = {
         results
         }
-        show.userExtensions(extensions)
+        show.userExtensions(extensions);
+    }
+    var extensionInfo = (extension) => {
+        //if some render required
+    show.extensionView(extension);
     }
 
     return {
         searchResults,
         uploadsResult,
         downloadsResult,
-        submitExtension
+        submitExtension,
+        extensionInfo
     }
 })();
