@@ -56,7 +56,8 @@ var show = (() => {
                 var $html = Mustache.render(tmpl, extensions);
                 $content.find("#search-results").remove();
                 $content.append($html);
-                $('#search-results .one-item').on('click', app.getExtensionView)
+                $('#search-results .one-item').on('click', app.getExtensionView);
+                console.log(extensions);
             },
             error: () => {
                 var err = "Could not load extension page";

@@ -40,14 +40,12 @@ var app = (() => {
         show.submitView();
     }
 
-    var searchFieldName;
-
     var search = (e) => {
         preventDefault(e);
         if (!hitEnter(e)) return;
 
-        searchFieldName = $('#name').val();
-        remote.searchByName(searchFieldName, remote);
+        extensionName = $('#name').val();
+        remote.searchByName(extensionName);
     }
 
     var login = function (e) {

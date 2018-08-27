@@ -21,7 +21,7 @@ remote = (() => {
             url: base + "/api/extension/search/" + extensionTitle,
             success: (res) => {
 
-            show.searchResults(res);
+            render.searchResults(res, extensionTitle);
 
             },
             error: (e) => {

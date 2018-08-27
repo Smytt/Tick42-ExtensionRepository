@@ -1,8 +1,8 @@
 var render = (() => {
-    var searchResults = (results, title) => {
+    var searchResults = (results, name) => {
         var extensions = {
             results,
-            title
+            name
         }
         show.searchResults(extensions);
     }
