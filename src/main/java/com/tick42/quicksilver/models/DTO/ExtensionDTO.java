@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public class ExtensionDTO {
+    private int Id;
     private String name;
     private String version;
     private String description;
@@ -30,6 +31,7 @@ public class ExtensionDTO {
     }
 
     public ExtensionDTO(Extension extension) {
+        this.setId(extension.getId());
         this.setName(extension.getName());
         this.setDescription(extension.getDescription());
         this.setFeatured(extension.getIsFeatured());
@@ -48,12 +50,18 @@ public class ExtensionDTO {
         this.setOwnerId(extension.getOwner().getId());
         this.setOwnerName(extension.getOwner().getUsername());
         this.setPending(extension.getIsPending());
-        extension.getTags().forEach(tag -> {
-            this.tags.add(tag.getName());
-        });
+        extension.getTags().forEach(tag -> this.tags.add(tag.getName()));
         this.setTimesDownloaded(extension.getTimesDownloaded());
         this.setUploadDate(extension.getUploadDate());
         this.setVersion(extension.getVersion());
+    }
+
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
     }
 
     public String getName() {
