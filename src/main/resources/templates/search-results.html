@@ -3,7 +3,11 @@
     {{#results}}
     <div class="one-item" extensionId="{{id}}">
         <div class="movie-info">
-            <h1>{{name}}</h1>
+            <div class="info">
+            <span>{{name}}</span>
+            <span>{{timesDownloaded}}</span>
+            </div>
+            <div class="description">{{description}}</div>
         </div>
     </div>
     {{/results}}

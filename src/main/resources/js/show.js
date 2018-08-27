@@ -33,21 +33,6 @@ var show = (() => {
             },
         })
     }
-    var submitView = () => {
-        $.ajax({
-            url: './templates/submit-view.html',
-            success: (tmpl) => {
-                var $html = Mustache.render(tmpl);
-                $content.empty();
-                $content.append($html);
-                remote.getUserExtensions();
-            },
-            error: () => {
-                var err = "Could not load submit page";
-                console.log(err);
-            },
-        })
-    }
 
     var searchResults = (extensions) => {
         $.ajax({

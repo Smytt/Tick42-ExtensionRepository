@@ -67,7 +67,7 @@ var app = (() => {
         preventDefault(e);
         if (!hitEnter(e)) return;
 
-        var name = $('#title').val();
+        var name = $('#name').val();
         var version = $('#version').val();
         var description = $('#description').val();
         var github = $('#github').val();
@@ -77,10 +77,11 @@ var app = (() => {
             name,
             version,
             description,
+            github,
             tags
         }
-
-        render.submitExtension(extension)
+       console.log(extension)
+        remote.submitExtension(extension)
     }
 
     function preventDefault(e) {
