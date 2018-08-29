@@ -7,7 +7,12 @@ import org.apache.http.auth.InvalidCredentialsException;
 import javax.servlet.http.HttpServletResponse;
 
 public interface UserService {
-    void create(User user);
+
+    User create(User user);
+
+    void update(User user);
+
+    void changeState(User user, String state);
 
     User findById(int id);
 

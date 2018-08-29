@@ -8,6 +8,7 @@ import com.tick42.quicksilver.services.base.UserService;
 import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +25,7 @@ public class UserController {
 
     @PostMapping(value = "/login")
     @ResponseBody
-    public String login(@RequestBody User user, HttpServletResponse response) throws InvalidCredentialsException {
+    public String generateTokenOnLogin(@RequestBody User user, HttpServletResponse response) throws InvalidCredentialsException {
         User loggedUser = userService.login(user);
         String token = "Token " + userService.generateToken(loggedUser);
         return token;
@@ -40,6 +41,12 @@ public class UserController {
         return userService.findById(id);
     }
 
+    @Secured("ROLE_ADMIN")
+    @PostMapping(value="/changeActiveState/{newState}/{id}")
+    public void changeUserState(@PathVariable("newState") String state,@PathVariable("id")int id){
+        User user = userService.findById(id);
+        userService.changeState(user,state);
+    }
     @ExceptionHandler
     ResponseEntity handleInvalidCredentialsException(InvalidCredentialsException e) {
         return ResponseEntity

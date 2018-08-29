@@ -7,6 +7,7 @@ import com.tick42.quicksilver.security.JwtGenerator;
 import com.tick42.quicksilver.services.base.UserService;
 import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,18 +15,33 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private JwtGenerator jwtGenerator;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, JwtGenerator jwtGenerator) {
+    public UserServiceImpl(UserRepository userRepository, JwtGenerator jwtGenerator, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jwtGenerator = jwtGenerator;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void create(User user) {
-        userRepository.create(user);
+    public User create(User user) {
+        return userRepository.create(user);
     }
 
+    @Override
+    public void update(User user){
+        userRepository.update(user);
+    }
+    @Override
+    public void changeState(User user,String state){
+        if (state.equals("enable")){
+            user.setActive(true);
+        }else if (state.equals("disable")){
+            user.setActive(false);
+        }
+        userRepository.update(user);
+    }
     @Override
     public User findById(int id) {
         return userRepository.findById(id);
@@ -48,7 +64,7 @@ public class UserServiceImpl implements UserService {
         User registeredUser = userRepository.findByUsername(username);
 
         if (registeredUser == null) {
-            user.setPassword(user.getPassword( /* todo */));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.create(user);
         }
         throw new UsernameExistsException("Username is already taken.");
