@@ -26,7 +26,7 @@ public class UserController {
     @ResponseBody
     public String login(@RequestBody User user, HttpServletResponse response) throws InvalidCredentialsException {
         User loggedUser = userService.login(user);
-        String token = userService.generateToken(loggedUser);
+        String token = "Token " + userService.generateToken(loggedUser);
         return token;
     }
 

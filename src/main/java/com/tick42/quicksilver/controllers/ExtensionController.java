@@ -2,7 +2,6 @@ package com.tick42.quicksilver.controllers;
 
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
-import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.security.JwtValidator;
 import com.tick42.quicksilver.services.base.ExtensionService;
 
@@ -21,12 +20,12 @@ import java.util.List;
 public class ExtensionController {
 
     private final ExtensionService extensionService;
-    private HttpServletRequest request;
     private JwtValidator validator;
 
     @Autowired
-    public ExtensionController(ExtensionService extensionService) {
+    public ExtensionController(ExtensionService extensionService, JwtValidator validator) {
         this.extensionService = extensionService;
+        this.validator = validator;
     }
 
     @GetMapping(value = "/all")

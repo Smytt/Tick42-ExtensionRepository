@@ -45,7 +45,7 @@ var app = (() => {
         preventDefault(e);
         if (!hitEnter(e)) return;
 
-        extensionName = $('#name').val();
+        extensionName = $('#search-input').val();
         remote.searchByName(extensionName);
     }
 
@@ -80,7 +80,6 @@ var app = (() => {
             github,
             tags
         }
-       console.log(extension)
         remote.submitExtension(extension)
     }
 

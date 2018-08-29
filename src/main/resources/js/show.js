@@ -1,7 +1,6 @@
 var show = (() => {
 
-    var $content = $('#content');
-
+    var $content =$('#content');
     var searchView = () => {
         $.ajax({
             url: './templates/search.html',
@@ -42,7 +41,6 @@ var show = (() => {
                 $content.find("#search-results").remove();
                 $content.append($html);
                 $('#search-results .one-item').on('click', app.getExtensionView);
-                console.log(extensions);
             },
             error: () => {
                 var err = "Could not load extension page";

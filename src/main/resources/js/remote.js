@@ -90,7 +90,10 @@ remote = (() => {
     var getUserExtensions = () => {
         $.ajax({
             type: 'GET',
-            url: base + "/api/extension/userExtensions",
+            url: base + "/api/extension/userExtensions/secured",
+            headers: {
+                "Authorization":JSON.parse(localStorage.getItem("Authorization"))
+            },
             success: (res) => {
 
             render.userExtensions(res);
@@ -105,13 +108,15 @@ remote = (() => {
     var login = (user) => {
             $.ajax({
                 type: 'POST',
-                url: base + "/token",
+                url: base + "/api/user/login",
                 data: JSON.stringify(user),
                 contentType: 'application/json',
-                success: () => {
+                success: (res) => {
+                var dataToStore = JSON.stringify(res);
+               localStorage.setItem('Authorization', dataToStore);
                 },
                 error: (e) => {
-                    console.log("Couldn't submit extension");
+                    console.log("Couldn't login");
                 }
             })
         }
@@ -125,7 +130,7 @@ remote = (() => {
 
             },
             error: (e) => {
-                console.log("Couldn't retrieve user's extensions")
+                console.log("Couldn't retrieve extension by id")
             }
         })
     }

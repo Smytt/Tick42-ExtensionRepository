@@ -1,8 +1,8 @@
 var render = (() => {
-    var searchResults = (results, name) => {
+    var searchResults = (results, searchedTittle) => {
         var extensions = {
             results,
-            name
+            searchedTittle
         }
         show.searchResults(extensions);
     }
@@ -29,20 +29,15 @@ var render = (() => {
         show.featuredResults(results);
     }
 
-    var submitExtension = (extension) => {
-//        formatTags(extensions)
-        remote.submitExtension(extension);
-
-    }
-    var userExtensions = (extensions) => {
-    //if some render required
+    var userExtensions = (results) => {
+    //if render required
         var extensions = {
         results
         }
         show.userExtensions(extensions);
     }
     var extensionInfo = (extension) => {
-        //if some render required
+        //if render required
     show.extensionView(extension);
     }
 
@@ -50,8 +45,8 @@ var render = (() => {
         searchResults,
         uploadsResult,
         downloadsResult,
-        submitExtension,
         extensionInfo,
-        featuredResults
+        featuredResults,
+        userExtensions
     }
 })();
