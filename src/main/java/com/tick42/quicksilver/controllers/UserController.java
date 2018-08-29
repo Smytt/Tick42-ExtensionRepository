@@ -35,7 +35,7 @@ public class UserController {
         return userService.register(user);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}/secured")
     public User profile(@PathVariable(name = "id") int id) {
         return userService.findById(id);
     }

@@ -14,12 +14,10 @@ import java.util.Date;
 @Component
 public class JwtGenerator {
 
-    @Value("${app.jwtSecret}")
-    private String jwtSecret;
-
+    private String secret = "ourSecretTeamQuickSilver";
     @Value("${app.jwtExpirationInMs}")
     private int jwtExpirationInMs;
-    private byte[] encodedBytes = Base64.getEncoder().encode("ourSecret".getBytes());
+    private byte[] encodedBytes = Base64.getEncoder().encode(secret.getBytes());
 
     public String generate(User user) {
         Date now = new Date();

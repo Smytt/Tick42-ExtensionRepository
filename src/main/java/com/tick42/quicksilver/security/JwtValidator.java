@@ -12,9 +12,8 @@ import java.util.Base64;
 
 @Component
 public class JwtValidator {
-    @Value("${app.jwtSecret}")
-    private String jwtSecret;
-    private byte[] encodedBytes = Base64.getEncoder().encode("ourSecret".getBytes());
+    private String secret = "ourSecretTeamQuickSilver";
+    private byte[] encodedBytes = Base64.getEncoder().encode(secret.getBytes());
 
     public User validate(String token) {
 
@@ -39,9 +38,7 @@ public class JwtValidator {
 
     public int getUserIdFromToken(HttpServletRequest request, HttpServletResponse response) {
         int id = 0;
-        System.out.println(request);
         String header = request.getHeader("Authorization");
-        System.out.println(request);
         if (header == null || !header.startsWith("Token ")) {
             throw new RuntimeException("JWT Token is missing");
         }

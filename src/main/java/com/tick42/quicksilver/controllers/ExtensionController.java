@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,18 +65,20 @@ public class ExtensionController {
         return extensionService.findFeatured();
     }
 
-    @GetMapping(value = "/userExtensions")
+    @GetMapping(value = "/userExtensions/secured")
     public List<ExtensionDTO> featured(HttpServletRequest request, HttpServletResponse response) {
         int id = validator.getUserIdFromToken(request, response);
         return extensionService.findUserExtensions(id);
     }
 
-    @PatchMapping(value = "/approveExtension/{id}")
+    @Secured("ROLE_ADMIN")
+    @PatchMapping(value = "/approveExtension/{id}/secured")
     void acceptExtension(@PathVariable(name = "id") int id) {
         extensionService.approveExtension(id);
     }
 
-    @PatchMapping(value = "/changeFeaturedState/{id}/{newState}")
+    @Secured("ROLE_ADMIN")
+    @PatchMapping(value = "/changeFeaturedState/{id}/{newState}/secured")
     void changeFeaturedState(@PathVariable("id") int id, @PathVariable("newState") String newState) {
         extensionService.changeFeaturedState(id, newState);
     }
