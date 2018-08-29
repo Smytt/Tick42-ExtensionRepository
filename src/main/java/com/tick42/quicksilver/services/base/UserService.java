@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.services.base;
 
 import com.tick42.quicksilver.models.User;
+import org.apache.http.auth.InvalidCredentialsException;
 
 
 import javax.servlet.http.HttpServletResponse;
@@ -10,7 +11,9 @@ public interface UserService {
 
     User findById(int id);
 
-    String createTokenData(User user, HttpServletResponse response);
+    User login(User user) throws InvalidCredentialsException;
 
     User register(User user);
+
+    String generateToken(User user);
 }

@@ -1,7 +1,7 @@
 package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.exceptions.FileStorageException;
-import com.tick42.quicksilver.exceptions.MyFileNotFoundException;
+import com.tick42.quicksilver.exceptions.FileNotFoundException;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.File;
 import com.tick42.quicksilver.repositories.FileRepositoryImpl;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -100,10 +99,10 @@ public class FileServiceImpl implements FileService {
             if (resource.exists()) {
                 return resource;
             } else {
-                throw new MyFileNotFoundException("File not found");
+                throw new FileNotFoundException("File not found");
             }
         } catch (MalformedURLException e) {
-            throw new MyFileNotFoundException("File not found " + e);
+            throw new FileNotFoundException("File not found " + e);
         }
     }
 

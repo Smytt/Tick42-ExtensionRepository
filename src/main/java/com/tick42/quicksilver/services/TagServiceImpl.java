@@ -58,21 +58,25 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> generateTags(String TagString) {
+    public List<Tag> generateTags(String tagString) {
+        tagString = tagString.trim();
+        List<Tag> tags = new ArrayList<>();
+
+        if (tagString == null || tagString.equals("")) {
+            return tags;
+        }
+
         List<String> tagNames =
-                Arrays.stream(TagString.split(", "))
+                Arrays.stream(tagString.split(","))
                         .map(String::toLowerCase)
                         .map(String::trim)
                         .collect(Collectors.toList());
-
-        List<Tag> tags = new ArrayList<>();
 
         tagNames.forEach(tagName -> {
             Tag existingTag = tagRepository.findByName(tagName);
             if (existingTag != null) {
                 tags.add(existingTag);
-            }
-            else {
+            } else {
                 tags.add(new Tag(tagName));
             }
         });

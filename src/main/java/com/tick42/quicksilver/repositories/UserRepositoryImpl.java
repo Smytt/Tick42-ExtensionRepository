@@ -1,14 +1,12 @@
 package com.tick42.quicksilver.repositories;
 
 import com.tick42.quicksilver.models.User;
-import com.tick42.quicksilver.repositories.base.GenericRepository;
 import com.tick42.quicksilver.repositories.base.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,17 +85,18 @@ public class UserRepositoryImpl implements UserRepository {
 
         return user;
     }
+
     @Override
-    public User findByUserName(String username){
+    public User findByUsername(String username) {
         User user = null;
-        try(Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             user = (User) session
-                    .createQuery("From User where username = :username")
-                    .setParameter("username",username)
+                    .createQuery("from User where username = :username")
+                    .setParameter("username", username)
                     .uniqueResult();
             session.getTransaction().commit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return user;

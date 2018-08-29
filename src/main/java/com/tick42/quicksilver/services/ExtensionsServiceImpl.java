@@ -13,8 +13,6 @@ import com.tick42.quicksilver.services.base.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +29,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
 
     @Autowired
     public ExtensionsServiceImpl(ExtensionRepository extensionRepository, TagService tagService,
-                                 GitHubService gitHubService,JwtValidator jwtValidator, UserRepository userRepository) {
+                                 GitHubService gitHubService, JwtValidator jwtValidator, UserRepository userRepository) {
         this.extensionRepository = extensionRepository;
         this.tagService = tagService;
         this.gitHubService = gitHubService;
@@ -76,20 +74,20 @@ public class ExtensionsServiceImpl implements ExtensionService {
 
 
     @Override
-    public List<ExtensionDTO> findAll() {
-        List<Extension> extensions = extensionRepository.findAll();
-        return createDTO(extensions);
-    }
-
-    @Override
-    public List<ExtensionDTO> findTopMostDownloaded(int count) {
-        List<Extension> extensions = extensionRepository.findTopMostDownloaded(count);
-        return createDTO(extensions);
-    }
-
-    @Override
-    public List<ExtensionDTO> findMostRecentUploads(int count) {
-        List<Extension> extensions = extensionRepository.findMostRecentUploads(count);
+    public List<ExtensionDTO> findAll(String orderBy, Integer page, Integer perPage) {
+        List<Extension> extensions = new ArrayList<>();
+        switch (orderBy) {
+            case "date":
+                extensions = extensionRepository.findAllByDate(page, perPage); break;
+            case "commits":
+                extensions = extensionRepository.findAllByCommit(page, perPage); break;
+            case "name":
+                extensions = extensionRepository.findAllByName(page, perPage); break;
+            case "downloads":
+                extensions = extensionRepository.findAllByDownloads(page, perPage); break;
+            default:
+                extensions = extensionRepository.findAllByDate(page, perPage); break;
+        }
         return createDTO(extensions);
     }
 
@@ -123,16 +121,20 @@ public class ExtensionsServiceImpl implements ExtensionService {
             extensionRepository.update(extension);
         }
     }
+
     @Override
-    public List<ExtensionDTO> findUserExtensions(int id){
+    public List<ExtensionDTO> findUserExtensions(int id) {
         User user = userRepository.findById(id);
         List<Extension> extensions = user.getExtensions();
         return createDTO(extensions);
     }
-    private List<ExtensionDTO> createDTO(List<Extension> extensions){
-        List<ExtensionDTO> extensionsDTO =
-                extensions.stream().map(ExtensionDTO::new)
-                        .collect(Collectors.toList());
+
+    private List<ExtensionDTO> createDTO(List<Extension> extensions) {
+        List<ExtensionDTO> extensionsDTO = extensions
+                .stream()
+                .map(ExtensionDTO::new)
+                .collect(Collectors.toList());
+
         return extensionsDTO;
     }
     //    @Override

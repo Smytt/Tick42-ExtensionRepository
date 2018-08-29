@@ -1,15 +1,12 @@
 package com.tick42.quicksilver.repositories;
 
-import com.sun.org.apache.xalan.internal.lib.Extensions;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.repositories.base.ExtensionRepository;
-import com.tick42.quicksilver.repositories.base.GenericRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +62,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
-                    .createQuery("from Extension")
+                    .createQuery("from Extension where isPending = false order by uploadDate desc")
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -103,38 +100,9 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         }
         return extensions;
     }
+
     @Override
-    public List<Extension> findTopMostDownloaded(int count){
-        List<Extension> extensions = new ArrayList<>();
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            extensions = session
-                    .createQuery("from Extension order by times_downloaded desc")
-                    .setMaxResults(count)
-                    .list();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-            return extensions;
-    }
-    @Override
-    public List<Extension> findMostRecentUploads(int count){
-        List<Extension> extensions = new ArrayList<>();
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            extensions = session
-                    .createQuery("from Extension order by upload_date desc")
-                    .setMaxResults(count)
-                    .list();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return extensions;
-    }
-    @Override
-    public List<Extension> findFeatured(){
+    public List<Extension> findFeatured() {
         List<Extension> extensions = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
@@ -147,47 +115,73 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         }
         return extensions;
     }
-//    @Override
-//    public List<Extension> sortByUploadDate(){
-//        List<Extension> extensions = new ArrayList<>();
-//        try (Session session = sessionFactory.openSession()) {
-//            session.beginTransaction();
-//            extensions = session
-//                    .createQuery("from Extension order by upload_date desc")
-//                    .list();
-//            session.getTransaction().commit();
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
-//        return extensions;
-//    }
-//    @Override
-//    public List<Extension> sortByMostDownloads(){
-//        List<Extension> extensions = new ArrayList<>();
-//        try (Session session = sessionFactory.openSession()) {
-//            session.beginTransaction();
-//            extensions = session
-//                    .createQuery("from Extension order by times_downloaded desc")
-//                    .list();
-//            session.getTransaction().commit();
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
-//        return extensions;
-//    }
-//
-//    @Override
-//    public List<Extension> sortByCommitDate(){
-//        List<Extension> extensions = new ArrayList<>();
-//        try (Session session = sessionFactory.openSession()) {
-//            session.beginTransaction();
-//            extensions = session
-//                    .createQuery("from Extension order by last_commit desc")
-//                    .list();
-//            session.getTransaction().commit();
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
-//        return extensions;
-//    }
+
+
+    @Override
+    public List<Extension> findAllByDate(Integer page, Integer perPage) {
+        List<Extension> extensions = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            extensions = session
+                    .createQuery("from Extension where isPending = false order by uploadDate desc")
+                    .setFirstResult((page - 1) * perPage)
+                    .setMaxResults(page * perPage)
+                    .list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return extensions;
+    }
+
+    @Override
+    public List<Extension> findAllByCommit(Integer page, Integer perPage) {
+        List<Extension> extensions = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            extensions = session
+                    .createQuery("from Extension where isPending = false order by github.lastCommit desc")
+                    .setFirstResult((page - 1) * perPage)
+                    .setMaxResults(page * perPage)
+                    .list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return extensions;
+    }
+
+    @Override
+    public List<Extension> findAllByName(Integer page, Integer perPage) {
+        List<Extension> extensions = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            extensions = session
+                    .createQuery("from Extension where isPending = false order by name asc")
+                    .setFirstResult((page - 1) * perPage)
+                    .setMaxResults(page * perPage)
+                    .list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return extensions;
+    }
+
+    @Override
+    public List<Extension> findAllByDownloads(Integer page, Integer perPage) {
+        List<Extension> extensions = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            extensions = session
+                    .createQuery("from Extension where isPending = false order by timesDownloaded desc")
+                    .setFirstResult((page - 1) * perPage)
+                    .setMaxResults(page * perPage)
+                    .list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return extensions;
+    }
 }

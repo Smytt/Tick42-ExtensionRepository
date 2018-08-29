@@ -1,12 +1,13 @@
 package com.tick42.quicksilver.services;
 
+import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.UserRepository;
 import com.tick42.quicksilver.security.JwtGenerator;
 import com.tick42.quicksilver.services.base.UserService;
+import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.servlet.http.HttpServletResponse;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,31 +32,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String createTokenData(User user, HttpServletResponse response){
-
+    public User login(User user) throws InvalidCredentialsException {
         String username = user.getUsername();
         String password = user.getPassword();
-        User foundUser = userRepository.findByUserName(username);
-        if (password.equals(foundUser.getPassword())){
-            String token = jwtGenerator.generate(foundUser);
-            response.addHeader("Authorization", "Token " + token);
-            return token;
+        User foundUser = userRepository.findByUsername(username);
+        if (foundUser != null && password.equals(foundUser.getPassword())) {
+            return foundUser;
         }
-        return null;
+        throw new InvalidCredentialsException("Invalid credentials.");
     }
 
-    public User register(User user){
+    @Override
+    public User register(User user) {
+        String username = user.getUsername();
+        User registeredUser = userRepository.findByUsername(username);
 
-        String userName = user.getUsername();
-        User registeredUser = userRepository.findByUserName(userName);
-        try {
-            if (registeredUser != null) {
-                throw new Exception("e");
-            }
-             userRepository.create(user);
-        }catch (Exception e) {
-            System.out.println(e.getMessage());
+        if (registeredUser == null) {
+            user.setPassword(user.getPassword( /* todo */));
+            return userRepository.create(user);
         }
-        return user;
+        throw new UsernameExistsException("Username is already taken.");
+    }
+
+    @Override
+    public String generateToken(User user) {
+        return jwtGenerator.generate(user);
     }
 }

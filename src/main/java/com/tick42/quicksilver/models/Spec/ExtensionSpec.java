@@ -3,13 +3,29 @@ package com.tick42.quicksilver.models.Spec;
 import com.tick42.quicksilver.models.Extension;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class ExtensionSpec {
 
+    @NotNull
+    @Size(min=1, message="Name should be at least 1 character.")
     private String name;
+
+
+    @NotNull
+    @Size(min=1, message="Version should be at least 1 character.")
     private String version;
+
+    @NotNull
+    @Size(min=1, message="Description should be at least 1 character.")
     private String description;
+
+    @NotNull
+    @Pattern(regexp = "^https://github.com/.+/.+$", message = "Link to github should match https://github.com/USER/REPOSITORY")
     private String github;
+
     private String tags;
 
     public ExtensionSpec() {

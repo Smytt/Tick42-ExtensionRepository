@@ -1,7 +1,6 @@
 package com.tick42.quicksilver.repositories;
 
 import com.tick42.quicksilver.models.Tag;
-import com.tick42.quicksilver.repositories.base.GenericRepository;
 import com.tick42.quicksilver.repositories.base.TagRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

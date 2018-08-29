@@ -8,15 +8,11 @@ import com.tick42.quicksilver.repositories.base.SettingsRepository;
 import com.tick42.quicksilver.services.base.GitHubService;
 import org.kohsuke.github.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.config.FixedRateTask;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;

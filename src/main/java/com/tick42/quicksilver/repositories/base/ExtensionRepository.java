@@ -7,15 +7,15 @@ import java.util.List;
 public interface ExtensionRepository extends GenericRepository<Extension> {
     List<Extension> findByName(String searchQuery);
 
-    List<Extension> findTopMostDownloaded(int count);
-
-    List<Extension> findMostRecentUploads(int count);
-
     List<Extension> findFeatured();
 
-//    List<Extension> sortByUploadDate();
-//
-//    List<Extension> sortByMostDownloads();
-//
-//    List<Extension> sortByCommitDate();
+    List<Extension> findAll();
+
+    List<Extension> findAllByDate(Integer page, Integer perPage);
+
+    List<Extension> findAllByCommit(Integer page, Integer perPage);
+
+    List<Extension> findAllByName(Integer page, Integer perPage);
+
+    List<Extension> findAllByDownloads(Integer page, Integer perPage);
 }
