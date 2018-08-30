@@ -2,12 +2,12 @@ package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.config.Scheduler;
 import com.tick42.quicksilver.models.GitHubModel;
-import com.tick42.quicksilver.models.Settings;
 import com.tick42.quicksilver.repositories.base.GenericRepository;
-import com.tick42.quicksilver.repositories.base.SettingsRepository;
 import com.tick42.quicksilver.services.base.GitHubService;
 import org.kohsuke.github.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.config.FixedRateTask;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 @Service
 public class GitHubServiceImpl implements GitHubService {
@@ -24,15 +25,15 @@ public class GitHubServiceImpl implements GitHubService {
     private final GitHub gitHub;
     private final Scheduler scheduler;
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
-    private final SettingsRepository settingsRepository;
+    private Preferences prefs;
+
 
     @Autowired
-    public GitHubServiceImpl(GenericRepository<GitHubModel> gitHubRepository, GitHub gitHub, Scheduler scheduler, ThreadPoolTaskScheduler threadPoolTaskScheduler, SettingsRepository settingsRepository) {
+    public GitHubServiceImpl(GenericRepository<GitHubModel> gitHubRepository, GitHub gitHub, Scheduler scheduler, ThreadPoolTaskScheduler threadPoolTaskScheduler) {
         this.gitHubRepository = gitHubRepository;
         this.gitHub = gitHub;
         this.scheduler = scheduler;
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;
-        this.settingsRepository = settingsRepository;
     }
 
     @Override
@@ -75,16 +76,15 @@ public class GitHubServiceImpl implements GitHubService {
     }
 
     @Override
-    public void createScheduledTask(ScheduledTaskRegistrar taskRegistrar) {
+    public void createScheduledTask(ScheduledTaskRegistrar taskRegistrar, int rate, int wait) {
+
+        prefs = Preferences.userRoot().node(this.getClass().getName());
+
+        prefs.putInt("updateRate", rate);
+        prefs.putInt("updateWait", wait);
 
         if (scheduler.getTask() != null) {
             scheduler.getTask().cancel();
-        }
-
-        Settings settings = settingsRepository.findById(1);
-
-        if (!settings.getEnableSync()) {
-            return;
         }
 
         FixedRateTask updateGitHubData = new FixedRateTask(new Runnable() {
@@ -92,7 +92,7 @@ public class GitHubServiceImpl implements GitHubService {
             public void run() {
                 updateExtensionDetails();
             }
-        }, settings.getGitHubRefresh(), settings.getInitialWait());
+        }, prefs.getInt("updateRate", 3600), prefs.getInt("updateWait", 3600));
 
         taskRegistrar.setTaskScheduler(threadPoolTaskScheduler);
         scheduler.setTask(taskRegistrar.scheduleFixedRateTask(updateGitHubData));

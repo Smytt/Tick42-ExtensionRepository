@@ -11,5 +11,5 @@ public interface GitHubService {
 
     void updateExtensionDetails();
 
-    void createScheduledTask(ScheduledTaskRegistrar taskRegistrar);
+    void createScheduledTask(ScheduledTaskRegistrar taskRegistrar, int rate, int wait);
 }
