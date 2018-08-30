@@ -3,7 +3,6 @@ package com.tick42.quicksilver.controllers;
 
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.User;
-import com.tick42.quicksilver.security.JwtGenerator;
 import com.tick42.quicksilver.services.base.UserService;
 import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
@@ -42,15 +41,15 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @PatchMapping(value="/changeActiveState/{newState}/{username}/secured")
-    public void changeUserState(@PathVariable("newState") String state,
-                                @PathVariable("username") String username){
-        User user = userService.findByUsername(username);
-        userService.changeActiveState(user,state);
+    @PatchMapping(value = "/setState/{id}/{newState}")
+    public User setState(@PathVariable("newState") String state,
+                         @PathVariable("id") int id) {
+       return userService.setState(id, state);
     }
+
     @Secured("ROLE_ADMIN")
-    @GetMapping(value="/listAll/secured")
-    public List<User> listAllUsers(){
+    @GetMapping(value = "/listAll/secured")
+    public List<User> listAllUsers() {
         return userService.findAll();
     }
 

@@ -14,7 +14,7 @@ import java.io.IOException;
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
 
     public JwtAuthenticationTokenFilter() {
-        super("**/secured");
+        super("**/secure");
     }
 
     @Override

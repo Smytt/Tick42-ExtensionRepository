@@ -17,9 +17,11 @@ remote = (() => {
     }
 
     var searchByName = (extensionTitle) => {
+        var token = document.cookie;
+        console.log(token);
         $.ajax({
             type: 'GET',
-            url: base + "/api/extension/search/" + extensionTitle,
+            url: base + "/api/extension/search/" + extensionTitle+ "/secure",
             success: (res) => {
                 render.searchResults(res, extensionTitle);
 
@@ -71,18 +73,22 @@ remote = (() => {
     }
 
     var submitExtension = (extension) => {
-            $.ajax({
-                type: 'POST',
-                url: base + "/api/extension/add",
-                data: JSON.stringify(extension),
-                contentType: 'application/json',
-                success: () => {
-                },
-                error: (e) => {
-                    console.log("Couldn't submit extension");
-                }
-            })
-        }
+        $.ajax({
+            type: 'POST',
+            url: base + "/api/extension/add",
+            data: JSON.stringify(extension),
+            contentType: 'application/json',
+            headers: {
+                "Authorization":JSON.parse(localStorage.getItem("Authorization"))
+            },
+            success: () => {
+
+            },
+            error: (e) => {
+                console.log("Couldn't submit extension");
+            }
+        })
+    }
 
     var getUserExtensions = () => {
         $.ajax({
@@ -111,6 +117,8 @@ remote = (() => {
             success: (res) => {
                 let dataToStore = JSON.stringify(res);
                 localStorage.setItem('Authorization', dataToStore);
+                document.cookie =
+                 'cookie1='+dataToStore+'; expires=Fri, 3 Aug 2019 20:47:11 UTC; path=/'
             },
             error: (e) => {
                 console.log("Couldn't login");
@@ -123,6 +131,9 @@ remote = (() => {
             url: base + '/api/user/changeActiveState' + username + state,
             data: JSON.stringify(username),
             contentType: 'application/json',
+            headers: {
+                'Authorization':JSON.parse(localStorage.getItem('Authorization'))
+            },
             success: (res) => {
 
             },
@@ -134,7 +145,7 @@ remote = (() => {
     var listAllUsers = () => {
         $.ajax({
             type:'GET',
-            url: base + "/api/user/listAll",
+            url: base + '/api/user/listAll',
             headers: {
                 "Authorization":JSON.parse(localStorage.getItem("Authorization"))
             },
@@ -161,7 +172,6 @@ remote = (() => {
             }
         })
     }
-
     return {
         searchByName,
         searchByTag,

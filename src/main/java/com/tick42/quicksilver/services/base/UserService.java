@@ -4,7 +4,6 @@ import com.tick42.quicksilver.models.User;
 import org.apache.http.auth.InvalidCredentialsException;
 
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface UserService {
@@ -13,7 +12,7 @@ public interface UserService {
 
     void update(User user);
 
-    void changeActiveState(User user, String state);
+    User setState(int id, String state);
 
     List<User> findAll();
 

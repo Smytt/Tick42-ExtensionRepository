@@ -32,17 +32,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user){
+    public void update(User user) {
         userRepository.update(user);
     }
+
     @Override
-    public void changeActiveState(User user,String state){
-        if (state.equals("enable")){
-            user.setActive(true);
-        }else if (state.equals("disable")){
-            user.setActive(false);
+    public User setState(int id, String state) {
+        User user = userRepository.findById(id);
+        switch (state) {
+            case "enable":
+                user.setIsActive(true);
+                break;
+            case "block":
+                user.setIsActive(false);
+                break;
+            default://TODO:exception
         }
-        userRepository.update(user);
+       return userRepository.update(user);
     }
 
     @Override
