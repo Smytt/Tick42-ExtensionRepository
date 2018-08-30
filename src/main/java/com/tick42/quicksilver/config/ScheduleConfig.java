@@ -37,8 +37,7 @@ public class ScheduleConfig implements SchedulingConfigurer {
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        prefs = Preferences.userRoot().node(this.getClass().getName());
-        gitHubService.createScheduledTask(taskRegistrar, prefs.getInt("updateRate", 3600), prefs.getInt("updateWait", 3600));
+        gitHubService.createScheduledTask(taskRegistrar, null, null);
     }
 
     public String getThreadPrefix() {

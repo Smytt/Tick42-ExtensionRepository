@@ -34,6 +34,7 @@ public class GitHubServiceImpl implements GitHubService {
         this.gitHub = gitHub;
         this.scheduler = scheduler;
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;
+        prefs = Preferences.userRoot().node(this.getClass().getName());
     }
 
     @Override
@@ -76,12 +77,12 @@ public class GitHubServiceImpl implements GitHubService {
     }
 
     @Override
-    public void createScheduledTask(ScheduledTaskRegistrar taskRegistrar, int rate, int wait) {
+    public void createScheduledTask(ScheduledTaskRegistrar taskRegistrar, Integer rate, Integer wait) {
 
-        prefs = Preferences.userRoot().node(this.getClass().getName());
-
-        prefs.putInt("updateRate", rate);
-        prefs.putInt("updateWait", wait);
+        if (rate != null && wait != null) {
+            prefs.putInt("updateRate", rate);
+            prefs.putInt("updateWait", wait);
+        }
 
         if (scheduler.getTask() != null) {
             scheduler.getTask().cancel();
@@ -92,7 +93,7 @@ public class GitHubServiceImpl implements GitHubService {
             public void run() {
                 updateExtensionDetails();
             }
-        }, prefs.getInt("updateRate", 3600), prefs.getInt("updateWait", 3600));
+        }, prefs.getInt("updateRate", 1), prefs.getInt("updateWait", 1));
 
         taskRegistrar.setTaskScheduler(threadPoolTaskScheduler);
         scheduler.setTask(taskRegistrar.scheduleFixedRateTask(updateGitHubData));
