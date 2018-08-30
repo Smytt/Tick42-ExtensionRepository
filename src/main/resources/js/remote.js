@@ -32,9 +32,12 @@ remote = (() => {
     }
 
     var mostDownloads = (count) => {
+        var perPage = 3;
+        var orderBy = "date";
+        var page = 3;
         $.ajax({
             type: 'GET',
-            url: base + "/api/extension/mostDownloads/" + count,
+            url: base + "api/extension/all?orderBy=date&perPage=2",
             success: (res) => {
                 render.downloadsResult(res);
 
@@ -143,7 +146,7 @@ remote = (() => {
     var listAllUsers = () => {
         $.ajax({
             type:'GET',
-            url: base + '/api/user/listAll',
+            url: base + '/api/user/all',
             headers: {
                 "Authorization":JSON.parse(localStorage.getItem("Authorization"))
             },
@@ -176,6 +179,7 @@ remote = (() => {
             url: base + "/api/user/listAll",
             success: (res) => {
                 render.users(res);
+                console.log(res);
                 console.log(res);
             },
             error: (e) => {

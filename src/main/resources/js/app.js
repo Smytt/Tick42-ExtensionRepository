@@ -12,7 +12,7 @@ var app = (() => {
     var start = () => {
         $("#login").on('click', getLoginView);
         $("#search").on('click', search);
-        $("#users").on('click', remote.getUsers);
+        $("#users").on('click', getAdminView);
         $("#register").on('click', getRegisterView);
         $("#submit").on('click', getSubmitView);
         $("#user-results").on('click', getUserExtensions);
@@ -23,6 +23,10 @@ var app = (() => {
     var getLoginView = (e) => {
         preventDefault(e);
         show.loginView();
+    }
+    var getAdminView = (e) => {
+        preventDefault(e);
+        show.adminView();
     }
     var getRegisterView = (e) => {
         preventDefault(e);

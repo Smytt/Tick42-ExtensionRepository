@@ -35,16 +35,16 @@ var show = (() => {
             },
         })
     }
-    var adminView = (users) => {
+    var adminView = () => {
         $.ajax({
-            url: './templates/adminView.html',
+            url: './templates/admin-view.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl, users);
+                var $html = Mustache.render(tmpl);
                 $content.empty();
                 $content.append($html);
-            },
+        },
             error: () => {
-                var err = "Could not load login page";
+                var err = "Could not load admin page";
                 console.log(err);
                 $content.prepend(err);
             },
@@ -70,7 +70,6 @@ var show = (() => {
         $.ajax({
             url: './templates/register-view.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl);
                 var $html = Mustache.render(tmpl);
                 $content.empty();
                 $content.append($html);

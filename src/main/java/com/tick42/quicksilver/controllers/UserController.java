@@ -48,7 +48,7 @@ public class UserController {
        return userService.setState(id, state);
     }
 
-    @GetMapping(value = "/listAll")
+    @GetMapping(value = "/all")
     public List<UserDTO> listAllUsers() {
         return userService.findAll();
     }
