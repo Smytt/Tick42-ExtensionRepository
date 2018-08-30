@@ -1,5 +1,6 @@
 package com.tick42.quicksilver.services.base;
 
+import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.User;
 import org.apache.http.auth.InvalidCredentialsException;
 
@@ -14,11 +15,11 @@ public interface UserService {
 
     User setState(int id, String state);
 
-    List<User> findAll();
+    List<UserDTO> findAll();
 
     User findByUsername(String username);
 
-    User findById(int id);
+    UserDTO findById(int id);
 
     User login(User user) throws InvalidCredentialsException;
 

@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
+import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.UserRepository;
 import com.tick42.quicksilver.security.JwtGenerator;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,14 +48,21 @@ public class UserServiceImpl implements UserService {
             case "block":
                 user.setIsActive(false);
                 break;
-            default://TODO:exception
+            default:
+                //TODO:exception
+                break;
         }
        return userRepository.update(user);
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDTO> findAll() {
+        List<User> users = userRepository.findAll();
+        List<UserDTO> usersDto = users
+                .stream()
+                .map(UserDTO::new)
+                .collect(Collectors.toList());
+        return usersDto;
     }
 
     @Override
@@ -62,8 +71,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(int id) {
-        return userRepository.findById(id);
+    public UserDTO findById(int id) {
+        User user = userRepository.findById(id);
+        UserDTO userDTO = new UserDTO(user);
+        return userDTO;
     }
 
     @Override

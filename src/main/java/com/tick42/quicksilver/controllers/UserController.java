@@ -2,6 +2,7 @@ package com.tick42.quicksilver.controllers;
 
 
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
+import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.services.base.UserService;
 import org.apache.http.auth.InvalidCredentialsException;
@@ -36,8 +37,8 @@ public class UserController {
         return userService.register(user);
     }
 
-    @GetMapping(value = "/{id}/secured")
-    public User profile(@PathVariable(name = "id") int id) {
+    @GetMapping(value = "/{id}")
+    public UserDTO profile(@PathVariable(name = "id") int id) {
         return userService.findById(id);
     }
 
@@ -47,9 +48,8 @@ public class UserController {
        return userService.setState(id, state);
     }
 
-    @Secured("ROLE_ADMIN")
-    @GetMapping(value = "/listAll/secured")
-    public List<User> listAllUsers() {
+    @GetMapping(value = "/listAll")
+    public List<UserDTO> listAllUsers() {
         return userService.findAll();
     }
 
