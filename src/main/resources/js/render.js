@@ -41,12 +41,19 @@ var render = (() => {
     show.extensionView(extension);
     }
 
+    var allUsers = (results) => {
+        var results = {
+            results
+        }
+        show.allUsers
+    }
     return {
         searchResults,
         uploadsResult,
         downloadsResult,
         extensionInfo,
         featuredResults,
-        userExtensions
+        userExtensions,
+        allUsers
     }
 })();

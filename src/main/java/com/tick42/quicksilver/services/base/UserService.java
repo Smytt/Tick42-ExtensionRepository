@@ -5,6 +5,7 @@ import org.apache.http.auth.InvalidCredentialsException;
 
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface UserService {
 
@@ -12,7 +13,11 @@ public interface UserService {
 
     void update(User user);
 
-    void changeState(User user, String state);
+    void changeActiveState(User user, String state);
+
+    List<User> findAll();
+
+    User findByUsername(String username);
 
     User findById(int id);
 

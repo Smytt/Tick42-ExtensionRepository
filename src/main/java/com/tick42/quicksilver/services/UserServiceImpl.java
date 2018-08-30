@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -34,7 +36,7 @@ public class UserServiceImpl implements UserService {
         userRepository.update(user);
     }
     @Override
-    public void changeState(User user,String state){
+    public void changeActiveState(User user,String state){
         if (state.equals("enable")){
             user.setActive(true);
         }else if (state.equals("disable")){
@@ -42,6 +44,17 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.update(user);
     }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
     @Override
     public User findById(int id) {
         return userRepository.findById(id);

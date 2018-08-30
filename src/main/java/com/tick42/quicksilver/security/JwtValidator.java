@@ -28,7 +28,8 @@ public class JwtValidator {
 
             jwtUser.setUsername(body.getSubject());
             jwtUser.setId(Integer.parseInt((String) body.get("userId")));
-            jwtUser.setRole((String) body.get("role"));
+            jwtUser.setRole((String)body.get("role"));
+            System.out.println((String)body.get("role"));
         } catch (Exception e) {
             System.out.println(e);
         }

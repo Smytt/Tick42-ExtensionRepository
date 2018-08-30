@@ -8,6 +8,7 @@ remote = (() => {
             url: base + "/api/tags/" + tagName,
             success: (result) => {
                 render.extensions(result);
+
             },
             error: (e) => {
                 console.log("Couldn't retrieve extensions");
@@ -20,8 +21,7 @@ remote = (() => {
             type: 'GET',
             url: base + "/api/extension/search/" + extensionTitle,
             success: (res) => {
-
-            render.searchResults(res, extensionTitle);
+                render.searchResults(res, extensionTitle);
 
             },
             error: (e) => {
@@ -35,8 +35,7 @@ remote = (() => {
             type: 'GET',
             url: base + "/api/extension/mostDownloads/" + count,
             success: (res) => {
-
-            render.downloadsResult(res);
+                render.downloadsResult(res);
 
             },
             error: (e) => {
@@ -49,8 +48,7 @@ remote = (() => {
             type: 'GET',
             url: base + "/api/extension/mostRecentUploads/" + count,
             success: (res) => {
-
-            render.uploadsResult(res);
+                render.uploadsResult(res);
 
             },
             error: (e) => {
@@ -63,8 +61,7 @@ remote = (() => {
             type: 'GET',
             url: base + "/api/extension/featured",
             success: (res) => {
-
-            render.featuredResults(res);
+                render.featuredResults(res);
 
             },
             error: (e) => {
@@ -96,7 +93,7 @@ remote = (() => {
             },
             success: (res) => {
 
-            render.userExtensions(res);
+                render.userExtensions(res);
 
             },
             error: (e) => {
@@ -106,27 +103,57 @@ remote = (() => {
     }
 
     var login = (user) => {
-            $.ajax({
-                type: 'POST',
-                url: base + "/api/user/login",
-                data: JSON.stringify(user),
-                contentType: 'application/json',
-                success: (res) => {
-                var dataToStore = JSON.stringify(res);
-               localStorage.setItem('Authorization', dataToStore);
-                },
-                error: (e) => {
-                    console.log("Couldn't login");
-                }
-            })
-        }
+        $.ajax({
+            type: 'POST',
+            url: base + "/api/user/login",
+            data: JSON.stringify(user),
+            contentType: 'application/json',
+            success: (res) => {
+                let dataToStore = JSON.stringify(res);
+                localStorage.setItem('Authorization', dataToStore);
+            },
+            error: (e) => {
+                console.log("Couldn't login");
+            }
+        })
+    }
+    var changeActiveState = (username, state) =>{
+        $.ajax({
+            type: 'POST',
+            url: base + '/api/user/changeActiveState' + username + state,
+            data: JSON.stringify(username),
+            contentType: 'application/json',
+            success: (res) => {
+
+            },
+            error: (e) => {
+                console.log("Couldn't change state");
+            }
+        })
+    }
+    var listAllUsers = () => {
+        $.ajax({
+            type:'GET',
+            url: base + "/api/user/listAll",
+            headers: {
+                "Authorization":JSON.parse(localStorage.getItem("Authorization"))
+            },
+            success: (res) => {
+                render.allUsers(res);
+
+
+            },
+            error: (e) => {
+                console.log("couldn't retrieve users")
+            }
+        })
+    }
     var getExtension = (id) => {
         $.ajax({
             type: 'GET',
             url: base + "/api/extension/get/" + id,
             success: (res) => {
-
-            render.extensionInfo(res);
+                render.extensionInfo(res);
 
             },
             error: (e) => {
@@ -144,6 +171,8 @@ remote = (() => {
         getUserExtensions,
         login,
         getExtension,
-        featuredExtensions
+        featuredExtensions,
+        changeActiveState,
+        listAllUsers
     }
 })()

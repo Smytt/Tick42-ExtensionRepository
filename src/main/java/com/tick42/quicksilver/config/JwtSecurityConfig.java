@@ -55,7 +55,7 @@ import java.util.Collections;
                 .and()
                 .csrf()
                 .disable()
-                .authorizeRequests().antMatchers("**/rest/**").authenticated()
+                .authorizeRequests().antMatchers("**/secured").authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(entryPoint)
                 .and()

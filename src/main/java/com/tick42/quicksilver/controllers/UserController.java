@@ -12,6 +12,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -41,12 +42,19 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @Secured("ROLE_ADMIN")
-    @PostMapping(value="/changeActiveState/{newState}/{id}")
-    public void changeUserState(@PathVariable("newState") String state,@PathVariable("id")int id){
-        User user = userService.findById(id);
-        userService.changeState(user,state);
+    @PatchMapping(value="/changeActiveState/{newState}/{username}/secured")
+    public void changeUserState(@PathVariable("newState") String state,
+                                @PathVariable("username") String username){
+        User user = userService.findByUsername(username);
+        userService.changeActiveState(user,state);
     }
+    @Secured("ROLE_ADMIN")
+    @GetMapping(value="/listAll/secured")
+    public List<User> listAllUsers(){
+        return userService.findAll();
+    }
+
+
     @ExceptionHandler
     ResponseEntity handleInvalidCredentialsException(InvalidCredentialsException e) {
         return ResponseEntity
