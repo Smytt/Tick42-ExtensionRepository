@@ -3,8 +3,8 @@ var app = (() => {
     var count = 10;
     var home = (e) => {
         preventDefault(e);
-        remote.mostRecentUploads(count,remote.mostRecentUploads);
-        remote.mostDownloads(count,remote.mostDownloads);
+//        remote.mostRecentUploads(count,remote.mostRecentUploads);
+//        remote.mostDownloads(count,remote.mostDownloads);
         remote.featuredExtensions();
     }
 
