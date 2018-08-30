@@ -3,37 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <title>Extension Repository</title>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 <body>
 <header>
-    <div class="container">
-        <nav>
-            <ul>
-                <li><a id="login" href="">login</a></li>
-                <li><a id="search" href="">search</a></li>
-                <li><a id="submit" href="">submit extension</a></li>
-                <li><a id="user-results" href="">user extensions</a></li>
-            </ul>
-        </nav>
+    <div>
+        <div class="wrap">
+            <div class="logo">
+                <a href=""><i class="fas fa-cloud-download-alt"></i> Ext <span>42</span></a>
+            </div>
+
+            <nav>
+                <ul>
+                    <li><a href="" id="login"><i class="fas fa-sign-in-alt"></i> Sign in</a></li>
+                    <li><a href="" id="register"><i class="fas fa-user-plus"></i> Register</a></li>
+                    <li><a href="" id="profile" class="current"><i class="fas fa-user-circle"></i> Profile</a></li>
+                    <li><a href="" id="logout"><i class="fas fa-sign-out-alt"></i> Sign out</a></li>
+                    <li><a href="" id="submit"><i class="fas fa-cloud-upload-alt"></i> Submit</a></li>
+                    <li><a href="" id="pending"><i class="fas fa-exclamation-circle"></i> Pending</a></li>
+                    <li><a href="" id="users"><i class="fas fa-users-cog"></i> Users</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="header">
+        <div class="wrap">
+            <div class="half">
+                <form action="">
+                    <input type="text" id="search-input" placeholder="search" class="menu-item">
+                    <button type="submit" id="search" class="menu-item"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+            <div class="half">
+                <a href="" class="menu-item"><i class="far fa-lightbulb"></i> Discover</a>
+            </div>
+        </div>
     </div>
 </header>
 <main>
-    <div class="container">
-        <div id="content">
+    <div id="content">
 
+
+
+        <!--new and popular-->
+        <div>
+            <div class="wrap hw-extensions">
+                <div class="half">
+                    <h1><i class="fas fa-fire"></i> Popular</h1>
+                    <div>
+                        <div class="one">
+                            <div class="image" style="background-image: url(img/icons/backpack.png)">
+
+                            </div>
+                            <h3>Tile Extension</h3>
+                            <span><i class="fas fa-download"></i> 166</span>
+                        </div>
+                        <div class="one">
+                            <div class="image" style="background-image: url(img/icons/open-book.png)">
+
+                            </div>
+                            <h3>Tile Extension</h3>
+                            <span><i class="fas fa-download"></i> 166</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="half hw-extensions">
+                    <h1><i class="fas fa-star"></i> New</h1>
+                    <div>
+                        <div class="one">
+                            <div class="image" style="background-image: url(img/icons/backpack.png)">
+
+                            </div>
+                            <h3>Tile Extension</h3>
+                            <span><i class="fas fa-download"></i> 166</span>
+                        </div>
+                        <div class="one">
+                            <div class="image" style="background-image: url(img/icons/open-book.png)">
+
+                            </div>
+                            <h3>Tile Extension</h3>
+                            <span><i class="fas fa-download"></i> 166</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+
+
+
+        <!--login / sign up-->
+
+
     </div>
-    <script
-            src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
-    <script src="js/show.js"></script>
-    <script src="js/remote.js"></script>
-    <script src="js/render.js"></script>
-    <script src="js/app.js"></script>
 </main>
+<footer>
+    <div>
+        <h2>Ext 42</h2>
+        <p>Extensions market</p>
+    </div>
+</footer>
+<script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
+<script src="js/show.js"></script>
+<script src="js/remote.js"></script>
+<script src="js/render.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

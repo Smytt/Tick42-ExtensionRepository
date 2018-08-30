@@ -2,7 +2,8 @@ var render = (() => {
     var searchResults = (results, searchedTittle) => {
         var extensions = {
             results,
-            searchedTittle
+            searchedTittle,
+            count: results.length,
         }
         show.searchResults(extensions);
     }
@@ -42,10 +43,10 @@ var render = (() => {
     }
 
     var allUsers = (results) => {
-        var results = {
+        var users = {
             results
         }
-        show.allUsers
+        show.adminView(users);
     }
     return {
         searchResults,
@@ -54,6 +55,6 @@ var render = (() => {
         extensionInfo,
         featuredResults,
         userExtensions,
-        allUsers
+        users
     }
 })();

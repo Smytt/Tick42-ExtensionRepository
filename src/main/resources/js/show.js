@@ -1,21 +1,6 @@
 var show = (() => {
 
     var $content =$('#content');
-    var searchView = () => {
-        $.ajax({
-            url: './templates/search.html',
-            success: (tmpl) => {
-                var $html = Mustache.render(tmpl);
-                $content.empty();
-                $content.append($html);
-                $content.find('button').on('click', app.search)
-            },
-            error: () => {
-                var err = "Could not load search page";
-                console.log(err);
-            },
-        })
-    }
 
     var submitView = () => {
         $.ajax({
@@ -39,8 +24,9 @@ var show = (() => {
             success: (tmpl) => {
                 var $html = Mustache.render(tmpl, extensions);
                 $content.find("#search-results").remove();
+                $content.empty();
                 $content.append($html);
-                $('#search-results .one-item').on('click', app.getExtensionView);
+                $('#search-results .one').on('click', app.getExtensionView);
             },
             error: () => {
                 var err = "Could not load extension page";
@@ -49,7 +35,21 @@ var show = (() => {
             },
         })
     }
-
+    var adminView = (users) => {
+        $.ajax({
+            url: './templates/adminView.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl, users);
+                $content.empty();
+                $content.append($html);
+            },
+            error: () => {
+                var err = "Could not load login page";
+                console.log(err);
+                $content.prepend(err);
+            },
+        })
+    }
     var loginView = () => {
         $.ajax({
             url: './templates/login-view.html',
@@ -66,7 +66,23 @@ var show = (() => {
             },
         })
     }
-
+    var registerView = () => {
+        $.ajax({
+            url: './templates/register-view.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl);
+                var $html = Mustache.render(tmpl);
+                $content.empty();
+                $content.append($html);
+                $content.find('button').on('click', app.register)
+        },
+            error: () => {
+                var err = "Could not load register page";
+                console.log(err);
+                $content.prepend(err);
+            },
+        })
+    }
     var mostDownloadsResult = (extensions) => {
         $.ajax({
             url: './templates/top-downloads.html',
@@ -90,7 +106,7 @@ var show = (() => {
                 var $html = Mustache.render(tmpl, uploadsResults);
                 $content.find("#most-recent-uploads").remove();
                 $content.append($html);
-                $('#most-recent-uploads .one-item').on('click', app.getExtensionView)
+                $('#most-recent-uploads .one').on('click', app.getExtensionView)
             },
             error: () => {
                 var err = "Could not load upload extensions";
@@ -106,7 +122,7 @@ var show = (() => {
                 var $html = Mustache.render(tmpl, featuredResults);
                 $content.find("#featured-results").remove();
                 $content.append($html);
-                $('#featured-results .one-item').on('click', app.getExtensionView)
+                $('#featured-results .one').on('click', app.getExtensionView)
             },
             error: () => {
                 var err = "Could not load featured extensions";
@@ -150,7 +166,6 @@ var show = (() => {
         })
     }
     return {
-        searchView,
         searchResults,
         mostDownloadsResult,
         uploadsResult,
@@ -158,6 +173,8 @@ var show = (() => {
         userExtensions,
         loginView,
         extensionView,
-        featuredResults
+        featuredResults,
+        adminView,
+        registerView
     }
 })()

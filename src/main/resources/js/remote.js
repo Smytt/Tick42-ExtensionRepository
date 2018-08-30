@@ -21,10 +21,9 @@ remote = (() => {
         console.log(token);
         $.ajax({
             type: 'GET',
-            url: base + "/api/extension/search/" + extensionTitle+ "/secure",
+            url: base + "/api/extension/search/" + extensionTitle,
             success: (res) => {
                 render.searchResults(res, extensionTitle);
-
             },
             error: (e) => {
                 console.log("Couldn't retrieve extensions")
@@ -64,7 +63,6 @@ remote = (() => {
             url: base + "/api/extension/featured",
             success: (res) => {
                 render.featuredResults(res);
-
             },
             error: (e) => {
                 console.log("Couldn't retrieve extensions")
@@ -162,10 +160,23 @@ remote = (() => {
     var getExtension = (id) => {
         $.ajax({
             type: 'GET',
-            url: base + "/api/extension/get/" + id,
+            url: base + "/api/extension/" + id,
             success: (res) => {
                 render.extensionInfo(res);
 
+            },
+            error: (e) => {
+                console.log("Couldn't retrieve extension by id")
+            }
+        })
+    }
+    var getUsers = () => {
+        $.ajax({
+            type: 'GET',
+            url: base + "/api/user/listAll",
+            success: (res) => {
+                render.users(res);
+                console.log(res);
             },
             error: (e) => {
                 console.log("Couldn't retrieve extension by id")
@@ -183,6 +194,7 @@ remote = (() => {
         getExtension,
         featuredExtensions,
         changeActiveState,
-        listAllUsers
+        listAllUsers,
+        getUsers
     }
 })()

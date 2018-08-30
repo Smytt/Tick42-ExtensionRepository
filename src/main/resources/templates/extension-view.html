@@ -1,6 +1,39 @@
-<div id="extension-view">
-<h1>{{name}}</h1>
-<p>{{description}}</p>
-<span>{{version}}</span>
-<span>{{timesDownloaded}}</span>
+
+<div>
+    <div class="wrap extension-details">
+        <div class="image">
+            <div style="background-image: url(../img/icons/backpack.png)"></div>
+            <button class="menu-item"><i class="fas fa-download"></i> download</button>
+            <button class="menu-item"><i class="fas fa-user"></i> Developer</button>
+            <a href="{{gitHubLink}}" target="_blank" class="menu-item"><i class="fab fa-github"></i> GitHub</a>
+        </div>
+        <div class="details">
+            <div class="action-btn">
+                <button class="menu-item"><i class="fas fa-check"></i> Approve</button>
+                <button class="menu-item"><i class="fas fa-pencil-alt"></i> Edit</button>
+                <button class="menu-item"><i class="fas fa-trash-alt"></i>Delete</button>
+                <button class="menu-item"><i class="fas fa-sync-alt"></i>GitHub</button>
+            </div>
+            <h1>{{name}}</h1>
+            <p>{{description}}</p>
+        </div>
+        <div class="info stats">
+            <h2><i class="fas fa-user"></i> Developer</h2>
+            <span><a href="">{{ownerName}}</a></span>
+            <h2><i class="fas fa-check-circle"></i> Version </h2>
+            <span>{{version}}</span>
+            <h2><i class="fas fa-arrow-circle-up"></i> Upload date</h2>
+            <span>{{uploadDate}}</span>
+            <h2><i class="fas fa-arrow-circle-down"></i> Downloads</h2>
+            <span>17</span>
+        </div>
+        <div class="info github">
+            <h2><i class="fab fa-github"></i> Last commit</h2>
+            <span>{{lastCommit}}</span>
+            <h2><i class="fab fa-github"></i> Open issues</h2>
+            <span>{{openIssues}}</span>
+            <h2><i class="fab fa-github"></i> Pull requests</h2>
+            <span>{{pullRequests}}</span>
+        </div>
+    </div>
 </div>

@@ -11,22 +11,23 @@ var app = (() => {
 
     var start = () => {
         $("#login").on('click', getLoginView);
-        $("#search").on('click', getSearchView);
+        $("#search").on('click', search);
+        $("#users").on('click', remote.getUsers);
+        $("#register").on('click', getRegisterView);
         $("#submit").on('click', getSubmitView);
         $("#user-results").on('click', getUserExtensions);
         home();
     }
 
-    var getSearchView = (e) => {
-        preventDefault(e);
-        show.searchView();
-    }
 
     var getLoginView = (e) => {
         preventDefault(e);
         show.loginView();
     }
-
+    var getRegisterView = (e) => {
+        preventDefault(e);
+        show.registerView();
+    }
     var getUserExtensions = (e) => {
         preventDefault(e);
         remote.getUserExtensions();
@@ -46,6 +47,7 @@ var app = (() => {
         if (!hitEnter(e)) return;
 
         extensionName = $('#search-input').val();
+        console.log(extensionName)
         remote.searchByName(extensionName);
     }
 
