@@ -1,14 +1,13 @@
 package com.tick42.quicksilver.models.DTO;
 
 import com.tick42.quicksilver.models.Extension;
-import com.tick42.quicksilver.models.Tag;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class ExtensionDTO {
-    private int Id;
+    private int id;
     private String name;
     private String version;
     private String description;
@@ -57,11 +56,11 @@ public class ExtensionDTO {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {

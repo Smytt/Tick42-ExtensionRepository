@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css?family=Abril+Fatface');
 
 html {
+    min-height: 100%;
     background: url("../img/footerbg.png") bottom center;
 }
 
@@ -295,7 +296,7 @@ footer * {
 }
 
 .extension-details .details p {
-    font-style: 16px;
+    font-size: 16px;
     margin: 10px 0;
 }
 
@@ -328,7 +329,7 @@ footer * {
     top: -2px;
 }
 
-.extension-details .image button {
+.extension-details .image button, .extension-details .image a {
     width:  100%;
     margin-top: 10px;
 }
@@ -359,6 +360,10 @@ footer * {
 .regular {
     width: 600px;
     margin: 0 auto;
+}
+
+.regular.narrow {
+    width: 400px;
 }
 
 .regular > * {
@@ -443,4 +448,12 @@ label button:hover {
 .action-btn.heading-btn .menu-item.current:hover {
     background-color: #f6cd61;
     color: #4a4e4d;
+}
+
+.middle > h1 {
+    float: none;
+}
+
+.half > h1 {
+    float: none;
 }

@@ -1,22 +1,55 @@
 var app = (() => {
 
-    var count = 10;
+    const perPage = 10;
+
     var home = (e) => {
         preventDefault(e);
-//        remote.mostRecentUploads(count,remote.mostRecentUploads);
-//        remote.mostDownloads(count,remote.mostDownloads);
-        remote.featuredExtensions();
+        loadNav();
+
+        show.loadHome();
     }
 
+    var loadHome = () => {
+        var count = 5;
+        remote.loadFeatured().then(
+            res => {
+                render.homeFeatured(res);
+            }
+        );
+        remote.loadByUploadDate("", 1, count).then(
+            res => {
+                render.homeNew(res)
+            }
+        );
+        remote.loadByTimesDownloaded("", 1, count).then(
+            res => {
+                render.homePopular(res)
+            }
+        );
+    }
 
-    var start = () => {
-        $("#login").on('click', getLoginView);
-        $("#search").on('click', search);
-        $("#users").on('click', getAdminView);
-        $("#register").on('click', getRegisterView);
-        $("#submit").on('click', getSubmitView);
-        $("#user-results").on('click', getUserExtensions);
-        home();
+    var search = (e) => {
+        preventDefault(e);
+
+        var query = $('#search-input').val().trim();
+
+        if (query.length === 0) return;
+
+        remote.loadByUploadDate(query, 1, perPage).then(
+            res => {
+                show.searchResults(res, query);
+            }
+        );
+    }
+
+    var discover = (e) => {
+        preventDefault(e);
+
+        remote.loadByUploadDate("", 1, perPage).then(
+            res => {
+                show.searchResults(res);
+            }
+        );
     }
 
 
@@ -36,7 +69,7 @@ var app = (() => {
         preventDefault(e);
         remote.getUserExtensions();
     }
-    var getExtensionView = function (e){
+    var getExtensionView = function (e) {
         preventDefault(e);
         var id = $(this).attr('extensionId');
         remote.getExtension(id);
@@ -44,15 +77,6 @@ var app = (() => {
     var getSubmitView = (e) => {
         preventDefault(e);
         show.submitView();
-    }
-
-    var search = (e) => {
-        preventDefault(e);
-        if (!hitEnter(e)) return;
-
-        extensionName = $('#search-input').val();
-        console.log(extensionName)
-        remote.searchByName(extensionName);
     }
 
     var login = function (e) {
@@ -96,22 +120,41 @@ var app = (() => {
         }
     }
 
+    var loadNav = () => {
+        if (remote.isAuth()) {
+            show.userNav();
+        }
+        else {
+            show.guestNav();
+        }
+    }
+
+    var attachNavEvents = () => {
+        $("#login").on('click', getLoginView);
+        $("#search").on('click', search);
+        $("#users").on('click', getAdminView);
+        $("#register").on('click', getRegisterView);
+        $("#submit").on('click', getSubmitView);
+        $("#user-results").on('click', getUserExtensions);
+        $("#discover").on('click', discover);
+    }
+
     function hitEnter(e) {
         if (e.type === 'keypress' && e.which !== 13) {
-                return false;
+            return false;
         }
         return true
     }
 
-
     return {
-        start,
+        attachNavEvents,
         home,
         search,
         submit,
         login,
-        getExtensionView
+        getExtensionView,
+        loadHome
     }
 })();
 
-app.start();
+app.home();

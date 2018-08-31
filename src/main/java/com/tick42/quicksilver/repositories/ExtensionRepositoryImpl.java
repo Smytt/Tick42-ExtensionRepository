@@ -118,12 +118,13 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
 
 
     @Override
-    public List<Extension> findAllByDate(Integer page, Integer perPage) {
+    public List<Extension> findAllByDate(String name, Integer page, Integer perPage) {
         List<Extension> extensions = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
-                    .createQuery("from Extension where isPending = false order by uploadDate desc")
+                    .createQuery("from Extension where isPending = false and name like :name order by uploadDate desc")
+                    .setParameter("name", "%" + name + "%")
                     .setFirstResult((page - 1) * perPage)
                     .setMaxResults(page * perPage)
                     .list();
@@ -135,12 +136,13 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
     }
 
     @Override
-    public List<Extension> findAllByCommit(Integer page, Integer perPage) {
+    public List<Extension> findAllByCommit(String name, Integer page, Integer perPage) {
         List<Extension> extensions = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
-                    .createQuery("from Extension where isPending = false order by github.lastCommit desc")
+                    .createQuery("from Extension where isPending = false and name like :name order by github.lastCommit desc")
+                    .setParameter("name", "%" + name + "%")
                     .setFirstResult((page - 1) * perPage)
                     .setMaxResults(page * perPage)
                     .list();
@@ -152,12 +154,13 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
     }
 
     @Override
-    public List<Extension> findAllByName(Integer page, Integer perPage) {
+    public List<Extension> findAllByName(String name, Integer page, Integer perPage) {
         List<Extension> extensions = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
-                    .createQuery("from Extension where isPending = false order by name asc")
+                    .createQuery("from Extension where isPending = false and name like :name order by name asc")
+                    .setParameter("name", "%" + name + "%")
                     .setFirstResult((page - 1) * perPage)
                     .setMaxResults(page * perPage)
                     .list();
@@ -169,12 +172,13 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
     }
 
     @Override
-    public List<Extension> findAllByDownloads(Integer page, Integer perPage) {
+    public List<Extension> findAllByDownloads(String name, Integer page, Integer perPage) {
         List<Extension> extensions = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
-                    .createQuery("from Extension where isPending = false order by timesDownloaded desc")
+                    .createQuery("from Extension where isPending = false and name like :name order by timesDownloaded desc")
+                    .setParameter("name", "%" + name + "%")
                     .setFirstResult((page - 1) * perPage)
                     .setMaxResults(page * perPage)
                     .list();
@@ -183,5 +187,19 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
             System.out.println(e.getMessage());
         }
         return extensions;
+    }
+
+    @Override
+    public Long getTotalResults(String name) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Long total = (Long) session
+                    .createQuery("select count(*) from Extension where isPending = false and name like :name")
+                    .setParameter("name", "%" + name + "%").uniqueResult();
+            session.getTransaction().commit();
+            return total;
+        } catch (Exception e) {
+            throw new RuntimeException("Couldn't get total results");
+        }
     }
 }

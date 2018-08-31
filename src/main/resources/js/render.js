@@ -1,33 +1,32 @@
 var render = (() => {
-    var searchResults = (results, searchedTittle) => {
+    var searchResults = (results, query) => {
         var extensions = {
-            results,
-            searchedTittle,
-            count: results.length,
+            extensions: results['extensions'],
+            query,
+            count: results['totalResults'],
         }
         show.searchResults(extensions);
     }
-    var uploadsResult = (results, count) => {
+
+    var homeNew = (results) => {
         var extensions = {
-            results,
-            count
+            extensions: results,
         }
-        show.uploadsResult(extensions);
+        show.homeNew(extensions);
     }
 
-    var downloadsResult = (results, count) => {
+    var homePopular = (results) => {
         var extensions = {
-            results,
-            count
+            extensions: results
         }
-        show.mostDownloadsResult(extensions);
+        show.homePopular(extensions);
     }
 
-    var featuredResults = (results) => {
+    var homeFeatured = (results) => {
         var results = {
-            results,
+            extensions: results,
         }
-        show.featuredResults(results);
+        show.homeFeatured(results);
     }
 
     var userExtensions = (results) => {
@@ -50,11 +49,10 @@ var render = (() => {
     }
     return {
         searchResults,
-        uploadsResult,
-        downloadsResult,
+        homeNew,
+        homePopular,
         extensionInfo,
-        featuredResults,
-        userExtensions,
-        users
+        homeFeatured,
+        userExtensions
     }
 })();

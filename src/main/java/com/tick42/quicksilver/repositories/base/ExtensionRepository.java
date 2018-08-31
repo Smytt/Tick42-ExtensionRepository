@@ -11,11 +11,13 @@ public interface ExtensionRepository extends GenericRepository<Extension> {
 
     List<Extension> findAll();
 
-    List<Extension> findAllByDate(Integer page, Integer perPage);
+    List<Extension> findAllByDate(String name, Integer page, Integer perPage);
 
-    List<Extension> findAllByCommit(Integer page, Integer perPage);
+    List<Extension> findAllByCommit(String name, Integer page, Integer perPage);
 
-    List<Extension> findAllByName(Integer page, Integer perPage);
+    List<Extension> findAllByName(String name, Integer page, Integer perPage);
 
-    List<Extension> findAllByDownloads(Integer page, Integer perPage);
+    List<Extension> findAllByDownloads(String name, Integer page, Integer perPage);
+
+    Long getTotalResults(String name);
 }

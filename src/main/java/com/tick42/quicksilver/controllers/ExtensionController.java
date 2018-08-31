@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.controllers;
 
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
+import com.tick42.quicksilver.models.DTO.PageDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.security.JwtValidator;
 import com.tick42.quicksilver.services.base.ExtensionService;
@@ -28,36 +29,25 @@ public class ExtensionController {
         this.validator = validator;
     }
 
-    @GetMapping(value = "/all")
-    public List<ExtensionDTO> findAll(
+    @GetMapping(value = "/search")
+    public PageDTO<ExtensionDTO> findAll(
+            @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "orderBy", required = false) String orderBy,
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "perPage", required = false) Integer perPage) {
 
-        if (orderBy == null) {
-            orderBy = "date";
-        }
-
-        if (page == null) {
-            page = 1;
-        }
-
-        if (perPage == null) {
-            perPage = 10;
-        }
-
-        return extensionService.findAll(orderBy, page, perPage);
+        return extensionService.findAll(name, orderBy, page, perPage);
     }
 
     @GetMapping(value = "/{id}")
     public ExtensionDTO findById(@PathVariable(name = "id") int id) {
         return extensionService.findById(id);
     }
-
-    @GetMapping(value = "/search/{name}")
-    public List<ExtensionDTO> findByName(@PathVariable(name = "name") String name) {
-        return extensionService.findByName(name);
-    }
+//
+//    @GetMapping(value = "/search/{name}")
+//    public List<ExtensionDTO> findByName(@PathVariable(name = "name") String name) {
+//        return extensionService.findByName(name);
+//    }
 
     @GetMapping(value = "/featured")
     public List<ExtensionDTO> featured() {

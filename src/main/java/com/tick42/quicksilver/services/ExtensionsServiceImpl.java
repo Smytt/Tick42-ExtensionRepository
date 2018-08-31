@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
+import com.tick42.quicksilver.models.DTO.PageDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.User;
@@ -74,21 +75,47 @@ public class ExtensionsServiceImpl implements ExtensionService {
 
 
     @Override
-    public List<ExtensionDTO> findAll(String orderBy, Integer page, Integer perPage) {
+    public PageDTO<ExtensionDTO> findAll(String name, String orderBy, Integer page, Integer perPage) {
+
+        if (name == null) {
+            name = "";
+        }
+
+        if (orderBy == null) {
+            orderBy = "date";
+        }
+
+        if (page == null || page < 1) {
+            page = 1;
+        }
+
+        if (perPage == null || perPage < 1) {
+            perPage = 10;
+        }
+
         List<Extension> extensions = new ArrayList<>();
+        Long totalResults = extensionRepository.getTotalResults(name);
+
         switch (orderBy) {
             case "date":
-                extensions = extensionRepository.findAllByDate(page, perPage); break;
+                extensions = extensionRepository.findAllByDate(name, page, perPage);
+                break;
             case "commits":
-                extensions = extensionRepository.findAllByCommit(page, perPage); break;
+                extensions = extensionRepository.findAllByCommit(name, page, perPage);
+                break;
             case "name":
-                extensions = extensionRepository.findAllByName(page, perPage); break;
+                extensions = extensionRepository.findAllByName(name, page, perPage);
+                break;
             case "downloads":
-                extensions = extensionRepository.findAllByDownloads(page, perPage); break;
+                extensions = extensionRepository.findAllByDownloads(name, page, perPage);
+                break;
             default:
-                extensions = extensionRepository.findAllByDate(page, perPage); break;
+                extensions = extensionRepository.findAllByDate(name, page, perPage);
+                break;
         }
-        return createDTO(extensions);
+
+        List<ExtensionDTO> extensionDTOS = createDTO(extensions);
+        return new PageDTO<ExtensionDTO>(extensionDTOS, page, totalResults);
     }
 
     @Override

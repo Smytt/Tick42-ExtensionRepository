@@ -2,6 +2,7 @@ package com.tick42.quicksilver.services.base;
 
 
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
+import com.tick42.quicksilver.models.DTO.PageDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface ExtensionService {
 
     List<ExtensionDTO> findByName(String searchQuery);
 
-    List<ExtensionDTO> findAll(String orderBy, Integer page, Integer perPage);
+    PageDTO<ExtensionDTO> findAll(String name, String orderBy, Integer page, Integer perPage);
 
     List<ExtensionDTO> findFeatured();
 

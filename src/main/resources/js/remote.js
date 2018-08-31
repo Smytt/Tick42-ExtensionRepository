@@ -2,6 +2,10 @@ remote = (() => {
 
     const base = "http://localhost:8080";
 
+    var isAuth = () => {
+        return localStorage.getItem('Authorization') !== null;
+    }
+
     var searchByTag = (tagName) => {
         $.ajax({
             type: 'GET',
@@ -31,45 +35,23 @@ remote = (() => {
         })
     }
 
-//    var mostDownloads = (count) => {
-//        var perPage = 3;
-//        var orderBy = "date";
-//        var page = 3;
-//        $.ajax({
-//            type: 'GET',
-//            url: base + "api/extension/all?orderBy=date&perPage=2",
-//            success: (res) => {
-//                render.downloadsResult(res);
-//
-//            },
-//            error: (e) => {
-//                console.log("Couldn't retrieve extensions")
-//            }
-//        })
-//    }
-//    var mostRecentUploads = (count) => {
-//        $.ajax({
-//            type: 'GET',
-//            url: base + "/api/extension/mostRecentUploads/" + count,
-//            success: (res) => {
-//                render.uploadsResult(res);
-//
-//            },
-//            error: (e) => {
-//                console.log("Couldn't retrieve extensions")
-//            }
-//        })
-//    }
-    var featuredExtensions = () => {
-        $.ajax({
+    var loadByTimesDownloaded = (name, page, perPage) => {
+        return $.ajax({
             type: 'GET',
-            url: base + "/api/extension/featured",
-            success: (res) => {
-                render.featuredResults(res);
-            },
-            error: (e) => {
-                console.log("Couldn't retrieve extensions")
-            }
+            url: base + "/api/extension/search" + "?name=" + name + "&orderBy=downloads" + "&perPage=" + perPage
+        })
+    }
+
+    var loadByUploadDate = (name, page, perPage) => {
+       return $.ajax({
+            type: 'GET',
+            url: base + "/api/extension/search" + "?name=" + name + "&orderBy=date" + "&perPage=" + perPage
+        })
+    }
+    var loadFeatured = () => {
+        return $.ajax({
+            type: 'GET',
+            url: base + "/api/extension/featured"
         })
     }
 
@@ -80,7 +62,7 @@ remote = (() => {
             data: JSON.stringify(extension),
             contentType: 'application/json',
             headers: {
-                "Authorization":JSON.parse(localStorage.getItem("Authorization"))
+                "Authorization": JSON.parse(localStorage.getItem("Authorization"))
             },
             success: () => {
 
@@ -96,7 +78,7 @@ remote = (() => {
             type: 'GET',
             url: base + "/api/extension/userExtensions/secured",
             headers: {
-                "Authorization":JSON.parse(localStorage.getItem("Authorization"))
+                "Authorization": JSON.parse(localStorage.getItem("Authorization"))
             },
             success: (res) => {
 
@@ -116,24 +98,23 @@ remote = (() => {
             data: JSON.stringify(user),
             contentType: 'application/json',
             success: (res) => {
-                let dataToStore = JSON.stringify(res);
-                localStorage.setItem('Authorization', dataToStore);
-                document.cookie =
-                 'cookie1='+dataToStore+'; expires=Fri, 3 Aug 2019 20:47:11 UTC; path=/'
+                let token = JSON.stringify(res);
+                localStorage.setItem('Authorization', token);
+                app.home()
             },
             error: (e) => {
                 console.log("Couldn't login");
             }
         })
     }
-    var changeActiveState = (username, state) =>{
+    var changeActiveState = (username, state) => {
         $.ajax({
             type: 'POST',
             url: base + '/api/user/changeActiveState' + username + state,
             data: JSON.stringify(username),
             contentType: 'application/json',
             headers: {
-                'Authorization':JSON.parse(localStorage.getItem('Authorization'))
+                'Authorization': JSON.parse(localStorage.getItem('Authorization'))
             },
             success: (res) => {
 
@@ -145,10 +126,10 @@ remote = (() => {
     }
     var listAllUsers = () => {
         $.ajax({
-            type:'GET',
+            type: 'GET',
             url: base + '/api/user/all',
             headers: {
-                "Authorization":JSON.parse(localStorage.getItem("Authorization"))
+                "Authorization": JSON.parse(localStorage.getItem("Authorization"))
             },
             success: (res) => {
                 render.allUsers(res);
@@ -188,15 +169,16 @@ remote = (() => {
         })
     }
     return {
+        isAuth,
         searchByName,
         searchByTag,
-//        mostRecentUploads,
-//        mostDownloads,
+        loadByUploadDate,
+        loadByTimesDownloaded,
         submitExtension,
         getUserExtensions,
         login,
         getExtension,
-        featuredExtensions,
+        loadFeatured,
         changeActiveState,
         listAllUsers,
         getUsers

@@ -1,6 +1,114 @@
 var show = (() => {
 
-    var $content =$('#content');
+    var $content = $('#content');
+
+    var loadHome = () => {
+        $.ajax({
+            url: './templates/home.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl);
+                $content.html($html);
+                app.loadHome();
+            },
+            error: () => {
+                var err = "Could not load home page";
+                console.log(err);
+            },
+        })
+    }
+
+    var userNav = () => {
+        $.ajax({
+            url: './templates/nav-user.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl);
+                $("nav").html($html);
+                app.attachNavEvents();
+            },
+            error: () => {
+                var err = "Could not load user nav";
+                console.log(err);
+            },
+        })
+    }
+
+    var guestNav = () => {
+        $.ajax({
+            url: './templates/nav-guest.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl);
+                $("nav").html($html);
+                app.attachNavEvents();
+            },
+            error: () => {
+                var err = "Could not load user nav";
+                console.log(err);
+            },
+        })
+    }
+
+    var adminNav = () => {
+        $.ajax({
+            url: './templates/nav-admin.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl);
+                $("nav").html($html);
+                app.attachNavEvents();
+            },
+            error: () => {
+                var err = "Could not load user nav";
+                console.log(err);
+            },
+        })
+    }
+
+    var homeFeatured = (extensions) => {
+        $.ajax({
+            url: './templates/home-featured.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl, extensions);
+                $content.find("#featured").html($html);
+                $('#featured .one').on('click', app.getExtensionView)
+            },
+            error: () => {
+                var err = "Could not load featured extensions";
+                console.log(err);
+                $content.prepend(err);
+            },
+        })
+    }
+
+    var homePopular = (extensions) => {
+        $.ajax({
+            url: './templates/home-popular.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl, extensions);
+                $content.find("#popular").html($html);
+                $('#popular .one').on('click', app.getExtensionView)
+            },
+            error: () => {
+                var err = "Could not load extension page";
+                console.log(err);
+                $content.prepend(err);
+            },
+        })
+    }
+
+    var homeNew = (extensions) => {
+        $.ajax({
+            url: './templates/home-new.html',
+            success: (tmpl) => {
+                var $html = Mustache.render(tmpl, extensions);
+                $content.find("#new").html($html);
+                $('#new .one').on('click', app.getExtensionView)
+            },
+            error: () => {
+                var err = "Could not load upload extensions";
+                console.log(err);
+                $content.prepend(err);
+            },
+        })
+    }
 
     var submitView = () => {
         $.ajax({
@@ -18,15 +126,13 @@ var show = (() => {
         })
     }
 
-    var searchResults = (extensions) => {
+    var searchResults = (res) => {
         $.ajax({
             url: './templates/search-results.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl, extensions);
-                $content.find("#search-results").remove();
-                $content.empty();
-                $content.append($html);
-                $('#search-results .one').on('click', app.getExtensionView);
+                var $html = Mustache.render(tmpl, res);
+                $content.html($html);
+                $('.one').on('click', app.getExtensionView);
             },
             error: () => {
                 var err = "Could not load extension page";
@@ -42,7 +148,7 @@ var show = (() => {
                 var $html = Mustache.render(tmpl);
                 $content.empty();
                 $content.append($html);
-        },
+            },
             error: () => {
                 var err = "Could not load admin page";
                 console.log(err);
@@ -57,7 +163,7 @@ var show = (() => {
                 var $html = Mustache.render(tmpl);
                 $content.empty();
                 $content.append($html);
-                $content.find('button').on('click', app.login)
+                $content.find('form button').on('click', app.login)
             },
             error: () => {
                 var err = "Could not load login page";
@@ -74,7 +180,7 @@ var show = (() => {
                 $content.empty();
                 $content.append($html);
                 $content.find('button').on('click', app.register)
-        },
+            },
             error: () => {
                 var err = "Could not load register page";
                 console.log(err);
@@ -82,54 +188,7 @@ var show = (() => {
             },
         })
     }
-    var mostDownloadsResult = (extensions) => {
-        $.ajax({
-            url: './templates/top-downloads.html',
-            success: (tmpl) => {
-                var $html = Mustache.render(tmpl, extensions);
-                $content.find("#top-downloads").remove();
-                $content.append($html);
-                $('#top-downloads .one-item').on('click', app.getExtensionView)
-            },
-            error: () => {
-                var err = "Could not load extension page";
-                console.log(err);
-                $content.prepend(err);
-            },
-        })
-    }
-    var uploadsResult = (uploadsResults) => {
-        $.ajax({
-            url: './templates/most-recent-uploads.html',
-            success: (tmpl) => {
-                var $html = Mustache.render(tmpl, uploadsResults);
-                $content.find("#most-recent-uploads").remove();
-                $content.append($html);
-                $('#most-recent-uploads .one').on('click', app.getExtensionView)
-            },
-            error: () => {
-                var err = "Could not load upload extensions";
-                console.log(err);
-                $content.prepend(err);
-            },
-        })
-    }
-    var featuredResults = (featuredResults) => {
-        $.ajax({
-            url: './templates/featured-results.html',
-            success: (tmpl) => {
-                var $html = Mustache.render(tmpl, featuredResults);
-                $content.find("#featured-results").remove();
-                $content.append($html);
-                $('#featured-results .one').on('click', app.getExtensionView)
-            },
-            error: () => {
-                var err = "Could not load featured extensions";
-                console.log(err);
-                $content.prepend(err);
-            },
-        })
-    }
+
     var userExtensions = (extensions) => {
         $.ajax({
             url: './templates/user-extensions.html',
@@ -165,14 +224,18 @@ var show = (() => {
         })
     }
     return {
+        loadHome,
+        userNav,
+        guestNav,
+        adminNav,
         searchResults,
-        mostDownloadsResult,
-        uploadsResult,
+        homePopular,
+        homeNew,
         submitView,
         userExtensions,
         loginView,
         extensionView,
-        featuredResults,
+        homeFeatured,
         adminView,
         registerView
     }
