@@ -64,7 +64,7 @@ public class ExtensionController {
         return extensionService.findFeatured();
     }
 
-    @GetMapping(value = "/userExtensions/secured")
+    @GetMapping(value = "/userExtensions")
     public List<ExtensionDTO> featured(HttpServletRequest request, HttpServletResponse response) {
         int id = validator.getUserIdFromToken(request, response);
         return extensionService.findUserExtensions(id);
@@ -93,31 +93,4 @@ public class ExtensionController {
         return extensionService.create(extension);
     }
 
-
-//    @GetMapping(value = "/httpRequest")
-//    public @ResponseBody
-//    void generateReport(HttpServletRequest request, HttpServletResponse response) {
-//        System.out.println(request.getHeader("Authorization"));
-//        System.out.println(response.getHeader("Authorization"));
-//    }
-
-//    @GetMapping(value = "/sortByUploadDate")
-//    public List<Extension> sortByUploadDate() {
-//        return extensionService.sortByUploadDate();
-//    }
-//
-//    @GetMapping(value = "/sortByMostDownloads")
-//    public List<Extension> sortByMostDownloads() {
-//        return extensionService.sortByMostDownloads();
-//    }
-//
-//    @GetMapping(value = "/sortByCommitDate")
-//    public List<Extension> sortByCommitDate() {
-//        return extensionService.sortByCommitDate();
-//    }
-
-    //    @DeleteMapping(value = "/delete/{id}")
-//    void deleteExtension(@PathVariable int id) {
-//        extensionService.delete(id);
-//    }
 }

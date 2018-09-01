@@ -30,36 +30,6 @@ remote = (() => {
             }
         })
     }
-
-//    var mostDownloads = (count) => {
-//        var perPage = 3;
-//        var orderBy = "date";
-//        var page = 3;
-//        $.ajax({
-//            type: 'GET',
-//            url: base + "api/extension/all?orderBy=date&perPage=2",
-//            success: (res) => {
-//                render.downloadsResult(res);
-//
-//            },
-//            error: (e) => {
-//                console.log("Couldn't retrieve extensions")
-//            }
-//        })
-//    }
-//    var mostRecentUploads = (count) => {
-//        $.ajax({
-//            type: 'GET',
-//            url: base + "/api/extension/mostRecentUploads/" + count,
-//            success: (res) => {
-//                render.uploadsResult(res);
-//
-//            },
-//            error: (e) => {
-//                console.log("Couldn't retrieve extensions")
-//            }
-//        })
-//    }
     var featuredExtensions = () => {
         $.ajax({
             type: 'GET',
@@ -94,7 +64,7 @@ remote = (() => {
     var getUserExtensions = () => {
         $.ajax({
             type: 'GET',
-            url: base + "/api/extension/userExtensions/secured",
+            url: base + "/api/extension/userExtensions",
             headers: {
                 "Authorization":JSON.parse(localStorage.getItem("Authorization"))
             },
@@ -126,6 +96,22 @@ remote = (() => {
             }
         })
     }
+    var register = (register) => {
+           $.ajax({
+            type: 'POST',
+                       url: base + "/api/user/register",
+                       data: JSON.stringify(user),
+                       contentType: 'application/json',
+                       success: (res) => {
+
+                       },
+                       error: (e) => {
+                           console.log("Couldn't register");
+                       }
+           })
+
+    }
+
     var changeActiveState = (username, state) =>{
         $.ajax({
             type: 'POST',
@@ -190,8 +176,6 @@ remote = (() => {
     return {
         searchByName,
         searchByTag,
-//        mostRecentUploads,
-//        mostDownloads,
         submitExtension,
         getUserExtensions,
         login,

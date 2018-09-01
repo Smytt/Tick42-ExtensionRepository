@@ -3,12 +3,12 @@ package com.tick42.quicksilver.controllers;
 
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.DTO.UserDTO;
+import com.tick42.quicksilver.models.Spec.UserRegistrationSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.services.base.UserService;
 import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public User register(@RequestBody User user) {
+    public User register(@RequestBody UserRegistrationSpec user) {
         return userService.register(user);
     }
 

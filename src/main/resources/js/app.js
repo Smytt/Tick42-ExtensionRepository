@@ -3,8 +3,6 @@ var app = (() => {
     var count = 10;
     var home = (e) => {
         preventDefault(e);
-//        remote.mostRecentUploads(count,remote.mostRecentUploads);
-//        remote.mostDownloads(count,remote.mostDownloads);
         remote.featuredExtensions();
     }
 
@@ -69,6 +67,17 @@ var app = (() => {
         remote.login(user);
     }
 
+    var register = function (e) {
+        preventDefault(e);
+        if (!hitEnter(e)) return;
+
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var repeatPassword = $('#repeat-password').val();
+
+        remote.register(username,password,repeatPassword);
+    }
+
     var submit = (e) => {
         preventDefault(e);
         if (!hitEnter(e)) return;
@@ -110,7 +119,8 @@ var app = (() => {
         search,
         submit,
         login,
-        getExtensionView
+        getExtensionView,
+        register
     }
 })();
 

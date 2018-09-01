@@ -82,38 +82,6 @@ var show = (() => {
             },
         })
     }
-    var mostDownloadsResult = (extensions) => {
-        $.ajax({
-            url: './templates/top-downloads.html',
-            success: (tmpl) => {
-                var $html = Mustache.render(tmpl, extensions);
-                $content.find("#top-downloads").remove();
-                $content.append($html);
-                $('#top-downloads .one-item').on('click', app.getExtensionView)
-            },
-            error: () => {
-                var err = "Could not load extension page";
-                console.log(err);
-                $content.prepend(err);
-            },
-        })
-    }
-    var uploadsResult = (uploadsResults) => {
-        $.ajax({
-            url: './templates/most-recent-uploads.html',
-            success: (tmpl) => {
-                var $html = Mustache.render(tmpl, uploadsResults);
-                $content.find("#most-recent-uploads").remove();
-                $content.append($html);
-                $('#most-recent-uploads .one').on('click', app.getExtensionView)
-            },
-            error: () => {
-                var err = "Could not load upload extensions";
-                console.log(err);
-                $content.prepend(err);
-            },
-        })
-    }
     var featuredResults = (featuredResults) => {
         $.ajax({
             url: './templates/featured-results.html',
@@ -166,8 +134,6 @@ var show = (() => {
     }
     return {
         searchResults,
-        mostDownloadsResult,
-        uploadsResult,
         submitView,
         userExtensions,
         loginView,

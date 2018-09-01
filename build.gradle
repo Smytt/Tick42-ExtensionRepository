@@ -57,13 +57,9 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.kohsuke/github-api
 	compile group: 'org.kohsuke', name: 'github-api', version: '1.93'
-	compile group: 'org.springframework', name: 'spring-orm', version: '5.0.8.RELEASE'
-	compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: '1.0.1.Final'
+//	compile group: 'org.springframework', name: 'spring-orm', version: '5.0.8.RELEASE'
+//	compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: '1.0.1.Final'
 
-//	 https://mvnrepository.com/artifact/org.springframework/spring-core
-	compile group: 'org.springframework', name: 'spring-core', version: '5.0.8.RELEASE'
-//     https://mvnrepository.com/artifact/org.springframework/spring-context
-    compile group: 'org.springframework', name: 'spring-context', version: '5.0.8.RELEASE'
 
 
 

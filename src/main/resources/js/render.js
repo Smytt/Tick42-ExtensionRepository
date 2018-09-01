@@ -7,21 +7,6 @@ var render = (() => {
         }
         show.searchResults(extensions);
     }
-    var uploadsResult = (results, count) => {
-        var extensions = {
-            results,
-            count
-        }
-        show.uploadsResult(extensions);
-    }
-
-    var downloadsResult = (results, count) => {
-        var extensions = {
-            results,
-            count
-        }
-        show.mostDownloadsResult(extensions);
-    }
 
     var featuredResults = (results) => {
         var results = {

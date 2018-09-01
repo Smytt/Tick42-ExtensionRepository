@@ -137,18 +137,4 @@ public class ExtensionsServiceImpl implements ExtensionService {
 
         return extensionsDTO;
     }
-    //    @Override
-//    public List<Extension> sortByUploadDate() {
-//        return extensionRepository.sortByUploadDate();
-//    }
-//
-//    @Override
-//    public List<Extension> sortByMostDownloads() {
-//        return extensionRepository.sortByMostDownloads();
-//    }
-//
-//    @Override
-//    public List<Extension> sortByCommitDate() {
-//        return extensionRepository.sortByCommitDate();
-//    }
 }

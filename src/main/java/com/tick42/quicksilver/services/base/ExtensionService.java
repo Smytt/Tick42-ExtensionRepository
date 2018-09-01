@@ -21,12 +21,6 @@ public interface ExtensionService {
     List<ExtensionDTO> findFeatured();
 
     List<ExtensionDTO> findUserExtensions(int id);
-//
-//    List<Extension> sortByUploadDate();
-//
-//    List<Extension> sortByMostDownloads();
-//
-//    List<Extension> sortByCommitDate();
 
     List<ExtensionDTO> findByTag(String tagName);
 

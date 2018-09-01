@@ -2,6 +2,7 @@ package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.DTO.UserDTO;
+import com.tick42.quicksilver.models.Spec.UserRegistrationSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.UserRepository;
 import com.tick42.quicksilver.security.JwtGenerator;
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
                 //TODO:exception
                 break;
         }
-       return userRepository.update(user);
+        return userRepository.update(user);
     }
 
     @Override
@@ -89,16 +90,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(User user) {
-        String username = user.getUsername();
-        User registeredUser = userRepository.findByUsername(username);
-
-        if (registeredUser == null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userRepository.create(user);
-        }
-        throw new UsernameExistsException("Username is already taken.");
+    public User register(UserRegistrationSpec userSpec) {
+        User registeredUser = userRepository.findByUsername(userSpec.getUsername());
+        if (userSpec.getPassword().equals(userSpec.getRepeatPassword())) {
+            if (registeredUser == null) {
+                String username = userSpec.getUsername();
+                String password = passwordEncoder.encode(userSpec.getPassword());
+                String role = "USER";
+                User user = new User(username, password, role);
+                return userRepository.create(user);
+            }
+            throw new UsernameExistsException("Username is already taken.");
+        }throw new UsernameExistsException("passwords don't match");
     }
+
 
     @Override
     public String generateToken(User user) {
