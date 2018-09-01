@@ -67,12 +67,6 @@ public class ExtensionsServiceImpl implements ExtensionService {
         extensionRepository.delete(id);
     }
 
-    @Override
-    public List<ExtensionDTO> findByName(String name) {
-        List<Extension> extensions = extensionRepository.findByName(name);
-        return createDTO(extensions);
-    }
-
 
     @Override
     public PageDTO<ExtensionDTO> findAll(String name, String orderBy, Integer page, Integer perPage) {
@@ -93,9 +87,14 @@ public class ExtensionsServiceImpl implements ExtensionService {
             perPage = 10;
         }
 
-        List<Extension> extensions = new ArrayList<>();
         Long totalResults = extensionRepository.getTotalResults(name);
+        int totalPages = (int) Math.ceil(totalResults * 1.0 / perPage);
 
+        if (page > totalPages) {
+            throw new RuntimeException("No such page");
+        }
+
+        List<Extension> extensions = new ArrayList<>();
         switch (orderBy) {
             case "date":
                 extensions = extensionRepository.findAllByDate(name, page, perPage);
@@ -114,20 +113,20 @@ public class ExtensionsServiceImpl implements ExtensionService {
                 break;
         }
 
-        List<ExtensionDTO> extensionDTOS = createDTO(extensions);
-        return new PageDTO<ExtensionDTO>(extensionDTOS, page, totalResults);
+        List<ExtensionDTO> extensionDTOS = generateExtensionDTOList(extensions);
+        return new PageDTO<>(extensionDTOS, page, totalPages, totalResults);
     }
 
     @Override
     public List<ExtensionDTO> findFeatured() {
         List<Extension> extensions = extensionRepository.findFeatured();
-        return createDTO(extensions);
+        return generateExtensionDTOList(extensions);
     }
 
     @Override
     public List<ExtensionDTO> findByTag(String tagName) {
         List<Extension> extensions = tagService.findByName(tagName).getExtensions();
-        return createDTO(extensions);
+        return generateExtensionDTOList(extensions);
     }
 
     @Override
@@ -149,14 +148,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
         }
     }
 
-    @Override
-    public List<ExtensionDTO> findUserExtensions(int id) {
-        User user = userRepository.findById(id);
-        List<Extension> extensions = user.getExtensions();
-        return createDTO(extensions);
-    }
-
-    private List<ExtensionDTO> createDTO(List<Extension> extensions) {
+    private List<ExtensionDTO> generateExtensionDTOList(List<Extension> extensions) {
         List<ExtensionDTO> extensionsDTO = extensions
                 .stream()
                 .map(ExtensionDTO::new)
@@ -164,18 +156,4 @@ public class ExtensionsServiceImpl implements ExtensionService {
 
         return extensionsDTO;
     }
-    //    @Override
-//    public List<Extension> sortByUploadDate() {
-//        return extensionRepository.sortByUploadDate();
-//    }
-//
-//    @Override
-//    public List<Extension> sortByMostDownloads() {
-//        return extensionRepository.sortByMostDownloads();
-//    }
-//
-//    @Override
-//    public List<Extension> sortByCommitDate() {
-//        return extensionRepository.sortByCommitDate();
-//    }
 }
