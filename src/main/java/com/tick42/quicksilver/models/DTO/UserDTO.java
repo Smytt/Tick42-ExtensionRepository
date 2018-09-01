@@ -8,7 +8,6 @@ import java.util.List;
 public class UserDTO {
     private int id;
     private String username;
-    private String password;
     private List<String> extensions = new ArrayList<>();
     private boolean isActive = true;
     private String role;
@@ -20,7 +19,6 @@ public class UserDTO {
     public UserDTO(User user) {
         this.setId(user.getId());
         this.setUsername(user.getUsername());
-        this.setPassword(user.getPassword());
         user.getExtensions().forEach(extension -> this.extensions.add(extension.getName()));
         this.setActive(user.getIsActive());
         this.setRole(user.getRole());
@@ -41,15 +39,6 @@ public class UserDTO {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
 
     public boolean isActive() {
         return isActive;
