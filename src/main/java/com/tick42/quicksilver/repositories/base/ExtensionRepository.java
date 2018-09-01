@@ -19,4 +19,6 @@ public interface ExtensionRepository extends GenericRepository<Extension> {
     List<Extension> findAllByDownloads(String name, Integer page, Integer perPage);
 
     Long getTotalResults(String name);
+
+    List<Extension> findPending();
 }

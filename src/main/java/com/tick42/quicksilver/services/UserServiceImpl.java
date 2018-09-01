@@ -2,7 +2,7 @@ package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.DTO.UserDTO;
-import com.tick42.quicksilver.models.Spec.UserRegistrationSpec;
+import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.UserRepository;
 import com.tick42.quicksilver.security.JwtGenerator;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User setState(int id, String state) {
+    public UserDTO setState(int id, String state) {
         User user = userRepository.findById(id);
         switch (state) {
             case "enable":
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
                 //TODO:exception
                 break;
         }
-        return userRepository.update(user);
+        return new UserDTO(userRepository.update(user));
     }
 
     @Override
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(UserRegistrationSpec userSpec) {
+    public User register(UserSpec userSpec) {
         User registeredUser = userRepository.findByUsername(userSpec.getUsername());
         if (userSpec.getPassword().equals(userSpec.getRepeatPassword())) {
             if (registeredUser == null) {
@@ -100,7 +100,8 @@ public class UserServiceImpl implements UserService {
                 return userRepository.create(user);
             }
             throw new UsernameExistsException("Username is already taken.");
-        }throw new UsernameExistsException("passwords don't match");
+        }
+        throw new UsernameExistsException("passwords don't match");
     }
 
     @Override

@@ -1,0 +1,12 @@
+{{#isActive}}
+<div class="action-btn heading-btn">
+    <button class="menu-item" id="block" userId="{{id}}"><i class="fas fa-user-slash"></i> Disable user
+    </button>
+</div>
+{{/isActive}}
+{{^isActive}}
+<div class="action-btn heading-btn">
+    <button class="menu-item" id="enable" userId="{{id}}"><i class="fas fa-user-check"></i> Enable user
+    </button>
+</div>
+{{/isActive}}

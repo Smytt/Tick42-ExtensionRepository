@@ -1,21 +1,19 @@
 package com.tick42.quicksilver.models.Spec;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class UserSpec {
-
-    @NotNull(message="is required")
-    @Size(min=1, message="is required")
+    @NotNull
+    @Size(min=7, message="Name should be at least 7 character.")
     private String username;
 
-    @NotNull(message="is required")
-    @Size(min=1, message="is required")
+    @NotNull
+    @Size(min=7, message="Name should be at least 7 character.")
     private String password;
 
-    @NotNull(message="is required")
-    @Size(min=1, message="is required")
+    @NotNull
+    @Size(min=7, message="pass should be at least 7 character.")
     private String repeatPassword;
 
     public UserSpec() {

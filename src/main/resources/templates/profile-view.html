@@ -2,15 +2,32 @@
     <div class="wrap hw-extensions">
 
         {{#isAdmin}}
-        <div class="action-btn heading-btn">
-            <button class="menu-item"><i class="fas fa-user-slash"></i> Disable user</button>
+        {{^isOwn}}
+        <div class="user-state-controls">
+            {{#isActive}}
+            <div class="action-btn heading-btn">
+                <button class="menu-item" id="block" userId="{{id}}"><i class="fas fa-user-slash"></i> Disable user
+                </button>
+            </div>
+            {{/isActive}}
+            {{^isActive}}
+            <div class="action-btn heading-btn">
+                <button class="menu-item" id="enable" userId="{{id}}"><i class="fas fa-user-check"></i> Enable user
+                </button>
+            </div>
+            {{/isActive}}
         </div>
-        <div class="action-btn heading-btn">
-            <button class="menu-item current"><i class="fas fa-user-check"></i> Enable user</button>
-        </div>
+        {{/isOwn}}
         {{/isAdmin}}
 
-        <h1><i class="fas fa-user"></i> {{username}} has {{totalExtensions}} extension</h1>
+        <h1><i class="fas fa-user"></i>
+            {{^isOwn}}
+            {{username}} has
+            {{/isOwn}}
+            {{#isOwn}}
+            You have
+            {{/isOwn}} {{totalExtensions}} extension
+        </h1>
 
         <div>
             {{#extensions}}

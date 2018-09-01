@@ -4,7 +4,7 @@ package com.tick42.quicksilver.controllers;
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.DTO.AuthDTO;
 import com.tick42.quicksilver.models.DTO.UserDTO;
-import com.tick42.quicksilver.models.Spec.UserRegistrationSpec;
+import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.services.base.UserService;
 import org.apache.http.auth.InvalidCredentialsException;
@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public User register(@RequestBody UserRegistrationSpec user) {
+    public User register(@RequestBody UserSpec user) {
         return userService.register(user);
     }
 
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PatchMapping(value = "/setState/{id}/{newState}")
-    public User setState(@PathVariable("newState") String state,
+    public UserDTO setState(@PathVariable("newState") String state,
                          @PathVariable("id") int id) {
        return userService.setState(id, state);
     }

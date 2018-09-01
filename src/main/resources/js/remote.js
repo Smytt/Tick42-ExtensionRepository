@@ -13,6 +13,20 @@ remote = (() => {
         })
     }
 
+    let loadByUploadDate = (name, page, perPage) => {
+        return $.ajax({
+            type: 'GET',
+            url: base + "/api/extensions/filter" + "?name=" + name + "&orderBy=date" + "&page=" + page + "&perPage=" + perPage
+        })
+    }
+
+    let loadByName = (name, page, perPage) => {
+        return $.ajax({
+            type: 'GET',
+            url: base + "/api/extensions/filter" + "?name=" + name + "&orderBy=name" + "&page=" + page + "&perPage=" + perPage
+        })
+    }
+
     let loadByTimesDownloaded = (name, page, perPage) => {
         return $.ajax({
             type: 'GET',
@@ -20,10 +34,10 @@ remote = (() => {
         })
     }
 
-    let loadByUploadDate = (name, page, perPage) => {
+    let loadByLatestCommit = (name, page, perPage) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extensions/filter" + "?name=" + name + "&orderBy=date" + "&page=" + page + "&perPage=" + perPage
+            url: base + "/api/extensions/filter" + "?name=" + name + "&orderBy=commits" + "&page=" + page + "&perPage=" + perPage
         })
     }
 
@@ -60,39 +74,29 @@ remote = (() => {
     }
 
     let login = (user) => {
-        $.ajax({
+        return $.ajax({
             type: 'POST',
             url: base + "/api/user/login",
             data: JSON.stringify(user),
-            contentType: 'application/json',
-            success: (res) => {
-                // let token = JSON.stringify(data); //todo
-                localStorage.setItem('Authorization', res['token']);
-                localStorage.setItem('id', res['id']);
-                localStorage.setItem('username', res['username']);
-                localStorage.setItem('role', res['role']);
-                app.home();
-            },
-            error: (e) => {
-                console.log("Couldn't login");
-            }
+            contentType: 'application/json'
         })
     }
 
-    let changeActiveState = (username, state) => {
-        $.ajax({
+    let register = (user) => {
+        return $.ajax({
             type: 'POST',
-            url: base + '/api/user/changeActiveState' + username + state,
-            data: JSON.stringify(username),
-            contentType: 'application/json',
-            headers: {
-                'Authorization': JSON.parse(localStorage.getItem('Authorization'))
-            },
-            success: (res) => {
+            url: base + "/api/user/register",
+            data: JSON.stringify(user),
+            contentType: 'application/json'
+        })
+    }
 
-            },
-            error: (e) => {
-                console.log("Couldn't change state");
+    let setUserState = (id, state) => {
+        return $.ajax({
+            type: 'PATCH',
+            url: base + '/api/user/setState/' + id + '/' + state,
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
             }
         })
     }
@@ -104,16 +108,27 @@ remote = (() => {
         })
     }
 
+    let loadPending = () => {
+        return $.ajax({
+            type: 'GET',
+            url: base + "/api/extensions/pending"
+        })
+    }
+
     return {
         isAuth,
         getTag,
         loadByUploadDate,
+        loadByName,
         loadByTimesDownloaded,
+        loadByLatestCommit,
         submitExtension,
         getUserProfile,
         login,
         getExtension,
         loadFeatured,
-        changeActiveState,
+        loadPending,
+        setUserState,
+        register
     }
 })()

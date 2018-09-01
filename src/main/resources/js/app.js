@@ -6,7 +6,7 @@ let app = (() => {
     const POPULAR_HOME_PAGE_COUNT = 5;
     const NEW_HOME_PAGE_COUNT = 5;
 
-    let home = (e) => {
+    let getHomeView = (e) => {
         preventDefault(e);
         loadNav();
 
@@ -31,34 +31,15 @@ let app = (() => {
         );
     }
 
-    let search = (e) => {
+    function search(e) {
         preventDefault(e);
 
         let orderBy = $(this).attr('orderBy');
-
-        switch (orderBy) {
-            case 'date':
-                searchByUploadDate(e);
-                break;
-            case 'name':
-                searchByUploadDate(e);
-                break;
-            case 'downloads':
-                searchByUploadDate(e);
-                break;
-            case 'commits':
-                searchByUploadDate(e);
-                break;
-        }
-    }
-
-    function searchByUploadDate(e) {
-        preventDefault(e);
         let page = 1;
         let query = '';
 
         if ($(this).attr('pagenum')) {
-            page = +$(this).attr('pagenum');
+            page = $(this).attr('pagenum');
             query = $('#query').text();
         }
 
@@ -67,12 +48,38 @@ let app = (() => {
             if (query.length === 0) return;
         }
 
-        remote.loadByUploadDate(query, page, PAGE_SIZE).then(
+        else if ($(this).is('button')) {
+            query = $('#query').text();
+        }
+
+        let request;
+
+        console.log(orderBy);
+        switch (orderBy) {
+            case 'date':
+                request = remote.loadByUploadDate(query, page, PAGE_SIZE);
+                break;
+            case 'name':
+                request = remote.loadByName(query, page, PAGE_SIZE);
+                break;
+            case 'downloads':
+                request = remote.loadByTimesDownloaded(query, page, PAGE_SIZE);
+                break;
+            case 'commits':
+                request = remote.loadByLatestCommit(query, page, PAGE_SIZE);
+                break;
+            default:
+                return;
+        }
+
+        request.then(
             res => {
-                res = render.searchResults(res, query)
+                res = render.searchResults(res, query, orderBy)
                 show.results(res);
             }
-        );
+        )
+
+
     }
 
     let getExtensionView = function (e) {
@@ -88,7 +95,7 @@ let app = (() => {
         );
     }
 
-    let getExtensionsByTag = function (e) {
+    let getTagView = function (e) {
         preventDefault(e);
 
         let tagName = $(this).attr('tagName');
@@ -101,6 +108,19 @@ let app = (() => {
     let getProfileView = function (e) {
         preventDefault(e);
         let id = $(this).attr('userId');
+        remote.getUserProfile(id).then(
+            res => {
+                res = render.profile(res);
+                show.user(res);
+            }
+        )
+    }
+
+    let getOwnProfileView = function (e) {
+        preventDefault(e);
+
+        let id = localStorage.getItem('id');
+
         remote.getUserProfile(id).then(
             res => {
                 res = render.profile(res);
@@ -125,7 +145,21 @@ let app = (() => {
     }
 
     let register = function (e) {
-        //todo
+        preventDefault(e);
+
+        let username = $('#username').val();
+        let password = $('#password').val();
+        let repeatPassword = $('#repeatPassword').val();
+
+        let user = {
+            username,
+            password,
+            repeatPassword
+        }
+
+        remote.register(user).then(
+            remote.login
+        )
     }
 
     let login = function (e) {
@@ -139,13 +173,37 @@ let app = (() => {
             username,
             password,
         }
-        remote.login(user);
+
+        remote.login(user).then(
+            res => {
+                localStorage.setItem('Authorization', res['token']);
+                localStorage.setItem('id', res['id']);
+                localStorage.setItem('username', res['username']);
+                localStorage.setItem('role', res['role']);
+                getHomeView();
+            }
+        );
     }
 
     let logout = (e) => {
         preventDefault(e);
         localStorage.clear();
-        home();
+        getHomeView();
+    }
+
+    function setUserState(e) {
+        preventDefault(e);
+
+        let newState = $(this).attr('id');
+        let userId = $(this).attr('userId');
+
+        remote.setUserState(userId, newState).then(
+            res => {
+                show.state(res);
+            }
+        ).catch((e) => {
+            console.log(e);
+        })
     }
 
     let submit = (e) => {
@@ -166,6 +224,14 @@ let app = (() => {
             tags
         }
         remote.submitExtension(extension)
+    }
+
+    let getPendingExtensionsView = (e) => {
+        preventDefault(e);
+
+        remote.loadPending().then(
+            show.pending
+        )
     }
 
     function preventDefault(e) {
@@ -194,27 +260,31 @@ let app = (() => {
         return true
     }
 
-    $body.on('click', '.logo a', home);
+    $body.on('click', '.logo a', getHomeView);
     $body.on('click', '#login', getLoginView)
     $body.on('click', '#logout', logout)
     $body.on('click', '#register', getRegisterView)
-    $body.on('click', '#search, #discover', searchByUploadDate)
+    $body.on('click', '#profile', getOwnProfileView)
+    $body.on('click', '#pending', getPendingExtensionsView)
+    $body.on('click', '#search, #discover', search)
     $body.on('click', '#submit', getSubmitView)
     $body.on('click', '.one', getExtensionView)
     $body.on('click', '.pages-control a', search)
     $body.on('click', '#submit-btn', submit)
     $body.on('click', '#register-btn', register)
     $body.on('click', '#login-btn', login)
-    $body.on('click', '.tags a', getExtensionsByTag)
+    $body.on('click', '.tags a', getTagView)
     $body.on('click', '.user-link', getProfileView)
 
     $body.on('click', '#orderBy button', search)
 
+    $body.on('click', '.user-state-controls button', setUserState)
+
 
     return {
-        home,
+        getHomeView,
         getHome
     }
 })();
 
-app.home();
+app.getHomeView();

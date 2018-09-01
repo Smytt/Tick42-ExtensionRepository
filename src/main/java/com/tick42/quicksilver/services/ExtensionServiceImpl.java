@@ -143,6 +143,11 @@ public class ExtensionServiceImpl implements ExtensionService {
         }
     }
 
+    @Override
+    public List<ExtensionDTO> findPending() {
+        return generateExtensionDTOList(extensionRepository.findPending());
+    }
+
     private List<ExtensionDTO> generateExtensionDTOList(List<Extension> extensions) {
         List<ExtensionDTO> extensionsDTO = extensions
                 .stream()

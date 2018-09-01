@@ -66,6 +66,12 @@ public class ExtensionController {
         return extensionService.findFeatured();
     }
 
+//    @Secured("ROLE_ADMIN")
+    @GetMapping(value = "/pending")
+    public List<ExtensionDTO> pending() {
+        return extensionService.findPending();
+    }
+
     @Secured("ROLE_ADMIN")
     @PatchMapping(value = "/{id}/approve/secured")
     void acceptExtension(@PathVariable(name = "id") int id) {

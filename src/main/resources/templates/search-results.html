@@ -9,17 +9,17 @@
             {{/query}}
         </h1>
         <div class="action-btn" id="orderBy">
-            <button class="menu-item current" orderBy="date"><i class="fas fa-calendar-alt"></i> By latest upload date</button>
+            <button class="menu-item" orderBy="date"><i class="fas fa-calendar-alt"></i> By latest upload date</button>
             <button class="menu-item" orderBy="name"><i class="fas fa-i-cursor"></i> By name</button>
             <button class="menu-item" orderBy="downloads"><i class="fas fa-fire"></i> By popularity</button>
             <button class="menu-item" orderBy="commits"><i class="fas fa-code-branch"></i> By latest commit</button>
         </div>
         <div class="pages-control">
             {{#prev}}
-            <a class="menu-item" id="btnPrev" pageNum="{{prevNum}}"><i class="fas fa-chevron-left"></i> previous</a>
+            <a class="menu-item" id="btnPrev" pageNum="{{prevNum}}" orderBy="{{orderBy}}"><i class="fas fa-chevron-left"></i> previous</a>
             {{/prev}}
             {{#next}}
-            <a class="menu-item" id="btnNext" pageNum="{{nextNum}}">next <i class="fas fa-chevron-right"></i></a>
+            <a class="menu-item" id="btnNext" pageNum="{{nextNum}}" orderBy="{{orderBy}}">next <i class="fas fa-chevron-right"></i></a>
             {{/next}}
         </div>
         <div>

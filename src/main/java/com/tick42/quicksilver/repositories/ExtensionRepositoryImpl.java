@@ -91,7 +91,22 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
-                    .createQuery("from Extension where is_featured = 1")
+                    .createQuery("from Extension where isFeatured = true")
+                    .list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return extensions;
+    }
+
+    @Override
+    public List<Extension> findPending() {
+        List<Extension> extensions = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            extensions = session
+                    .createQuery("from Extension where isPending = true")
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -107,7 +122,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
-                    .createQuery("from Extension where isPending = false and name like :name order by uploadDate desc")
+                    .createQuery("from Extension where isPending = false and owner.isActive = true and name like :name order by uploadDate desc")
                     .setParameter("name", "%" + name + "%")
                     .setFirstResult((page - 1) * perPage)
                     .setMaxResults(perPage)
@@ -125,7 +140,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
-                    .createQuery("from Extension where isPending = false and name like :name order by github.lastCommit desc")
+                    .createQuery("from Extension where isPending = false and owner.isActive = true and name like :name order by github.lastCommit desc")
                     .setParameter("name", "%" + name + "%")
                     .setFirstResult((page - 1) * perPage)
                     .setMaxResults(perPage)
@@ -143,7 +158,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
-                    .createQuery("from Extension where isPending = false and name like :name order by name asc")
+                    .createQuery("from Extension where isPending = false and owner.isActive = true and name like :name order by name asc")
                     .setParameter("name", "%" + name + "%")
                     .setFirstResult((page - 1) * perPage)
                     .setMaxResults(perPage)
@@ -161,7 +176,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
-                    .createQuery("from Extension where isPending = false and name like :name order by timesDownloaded desc")
+                    .createQuery("from Extension where isPending = false and owner.isActive = true and name like :name order by timesDownloaded desc")
                     .setParameter("name", "%" + name + "%")
                     .setFirstResult((page - 1) * perPage)
                     .setMaxResults(perPage)

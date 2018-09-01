@@ -22,4 +22,6 @@ public interface ExtensionService {
     void approveExtension(int id);
 
     void changeFeaturedState(int id, String newState);
+
+    List<ExtensionDTO> findPending();
 }

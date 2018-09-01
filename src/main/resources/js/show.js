@@ -90,6 +90,8 @@ let show = (() => {
             success: (tmpl) => {
                 let $html = Mustache.render(tmpl, results);
                 $content.html($html);
+                $('#orderBy button').removeClass('current')
+                $('#orderBy button[orderBy="' + results['orderBy'] + '"]').addClass('current')
             }
         })
     }
@@ -144,6 +146,26 @@ let show = (() => {
         })
     }
 
+    let state = (user) => {
+        $.ajax({
+            url: './templates/user-state.html',
+            success: (tmpl) => {
+                let $html = Mustache.render(tmpl, user);
+                $('.user-state-controls').html($html);
+            }
+        })
+    }
+
+    let pending = (extensions) => {
+        $.ajax({
+            url: './templates/pending-view.html',
+            success: (tmpl) => {
+                let $html = Mustache.render(tmpl, extensions);
+                $content.html($html);
+            }
+        })
+    }
+
     return {
         home,
         userNav,
@@ -158,6 +180,8 @@ let show = (() => {
         login,
         extension,
         register,
-        tag
+        tag,
+        state,
+        pending
     }
 })()
