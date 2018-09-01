@@ -6,6 +6,7 @@ import java.util.List;
 
 public class PageDTO<T> {
     private int currentPage;
+    private int totalPages;
     private Long totalResults;
     private List<T> extensions;
 
@@ -13,10 +14,11 @@ public class PageDTO<T> {
 
     }
 
-    public PageDTO(List<T> extensions, int currentPage, Long totalResults) {
+    public PageDTO(List<T> extensions, int currentPage, int totalPages, Long totalResults) {
         this.setCurrentPage(currentPage);
         this.setTotalResults(totalResults);
         this.setExtensions(extensions);
+        this.setTotalPages(totalPages);
     }
 
     public int getCurrentPage() {
@@ -41,5 +43,13 @@ public class PageDTO<T> {
 
     public void setExtensions(List<T> extensions) {
         this.extensions = extensions;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
     }
 }

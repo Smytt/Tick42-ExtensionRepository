@@ -1,36 +1,27 @@
 <div>
     <div class="wrap hw-extensions">
 
+        {{#isAdmin}}
         <div class="action-btn heading-btn">
             <button class="menu-item"><i class="fas fa-user-slash"></i> Disable user</button>
         </div>
         <div class="action-btn heading-btn">
             <button class="menu-item current"><i class="fas fa-user-check"></i> Enable user</button>
         </div>
-        <h1><i class="fas fa-user"></i> Smytt has 3 extension</h1>
+        {{/isAdmin}}
+
+        <h1><i class="fas fa-user"></i> {{username}} has {{totalExtensions}} extension</h1>
 
         <div>
-            <div class="one">
-                <div class="image" style="background-image: url(img/icons/backpack.png)">
+            {{#extensions}}
+            <div class="one" extensionId="{{id}}">
+                <div class="image" style="background-image: url({{imageLocation}})">
 
                 </div>
-                <h3>Tile Extension</h3>
-                <span><i class="fas fa-download"></i> 166</span>
+                <h3>{{name}}</h3>
+                <span><i class="fas fa-download"></i> {{timesDownloaded}}</span>
             </div>
-            <div class="one">
-                <div class="image" style="background-image: url(img/icons/open-book.png)">
-
-                </div>
-                <h3>Tile Extension</h3>
-                <span><i class="fas fa-download"></i> 166</span>
-            </div>
-            <div class="one">
-                <div class="image" style="background-image: url(img/icons/open-book.png)">
-
-                </div>
-                <h3>Tile Extens11ion</h3>
-                <span><i class="fas fa-download"></i> 166</span>
-            </div>
+            {{/extensions}}
         </div>
     </div>
 </div>

@@ -1,25 +1,39 @@
-
 <div>
     <div class="wrap extension-details">
         <div class="image">
-            <div style="background-image: url(../img/icons/backpack.png)"></div>
-            <button class="menu-item"><i class="fas fa-download"></i> download</button>
-            <button class="menu-item"><i class="fas fa-user"></i> Developer</button>
+            <div style="background-image: url({{imageLocation}})"></div>
+            <a href="{{fileLocation}}" class="menu-item" target="_blank"><i class="fas fa-download"></i> download</a>
+            <a class="menu-item user-link" userId="{{ownerId}}"><i class="fas fa-user"></i> {{ownerName}}</a>
             <a href="{{gitHubLink}}" target="_blank" class="menu-item"><i class="fab fa-github"></i> GitHub</a>
         </div>
         <div class="details">
+            {{#isAdmin}}
             <div class="action-btn">
                 <button class="menu-item"><i class="fas fa-check"></i> Approve</button>
                 <button class="menu-item"><i class="fas fa-pencil-alt"></i> Edit</button>
-                <button class="menu-item"><i class="fas fa-trash-alt"></i>Delete</button>
-                <button class="menu-item"><i class="fas fa-sync-alt"></i>GitHub</button>
+                <button class="menu-item"><i class="fas fa-trash-alt"></i> Delete</button>
+                <button class="menu-item"><i class="fas fa-sync-alt"></i> GitHub</button>
             </div>
+            {{/isAdmin}}
+            {{^isAdmin}}
+            {{#isOwn}}
+            <div class="action-btn">
+                <button class="menu-item"><i class="fas fa-pencil-alt"></i> Edit</button>
+                <button class="menu-item"><i class="fas fa-trash-alt"></i> Delete</button>
+            </div>
+            {{/isOwn}}
+            {{/isAdmin}}
             <h1>{{name}}</h1>
             <p>{{description}}</p>
+            <div class="tags">
+                {{#tags}}
+                <a tagName="{{.}}">{{.}}</a>
+                {{/tags}}
+            </div>
         </div>
         <div class="info stats">
             <h2><i class="fas fa-user"></i> Developer</h2>
-            <span><a href="">{{ownerName}}</a></span>
+            <span><a class="user-link" userId="{{ownerId}}">{{ownerName}}</a></span>
             <h2><i class="fas fa-check-circle"></i> Version </h2>
             <span>{{version}}</span>
             <h2><i class="fas fa-arrow-circle-up"></i> Upload date</h2>

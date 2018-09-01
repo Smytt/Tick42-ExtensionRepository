@@ -29,7 +29,6 @@ public class User {
     @Size(min=1, message="is required")
     private String password;
 
-
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Extension> extensions = new ArrayList<>();
 

@@ -2,6 +2,9 @@
 @import url('https://fonts.googleapis.com/css?family=Caveat|Shadows+Into+Light+Two');
 @import url('https://fonts.googleapis.com/css?family=Abril+Fatface');
 
+a:hover {
+    cursor: pointer;
+}
 html {
     min-height: 100%;
     background: url("../img/footerbg.png") bottom center;
@@ -292,7 +295,7 @@ footer * {
 }
 
 .extension-details .details {
-    width: 600px;
+    width: 560px;
 }
 
 .extension-details .details p {
@@ -301,26 +304,27 @@ footer * {
 }
 
 .stats {
-    width:  150px;
+    width:  170px;
     margin-right: 10px !important;
 }
 
 .github {
-    width: 150px;
+    width: 170px;
     margin-right: 0 !important;
 }
 
 
 .info h2 {
     color: #0e9aa7;
-    font-size: 18px;
+    font-size: 22px;
     margin-bottom: 5px;
 }
 
 .info span {
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     display: block;
     text-indent: 20px;
+    font-size: 18px;
 }
 
 .info h2 i {
@@ -394,7 +398,7 @@ footer * {
     display: none;
 }
 
-label button {
+label button, label div {
     display: block;
     width: 100%;
     background-color: #f6cd61 !important;
@@ -456,4 +460,24 @@ label button:hover {
 
 .half > h1 {
     float: none;
+}
+
+
+.pages-control {
+    margin-bottom: 20px;
+}
+
+.pages-control .menu-item:nth-child(2) i {
+    margin-right: 0;
+    margin-left: 10px;
+}
+
+.tags a {
+    display:  inline-block;
+    border: 1px solid #f6cd61;
+    padding: 5px 10px;
+}
+
+.tags a:hover {
+    border-color: #fe8a71;
 }

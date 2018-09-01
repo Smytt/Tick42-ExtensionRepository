@@ -1,18 +1,10 @@
 <div>
     <div class="wrap hw-extensions">
-
-        <div class="action-btn heading-btn">
-            <button class="menu-item"><i class="fas fa-user-slash"></i> Disable user</button>
-        </div>
-        <div class="action-btn heading-btn">
-            <button class="menu-item current"><i class="fas fa-user-check"></i> Enable user</button>
-        </div>
-
-        <h1><i class="fas fa-user"></i> {{username}} has {{totalExtensions}} extension</h1>
+        <h1><i class="fas fa-tag"></i> {{totalExtensions}} extension tagged with {{tag}}</h1>
 
         <div>
             {{#extensions}}
-            <div class="one">
+            <div class="one" extensionId="{{id}}">
                 <div class="image" style="background-image: url({{imageLocation}})">
 
                 </div>

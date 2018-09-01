@@ -1,242 +1,163 @@
-var show = (() => {
+let show = (() => {
 
-    var $content = $('#content');
+    let $content = $('#content');
+    let $nav = $('nav');
 
-    var loadHome = () => {
+    let home = () => {
         $.ajax({
             url: './templates/home.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl);
+                let $html = Mustache.render(tmpl);
                 $content.html($html);
-                app.loadHome();
-            },
-            error: () => {
-                var err = "Could not load home page";
-                console.log(err);
-            },
+                app.getHome();
+            }
         })
     }
 
-    var userNav = () => {
+    let userNav = () => {
         $.ajax({
             url: './templates/nav-user.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl);
-                $("nav").html($html);
-                app.attachNavEvents();
-            },
-            error: () => {
-                var err = "Could not load user nav";
-                console.log(err);
-            },
+                let $html = Mustache.render(tmpl);
+                $nav.html($html);
+            }
         })
     }
 
-    var guestNav = () => {
+    let guestNav = () => {
         $.ajax({
             url: './templates/nav-guest.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl);
-                $("nav").html($html);
-                app.attachNavEvents();
-            },
-            error: () => {
-                var err = "Could not load user nav";
-                console.log(err);
-            },
+                let $html = Mustache.render(tmpl);
+                $nav.html($html);
+            }
         })
     }
 
-    var adminNav = () => {
+    let adminNav = () => {
         $.ajax({
             url: './templates/nav-admin.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl);
-                $("nav").html($html);
-                app.attachNavEvents();
-            },
-            error: () => {
-                var err = "Could not load user nav";
-                console.log(err);
-            },
+                let $html = Mustache.render(tmpl);
+                $nav.html($html);
+            }
         })
     }
 
-    var homeFeatured = (extensions) => {
+    let homeFeatured = (page) => {
         $.ajax({
             url: './templates/home-featured.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl, extensions);
-                $content.find("#featured").html($html);
-                $('#featured .one').on('click', app.getExtensionView)
-            },
-            error: () => {
-                var err = "Could not load featured extensions";
-                console.log(err);
-                $content.prepend(err);
-            },
+                let $html = Mustache.render(tmpl, page);
+                $("#featured").html($html);
+            }
         })
     }
 
-    var homePopular = (extensions) => {
+    let homePopular = (extensions) => {
         $.ajax({
             url: './templates/home-popular.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl, extensions);
-                $content.find("#popular").html($html);
-                $('#popular .one').on('click', app.getExtensionView)
-            },
-            error: () => {
-                var err = "Could not load extension page";
-                console.log(err);
-                $content.prepend(err);
-            },
+                let $html = Mustache.render(tmpl, extensions);
+                $("#popular").html($html);
+            }
         })
     }
 
-    var homeNew = (extensions) => {
+    let homeNew = (extensions) => {
         $.ajax({
             url: './templates/home-new.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl, extensions);
-                $content.find("#new").html($html);
-                $('#new .one').on('click', app.getExtensionView)
-            },
-            error: () => {
-                var err = "Could not load upload extensions";
-                console.log(err);
-                $content.prepend(err);
-            },
+                let $html = Mustache.render(tmpl, extensions);
+                $("#new").html($html);
+            }
         })
     }
 
-    var submitView = () => {
+    let submit = () => {
         $.ajax({
             url: './templates/submit-view.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl);
-                $content.empty();
-                $content.append($html);
-                $content.find('button').on('click', app.submit)
-            },
-            error: () => {
-                var err = "Could not load submit page";
-                console.log(err);
-            },
+                let $html = Mustache.render(tmpl);
+                $content.html($html);
+            }
         })
     }
 
-    var searchResults = (res) => {
+    let results = (results) => {
         $.ajax({
             url: './templates/search-results.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl, res);
+                let $html = Mustache.render(tmpl, results);
                 $content.html($html);
-                $('.one').on('click', app.getExtensionView);
-            },
-            error: () => {
-                var err = "Could not load extension page";
-                console.log(err);
-                $content.prepend(err);
-            },
+            }
         })
     }
-    var adminView = () => {
-        $.ajax({
-            url: './templates/admin-view.html',
-            success: (tmpl) => {
-                var $html = Mustache.render(tmpl);
-                $content.empty();
-                $content.append($html);
-            },
-            error: () => {
-                var err = "Could not load admin page";
-                console.log(err);
-                $content.prepend(err);
-            },
-        })
-    }
-    var loginView = () => {
+
+    let login = () => {
         $.ajax({
             url: './templates/login-view.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl);
-                $content.empty();
-                $content.append($html);
-                $content.find('form button').on('click', app.login)
-            },
-            error: () => {
-                var err = "Could not load login page";
-                console.log(err);
-                $content.prepend(err);
-            },
+                let $html = Mustache.render(tmpl);
+                $content.html($html);
+            }
         })
     }
-    var registerView = () => {
+
+    let register = () => {
         $.ajax({
             url: './templates/register-view.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl);
-                $content.empty();
-                $content.append($html);
-                $content.find('button').on('click', app.register)
-            },
-            error: () => {
-                var err = "Could not load register page";
-                console.log(err);
-                $content.prepend(err);
-            },
+                let $html = Mustache.render(tmpl);
+                $content.html($html);
+            }
         })
     }
 
-    var userExtensions = (extensions) => {
+    let user = (extensions) => {
         $.ajax({
-            url: './templates/user-extensions.html',
+            url: './templates/profile-view.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl, extensions);
-                $content.find("#user-extensions").remove();
-                $content.append($html);
-                $('#user-extensions .one-item').on('click', app.getExtensionView)
-            },
-            error: () => {
-                var err = "Could not load user extensions";
-                console.log(err);
-                $content.prepend(err);
-            },
+                let $html = Mustache.render(tmpl, extensions);
+                $content.html($html);
+            }
         })
     }
-    var extensionView = (extension) => {
+
+    let extension = (extension) => {
         $.ajax({
             url: './templates/extension-view.html',
             success: (tmpl) => {
-                var $html = Mustache.render(tmpl, extension);
-                $content.empty();
-                $content.append($html);
-                console.log(extension);
-                console.log(extension['name'])
-
-            },
-            error: () => {
-                var err = "Could not load extension view";
-                console.log(err);
-                $content.prepend(err);
-            },
+                let $html = Mustache.render(tmpl, extension);
+                $content.html($html);
+            }
         })
     }
+
+    let tag = (tag) => {
+        $.ajax({
+            url: './templates/tag-view.html',
+            success: (tmpl) => {
+                let $html = Mustache.render(tmpl, tag);
+                $content.html($html);
+            }
+        })
+    }
+
     return {
-        loadHome,
+        home,
         userNav,
         guestNav,
         adminNav,
-        searchResults,
+        results,
+        homeFeatured,
         homePopular,
         homeNew,
-        submitView,
-        userExtensions,
-        loginView,
-        extensionView,
-        homeFeatured,
-        adminView,
-        registerView
+        submit,
+        user,
+        login,
+        extension,
+        register,
+        tag
     }
 })()

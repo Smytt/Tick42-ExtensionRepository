@@ -86,22 +86,6 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
     }
 
     @Override
-    public List<Extension> findByName(String searchQuery) {
-        List<Extension> extensions = new ArrayList<>();
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            extensions = session
-                    .createQuery("from Extension where name like :name")
-                    .setParameter("name", "%" + searchQuery + "%")
-                    .list();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return extensions;
-    }
-
-    @Override
     public List<Extension> findFeatured() {
         List<Extension> extensions = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
@@ -126,7 +110,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
                     .createQuery("from Extension where isPending = false and name like :name order by uploadDate desc")
                     .setParameter("name", "%" + name + "%")
                     .setFirstResult((page - 1) * perPage)
-                    .setMaxResults(page * perPage)
+                    .setMaxResults(perPage)
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -144,7 +128,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
                     .createQuery("from Extension where isPending = false and name like :name order by github.lastCommit desc")
                     .setParameter("name", "%" + name + "%")
                     .setFirstResult((page - 1) * perPage)
-                    .setMaxResults(page * perPage)
+                    .setMaxResults(perPage)
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -162,7 +146,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
                     .createQuery("from Extension where isPending = false and name like :name order by name asc")
                     .setParameter("name", "%" + name + "%")
                     .setFirstResult((page - 1) * perPage)
-                    .setMaxResults(page * perPage)
+                    .setMaxResults(perPage)
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -180,7 +164,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
                     .createQuery("from Extension where isPending = false and name like :name order by timesDownloaded desc")
                     .setParameter("name", "%" + name + "%")
                     .setFirstResult((page - 1) * perPage)
-                    .setMaxResults(page * perPage)
+                    .setMaxResults(perPage)
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {

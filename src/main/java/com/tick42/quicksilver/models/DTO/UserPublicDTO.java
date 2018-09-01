@@ -4,26 +4,29 @@ import com.tick42.quicksilver.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class UserDTO {
+public class UserPublicDTO {
     private int id;
     private String username;
-    private String password;
-    private List<String> extensions = new ArrayList<>();
-    private boolean isActive = true;
-    private String role;
+    private int totalExtensions;
+    private List<ExtensionDTO> extensions = new ArrayList<>();
+    private boolean isActive;
 
-    public UserDTO(){
+    public UserPublicDTO() {
 
     }
 
-    public UserDTO(User user) {
+    public UserPublicDTO(User user) {
         this.setId(user.getId());
         this.setUsername(user.getUsername());
-        this.setPassword(user.getPassword());
-        user.getExtensions().forEach(extension -> this.extensions.add(extension.getName()));
-        this.setActive(user.getIsActive());
-        this.setRole(user.getRole());
+        this.setExtensions(
+                user.getExtensions()
+                        .stream()
+                        .map(ExtensionDTO::new)
+                        .collect(Collectors.toList()));
+        this.setTotalExtensions(this.extensions.size());
+        this.setIsActive(user.getIsActive());
     }
 
     public int getId() {
@@ -42,36 +45,27 @@ public class UserDTO {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public List<String> getExtensions() {
+    public List<ExtensionDTO> getExtensions() {
         return extensions;
     }
 
-    public void setExtensions(List<String> extensions) {
+    public void setExtensions(List<ExtensionDTO> extensions) {
         this.extensions = extensions;
+    }
+
+    public int getTotalExtensions() {
+        return totalExtensions;
+    }
+
+    public void setTotalExtensions(int totalExtensions) {
+        this.totalExtensions = totalExtensions;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean active) {
+        isActive = active;
     }
 }

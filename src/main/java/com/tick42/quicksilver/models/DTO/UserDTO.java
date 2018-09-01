@@ -16,6 +16,7 @@ public class UserDTO {
     public UserDTO(){
 
     }
+
     public UserDTO(User user) {
         this.setId(user.getId());
         this.setUsername(user.getUsername());

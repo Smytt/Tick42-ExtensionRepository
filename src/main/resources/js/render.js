@@ -1,58 +1,30 @@
-var render = (() => {
-    var searchResults = (results, query) => {
-        var extensions = {
-            extensions: results['extensions'],
-            query,
-            count: results['totalResults'],
-        }
-        show.searchResults(extensions);
+let render = (() => {
+
+    let searchResults = (res, query) => {
+        res['prev'] = +res['currentPage'] > 1;
+        res['next'] = +res['currentPage'] < res['totalPages'];
+        res['prevNum'] = +res['currentPage'] - 1;
+        res['nextNum'] = +res['currentPage'] + 1;
+        res['query'] = query;
+        return res;
     }
 
-    var homeNew = (results) => {
-        var extensions = {
-            extensions: results,
-        }
-        show.homeNew(extensions);
+    let extension = (extension) => {
+        extension['uploadDate'] = moment(extension['uploadDate']).format('MMM, DD YYYY');
+        extension['lastCommit'] = moment(extension['lastCommit']).format('MMM, DD YYYY');
+        extension['isOwn'] = localStorage.getItem('id') == extension['ownerId'];
+        extension['isAdmin'] = localStorage.getItem('role') === 'ROLE_ADMIN';
+        return extension;
     }
 
-    var homePopular = (results) => {
-        var extensions = {
-            extensions: results
-        }
-        show.homePopular(extensions);
+    let profile = (profile) => {
+        profile['isAdmin'] = localStorage.getItem('role') === 'ROLE_ADMIN';
+        return profile;
     }
 
-    var homeFeatured = (results) => {
-        var results = {
-            extensions: results,
-        }
-        show.homeFeatured(results);
-    }
-
-    var userExtensions = (results) => {
-    //if render required
-        var extensions = {
-        results
-        }
-        show.userExtensions(extensions);
-    }
-    var extensionInfo = (extension) => {
-        //if render required
-    show.extensionView(extension);
-    }
-
-    var allUsers = (results) => {
-        var users = {
-            results
-        }
-        show.adminView(users);
-    }
     return {
         searchResults,
-        homeNew,
-        homePopular,
-        extensionInfo,
-        homeFeatured,
-        userExtensions
+        extension,
+        profile
     }
 })();

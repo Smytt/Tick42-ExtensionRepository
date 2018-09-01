@@ -27,11 +27,11 @@ public class FileServiceImpl implements FileService {
 
     private final Path fileLocation;
     private final FileRepositoryImpl fileRepository;
-    private final ExtensionsServiceImpl extensionsService;
+    private final ExtensionServiceImpl extensionsService;
     private final ExtensionRepository extensionRepository;
 
     @Autowired
-    public FileServiceImpl(FileRepositoryImpl fileRepository, ExtensionsServiceImpl extensionsService, ExtensionRepository extensionRepository) {
+    public FileServiceImpl(FileRepositoryImpl fileRepository, ExtensionServiceImpl extensionsService, ExtensionRepository extensionRepository) {
         this.fileRepository = fileRepository;
         this.extensionsService = extensionsService;
         this.extensionRepository = extensionRepository;

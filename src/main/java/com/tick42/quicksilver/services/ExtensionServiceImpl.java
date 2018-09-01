@@ -2,6 +2,7 @@ package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.DTO.PageDTO;
+import com.tick42.quicksilver.models.DTO.TagDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.User;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ExtensionsServiceImpl implements ExtensionService {
+public class ExtensionServiceImpl implements ExtensionService {
 
     private final ExtensionRepository extensionRepository;
     private final TagService tagService;
@@ -29,8 +30,8 @@ public class ExtensionsServiceImpl implements ExtensionService {
     private UserRepository userRepository;
 
     @Autowired
-    public ExtensionsServiceImpl(ExtensionRepository extensionRepository, TagService tagService,
-                                 GitHubService gitHubService, JwtValidator jwtValidator, UserRepository userRepository) {
+    public ExtensionServiceImpl(ExtensionRepository extensionRepository, TagService tagService,
+                                GitHubService gitHubService, JwtValidator jwtValidator, UserRepository userRepository) {
         this.extensionRepository = extensionRepository;
         this.tagService = tagService;
         this.gitHubService = gitHubService;
@@ -90,7 +91,7 @@ public class ExtensionsServiceImpl implements ExtensionService {
         Long totalResults = extensionRepository.getTotalResults(name);
         int totalPages = (int) Math.ceil(totalResults * 1.0 / perPage);
 
-        if (page > totalPages) {
+        if (page > totalPages && totalResults != 0) {
             throw new RuntimeException("No such page");
         }
 
@@ -120,12 +121,6 @@ public class ExtensionsServiceImpl implements ExtensionService {
     @Override
     public List<ExtensionDTO> findFeatured() {
         List<Extension> extensions = extensionRepository.findFeatured();
-        return generateExtensionDTOList(extensions);
-    }
-
-    @Override
-    public List<ExtensionDTO> findByTag(String tagName) {
-        List<Extension> extensions = tagService.findByName(tagName).getExtensions();
         return generateExtensionDTOList(extensions);
     }
 

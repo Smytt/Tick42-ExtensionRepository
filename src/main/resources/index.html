@@ -13,7 +13,7 @@
     <div>
         <div class="wrap">
             <div class="logo">
-                <a href=""><i class="fas fa-cloud-download-alt"></i> Ext <span>42</span></a>
+                <a ><i class="fas fa-cloud-download-alt"></i> Ext <span>42</span></a>
             </div>
 
             <nav>
@@ -26,11 +26,11 @@
             <div class="half">
                 <form action="">
                     <input type="text" id="search-input" placeholder="search" class="menu-item">
-                    <button type="submit" id="search" class="menu-item"><i class="fas fa-search"></i></button>
+                    <button type="submit" id="search" class="menu-item" orderBy="date"><i class="fas fa-search"></i></button>
                 </form>
             </div>
             <div class="half">
-                <a href="" class="menu-item" id="discover"><i class="far fa-lightbulb"></i> Discover</a>
+                <a  class="menu-item" id="discover" orderBy="date"><i class="far fa-lightbulb"></i> Discover</a>
             </div>
         </div>
     </div>
@@ -50,6 +50,8 @@
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/locale/en-gb.js"></script>
 <script src="js/show.js"></script>
 <script src="js/remote.js"></script>
 <script src="js/render.js"></script>

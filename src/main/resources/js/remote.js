@@ -2,63 +2,42 @@ remote = (() => {
 
     const base = "http://localhost:8080";
 
-    var isAuth = () => {
+    let isAuth = () => {
         return localStorage.getItem('Authorization') !== null;
     }
 
-    var searchByTag = (tagName) => {
-        $.ajax({
-            type: 'GET',
-            url: base + "/api/tags/" + tagName,
-            success: (result) => {
-                render.extensions(result);
-
-            },
-            error: (e) => {
-                console.log("Couldn't retrieve extensions");
-            }
-        })
-    }
-
-    var searchByName = (extensionTitle) => {
-        var token = document.cookie;
-        console.log(token);
-        $.ajax({
-            type: 'GET',
-            url: base + "/api/extension/search/" + extensionTitle,
-            success: (res) => {
-                render.searchResults(res, extensionTitle);
-            },
-            error: (e) => {
-                console.log("Couldn't retrieve extensions")
-            }
-        })
-    }
-
-    var loadByTimesDownloaded = (name, page, perPage) => {
+    let getTag = (tagName) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extension/search" + "?name=" + name + "&orderBy=downloads" + "&perPage=" + perPage
+            url: base + "/api/tag/" + tagName,
         })
     }
 
-    var loadByUploadDate = (name, page, perPage) => {
-       return $.ajax({
-            type: 'GET',
-            url: base + "/api/extension/search" + "?name=" + name + "&orderBy=date" + "&perPage=" + perPage
-        })
-    }
-    var loadFeatured = () => {
+    let loadByTimesDownloaded = (name, page, perPage) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extension/featured"
+            url: base + "/api/extensions/filter" + "?name=" + name + "&orderBy=downloads" + "&page=" + page + "&perPage=" + perPage
         })
     }
 
-    var submitExtension = (extension) => {
+    let loadByUploadDate = (name, page, perPage) => {
+        return $.ajax({
+            type: 'GET',
+            url: base + "/api/extensions/filter" + "?name=" + name + "&orderBy=date" + "&page=" + page + "&perPage=" + perPage
+        })
+    }
+
+    let loadFeatured = () => {
+        return $.ajax({
+            type: 'GET',
+            url: base + "/api/extensions/featured"
+        })
+    }
+
+    let submitExtension = (extension) => {
         $.ajax({
             type: 'POST',
-            url: base + "/api/extension/add",
+            url: base + "/api/extensions",
             data: JSON.stringify(extension),
             contentType: 'application/json',
             headers: {
@@ -73,41 +52,34 @@ remote = (() => {
         })
     }
 
-    var getUserExtensions = () => {
-        $.ajax({
+    let getUserProfile = (id) => {
+        return $.ajax({
             type: 'GET',
-            url: base + "/api/extension/userExtensions/secured",
-            headers: {
-                "Authorization": JSON.parse(localStorage.getItem("Authorization"))
-            },
-            success: (res) => {
-
-                render.userExtensions(res);
-
-            },
-            error: (e) => {
-                console.log("Couldn't retrieve user's extensions")
-            }
+            url: base + "/api/user/" + id,
         })
     }
 
-    var login = (user) => {
+    let login = (user) => {
         $.ajax({
             type: 'POST',
             url: base + "/api/user/login",
             data: JSON.stringify(user),
             contentType: 'application/json',
             success: (res) => {
-                let token = JSON.stringify(res);
-                localStorage.setItem('Authorization', token);
-                app.home()
+                // let token = JSON.stringify(data); //todo
+                localStorage.setItem('Authorization', res['token']);
+                localStorage.setItem('id', res['id']);
+                localStorage.setItem('username', res['username']);
+                localStorage.setItem('role', res['role']);
+                app.home();
             },
             error: (e) => {
                 console.log("Couldn't login");
             }
         })
     }
-    var changeActiveState = (username, state) => {
+
+    let changeActiveState = (username, state) => {
         $.ajax({
             type: 'POST',
             url: base + '/api/user/changeActiveState' + username + state,
@@ -124,63 +96,24 @@ remote = (() => {
             }
         })
     }
-    var listAllUsers = () => {
-        $.ajax({
+
+    let getExtension = (id) => {
+        return $.ajax({
             type: 'GET',
-            url: base + '/api/user/all',
-            headers: {
-                "Authorization": JSON.parse(localStorage.getItem("Authorization"))
-            },
-            success: (res) => {
-                render.allUsers(res);
-
-
-            },
-            error: (e) => {
-                console.log("couldn't retrieve users")
-            }
+            url: base + "/api/extensions/" + id
         })
     }
-    var getExtension = (id) => {
-        $.ajax({
-            type: 'GET',
-            url: base + "/api/extension/" + id,
-            success: (res) => {
-                render.extensionInfo(res);
 
-            },
-            error: (e) => {
-                console.log("Couldn't retrieve extension by id")
-            }
-        })
-    }
-    var getUsers = () => {
-        $.ajax({
-            type: 'GET',
-            url: base + "/api/user/listAll",
-            success: (res) => {
-                render.users(res);
-                console.log(res);
-                console.log(res);
-            },
-            error: (e) => {
-                console.log("Couldn't retrieve extension by id")
-            }
-        })
-    }
     return {
         isAuth,
-        searchByName,
-        searchByTag,
+        getTag,
         loadByUploadDate,
         loadByTimesDownloaded,
         submitExtension,
-        getUserExtensions,
+        getUserProfile,
         login,
         getExtension,
         loadFeatured,
         changeActiveState,
-        listAllUsers,
-        getUsers
     }
 })()

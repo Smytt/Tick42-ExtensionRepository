@@ -1,5 +1,6 @@
 package com.tick42.quicksilver.services.base;
 
+import com.tick42.quicksilver.models.DTO.TagDTO;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.Tag;
 
@@ -12,7 +13,7 @@ public interface TagService {
 
     Tag findById(int id);
 
-    Tag findByName(String name);
+    TagDTO findByName(String name);
 
     List<Tag> prepareTags(List<Tag> tags);
 

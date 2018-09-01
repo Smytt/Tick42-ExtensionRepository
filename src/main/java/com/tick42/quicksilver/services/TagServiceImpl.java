@@ -1,5 +1,6 @@
 package com.tick42.quicksilver.services;
 
+import com.tick42.quicksilver.models.DTO.TagDTO;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.Tag;
 import com.tick42.quicksilver.repositories.base.ExtensionRepository;
@@ -35,8 +36,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag findByName(String name) {
-        return tagRepository.findByName(name);
+    public TagDTO findByName(String name) {
+        return new TagDTO(tagRepository.findByName(name));
     }
 
     public String normalize(String name) {
