@@ -2,8 +2,6 @@ package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.DTO.UserDTO;
-import com.tick42.quicksilver.models.DTO.UserPublicDTO;
-import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.Spec.UserRegistrationSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.UserRepository;
@@ -74,9 +72,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserPublicDTO findById(int id) {
+    public UserDTO findById(int id) {
         User user = userRepository.findById(id);
-        return new UserPublicDTO(user);
+        return new UserDTO(user);
     }
 
     @Override

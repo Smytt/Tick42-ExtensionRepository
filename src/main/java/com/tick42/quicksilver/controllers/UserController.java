@@ -4,19 +4,15 @@ package com.tick42.quicksilver.controllers;
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.DTO.AuthDTO;
 import com.tick42.quicksilver.models.DTO.UserDTO;
-import com.tick42.quicksilver.models.DTO.UserPublicDTO;
-import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.Spec.UserRegistrationSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.services.base.UserService;
 import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -43,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public UserPublicDTO profile(@PathVariable(name = "id") int id) {
+    public UserDTO profile(@PathVariable(name = "id") int id) {
         return userService.findById(id);
     }
 
