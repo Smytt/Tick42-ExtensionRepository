@@ -19,11 +19,6 @@ public class UserRegistrationSpec {
     public UserRegistrationSpec() {
 
     }
-    public UserRegistrationSpec(@NotNull @Size(min = 7, message = "Name should be at least 7 character.") String username, @NotNull @Size(min = 7, message = "Name should be at least 7 character.") String password, @NotNull @Size(min = 7, message = "pass should be at least 7 character.") String repeatPassword) {
-        this.username = username;
-        this.password = password;
-        this.repeatPassword = repeatPassword;
-    }
 
     public String getUsername() {
         return username;
