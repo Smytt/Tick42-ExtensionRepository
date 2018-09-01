@@ -6,6 +6,7 @@ import com.tick42.quicksilver.models.DTO.AuthDTO;
 import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.DTO.UserPublicDTO;
 import com.tick42.quicksilver.models.Spec.UserSpec;
+import com.tick42.quicksilver.models.Spec.UserRegistrationSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.services.base.UserService;
 import org.apache.http.auth.InvalidCredentialsException;
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public User register(@RequestBody User user) {
+    public User register(@RequestBody UserRegistrationSpec user) {
         return userService.register(user);
     }
 
