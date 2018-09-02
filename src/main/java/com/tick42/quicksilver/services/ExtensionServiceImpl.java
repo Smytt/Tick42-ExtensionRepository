@@ -138,10 +138,10 @@ public class ExtensionServiceImpl implements ExtensionService {
         Extension extension = extensionRepository.findById(id);
         switch (state) {
             case "publish":
-                extension.setIsPending(true);
+                extension.setIsPending(false);
                 break;
             case "unpublish":
-                extension.setIsPending(false);
+                extension.setIsPending(true);
                 break;
             default:
                 //TODO:Exception
