@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,8 +58,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> findAll() {
-        List<User> users = userRepository.findAll();
+    public List<UserDTO> findAll(String state) {
+        List<User> users = new ArrayList<>();
+
+        if (state == null) {
+            state = "";
+        }
+        switch (state) {
+            case "active":
+                users = userRepository.findUsersByActiveState(true);
+            case "blocked":
+                users = userRepository.findUsersByActiveState(false);
+                break;
+            default:
+                users = userRepository.findAll();
+        }
         List<UserDTO> usersDto = users
                 .stream()
                 .map(UserDTO::new)

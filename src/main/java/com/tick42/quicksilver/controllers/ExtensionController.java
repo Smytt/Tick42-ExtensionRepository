@@ -31,9 +31,10 @@ public class ExtensionController {
     }
 
     @PostMapping
-    public @ResponseBody
-    ExtensionDTO create(@Valid @RequestBody ExtensionSpec extension) {
-        return extensionService.create(extension);
+    @ResponseBody
+    public ExtensionDTO create(@Valid @RequestBody ExtensionSpec extension,HttpServletRequest request) {
+        int id = validator.getUserIdFromToken(request);
+        return extensionService.create(extension, id);
     }
 
     @GetMapping(value = "/{id}")
@@ -46,9 +47,9 @@ public class ExtensionController {
         return extensionService.findById(id);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ExtensionDTO delete(@PathVariable(name = "id") int id) {
-        return extensionService.findById(id);
+    @DeleteMapping(value = "delete/{id}")
+    public void  delete(@PathVariable(name = "id") int id) {
+         extensionService.delete(id);
     }
 
     @GetMapping(value = "/filter")
@@ -66,20 +67,17 @@ public class ExtensionController {
         return extensionService.findFeatured();
     }
 
-//    @Secured("ROLE_ADMIN")
     @GetMapping(value = "/pending")
     public List<ExtensionDTO> pending() {
         return extensionService.findPending();
     }
 
-    @Secured("ROLE_ADMIN")
-    @PatchMapping(value = "/{id}/approve/secured")
-    void acceptExtension(@PathVariable(name = "id") int id) {
+    @PatchMapping(value = "/approve/{id}")
+    void approveExtension(@PathVariable(name = "id") int id) {
         extensionService.approveExtension(id);
     }
 
-    @Secured("ROLE_ADMIN")
-    @PatchMapping(value = "/{id}/featured/{newState}/secured")
+    @PatchMapping(value = "/{id}/featured/{newState}")
     void changeFeaturedState(@PathVariable("id") int id, @PathVariable("newState") String newState) {
         extensionService.changeFeaturedState(id, newState);
     }

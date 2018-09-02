@@ -37,7 +37,7 @@ public class JwtValidator {
         return jwtUser;
     }
 
-    public int getUserIdFromToken(HttpServletRequest request, HttpServletResponse response) {
+    public int getUserIdFromToken(HttpServletRequest request) {
         int id = 0;
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Token ")) {

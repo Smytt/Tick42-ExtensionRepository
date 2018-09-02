@@ -101,4 +101,20 @@ public class UserRepositoryImpl implements UserRepository {
         }
         return user;
     }
+
+    @Override
+    public List<User> findUsersByActiveState(boolean state) {
+        List<User> users = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            users = session
+                    .createQuery("from User where enabled = :enabled")
+                    .setParameter("enabled", state)
+                    .list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return users;
+    }
 }

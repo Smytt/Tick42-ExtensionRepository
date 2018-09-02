@@ -436,8 +436,7 @@ label button:hover {
     padding: 0 20px;
 }
 
-.list-users .off > * {
-    background-color: #fe8a71;
+.list-users .off:hover > * {
 }
 
 .action-btn.heading-btn {

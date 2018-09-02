@@ -14,6 +14,17 @@ let show = (() => {
         })
     }
 
+    let users = (users) => {
+    console.log(users)
+        $.ajax({
+             url: './templates/admin-view.html',
+             success: (tmpl) => {
+                 let $html = Mustache.render(tmpl, users);
+                 $content.html($html);
+             }
+         })
+
+    }
     let userNav = () => {
         $.ajax({
             url: './templates/nav-user.html',
@@ -132,6 +143,7 @@ let show = (() => {
             success: (tmpl) => {
                 let $html = Mustache.render(tmpl, extension);
                 $content.html($html);
+
             }
         })
     }
@@ -177,6 +189,7 @@ let show = (() => {
         homeNew,
         submit,
         user,
+        users,
         login,
         extension,
         register,

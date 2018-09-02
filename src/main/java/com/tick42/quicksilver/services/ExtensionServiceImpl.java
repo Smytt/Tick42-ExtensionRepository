@@ -40,15 +40,12 @@ public class ExtensionServiceImpl implements ExtensionService {
     }
 
     @Override
-    public ExtensionDTO create(ExtensionSpec extensionSpec) {
+    public ExtensionDTO create(ExtensionSpec extensionSpec, int id) {
 
         Extension extension = new Extension(extensionSpec);
-
-        User mockUser = new User();
-        mockUser.setId(3);
-
+        User user = userRepository.findById(id);
         extension.setIsPending(true);
-        extension.setOwner(mockUser);
+        extension.setOwner(user);
         extension.setUploadDate(new Date());
         extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
         extension.setTags(tagService.generateTags(extensionSpec.getTags()));

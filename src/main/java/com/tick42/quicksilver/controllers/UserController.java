@@ -50,8 +50,8 @@ public class UserController {
     }
 
     @GetMapping(value = "/all")
-    public List<UserDTO> listAllUsers() {
-        return userService.findAll();
+    public List<UserDTO> listAllUsers(@RequestParam(name = "activeState", required = false) String state) {
+        return userService.findAll(state);
     }
 
 

@@ -54,7 +54,6 @@ let app = (() => {
 
         let request;
 
-        console.log(orderBy);
         switch (orderBy) {
             case 'date':
                 request = remote.loadByUploadDate(query, page, PAGE_SIZE);
@@ -144,6 +143,18 @@ let app = (() => {
         show.submit();
     }
 
+    let getUsersView = (e) => {
+        preventDefault(e);
+        let id = $(this).attr('id');
+        console.log(id);
+        remote.getUsers().then(
+            res => {
+                res = render.profile(res);
+                show.users(res);
+            }
+        )
+    }
+
     let register = function (e) {
         preventDefault(e);
 
@@ -190,16 +201,38 @@ let app = (() => {
         localStorage.clear();
         getHomeView();
     }
+    let approveExtension = function (e) {
+        preventDefault(e);
+        if (!hitEnter(e)) return;
+
+        let extensionId = $(this).attr('extensionId');
+        remote.approveExtension(extensionId).then(
+            res => {
+                getPendingExtensionsView();
+            }
+        );
+    }
+
+    let deleteExtension = function (e) {
+        preventDefault(e);
+        if (!hitEnter(e)) return;
+
+        let extensionId = $(this).attr('extensionId');
+        remote.deleteExtension(extensionId).then(
+            res => {
+                getHomeView();
+            }
+        );
+    }
 
     function setUserState(e) {
         preventDefault(e);
 
         let newState = $(this).attr('id');
         let userId = $(this).attr('userId');
-
         remote.setUserState(userId, newState).then(
             res => {
-                show.state(res);
+                getUsersView();
             }
         ).catch((e) => {
             console.log(e);
@@ -223,7 +256,11 @@ let app = (() => {
             github,
             tags
         }
-        remote.submitExtension(extension)
+        remote.submitExtension(extension).then(
+            res => {
+                getHomeView();
+            }
+        )
     }
 
     let getPendingExtensionsView = (e) => {
@@ -262,21 +299,30 @@ let app = (() => {
 
     $body.on('click', '.logo a', getHomeView);
     $body.on('click', '#login', getLoginView)
+    $body.on('click', '#users', getUsersView)
+    $body.on('click', '#active', getUsersView)
+    $body.on('click', '#blocked', getUsersView)
+    $body.on('click', '#all-users', getUsersView)
     $body.on('click', '#logout', logout)
     $body.on('click', '#register', getRegisterView)
     $body.on('click', '#profile', getOwnProfileView)
     $body.on('click', '#pending', getPendingExtensionsView)
     $body.on('click', '#search, #discover', search)
     $body.on('click', '#submit', getSubmitView)
-    $body.on('click', '.one', getExtensionView)
+    $body.on('click', '.hw-extensions .one', getExtensionView)
     $body.on('click', '.pages-control a', search)
     $body.on('click', '#submit-btn', submit)
+    $body.on('click', '#approve', approveExtension)
+    $body.on('click', '#delete', deleteExtension)
     $body.on('click', '#register-btn', register)
     $body.on('click', '#login-btn', login)
+    $body.on('click', '#approve', approveExtension)
     $body.on('click', '.tags a', getTagView)
     $body.on('click', '.user-link', getProfileView)
+    $body.on('click', '.list-users .one', setUserState)
 
     $body.on('click', '#orderBy button', search)
+
 
     $body.on('click', '.user-state-controls button', setUserState)
 

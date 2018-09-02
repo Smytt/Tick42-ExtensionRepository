@@ -16,7 +16,7 @@ public interface UserService {
 
     UserDTO setState(int id, String state);
 
-    List<UserDTO> findAll();
+    List<UserDTO> findAll(String state);
 
     User findByUsername(String username);
 

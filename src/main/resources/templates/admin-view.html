@@ -2,10 +2,24 @@
     <div class="wrap list-users">
         <h1><i class="fas fa-users-cog"></i> Manage users</h1>
         <div class="action-btn">
-            <button class="menu-item"><i class="fas fa-user-check"></i> active</button>
-            <button class="menu-item current"><i class="fas fa-user-slash"></i> blocked</button>
-            <button class="menu-item"><i class="fas fa-users"></i> all</button>
+            <button class="menu-item" id="active"><i id="active2" class="fas fa-user-check"></i> active</button>
+            <button class="menu-item" id="blocked"><i id="active1" class="fas fa-user-slash"></i> blocked</button>
+            <button class="menu-item current" ><i class="fas fa-users"></i> all</button>
         </div>
+        {{#.}}
+            {{#isActive}}
+            <div class="one on" id="block" userId="{{id}}">
+                <a href="" class="name">{{username}}</a>
+                <button class="action" ><i class="fas fa-toggle-on"></i></button>
+            </div>
+            {{/isActive}}
+            {{^isActive}}
+            <div class="one off" id="enable" userId="{{id}}">
+                <a href="" class="name">{{username}}</a>
+                <button class="action"><i class="fas fa-toggle-off"></i></button>
+            </div>
+            {{/isActive}}
 
+        {{/.}}
     </div>
 </div>

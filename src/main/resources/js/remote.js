@@ -49,20 +49,14 @@ remote = (() => {
     }
 
     let submitExtension = (extension) => {
-        $.ajax({
+        return $.ajax({
             type: 'POST',
             url: base + "/api/extensions",
             data: JSON.stringify(extension),
             contentType: 'application/json',
             headers: {
-                "Authorization": JSON.parse(localStorage.getItem("Authorization"))
+                "Authorization": localStorage.getItem("Authorization")
             },
-            success: () => {
-
-            },
-            error: (e) => {
-                console.log("Couldn't submit extension");
-            }
         })
     }
 
@@ -70,6 +64,9 @@ remote = (() => {
         return $.ajax({
             type: 'GET',
             url: base + "/api/user/" + id,
+            headers: {
+                "Authorization": localStorage.getItem("Authorization")
+           },
         })
     }
 
@@ -91,6 +88,21 @@ remote = (() => {
         })
     }
 
+    let approveExtension = (extensionId) => {
+        return $.ajax({
+            type: 'PATCH',
+            url: base + '/api/extensions/approve/' + extensionId
+        })
+    }
+
+    let deleteExtension = (extensionId) => {
+        return $.ajax({
+            type: 'DELETE',
+            url: base + '/api/extensions/delete/' + extensionId
+        })
+
+    }
+
     let setUserState = (id, state) => {
         return $.ajax({
             type: 'PATCH',
@@ -108,6 +120,12 @@ remote = (() => {
         })
     }
 
+    let getUsers = (id) => {
+        return $.ajax({
+            type: 'GET',
+            url: base + "/api/user/all"
+            })
+    }
     let loadPending = () => {
         return $.ajax({
             type: 'GET',
@@ -125,7 +143,10 @@ remote = (() => {
         submitExtension,
         getUserProfile,
         login,
+        getUsers,
         getExtension,
+        approveExtension,
+        deleteExtension,
         loadFeatured,
         loadPending,
         setUserState,

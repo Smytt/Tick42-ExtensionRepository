@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ExtensionService {
 
-    ExtensionDTO create(ExtensionSpec model);
+    ExtensionDTO create(ExtensionSpec model, int id);
 
     ExtensionDTO findById(int id);
 

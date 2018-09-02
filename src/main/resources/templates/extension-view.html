@@ -9,9 +9,9 @@
         <div class="details">
             {{#isAdmin}}
             <div class="action-btn">
-                <button class="menu-item"><i class="fas fa-check"></i> Approve</button>
+                <button class="menu-item" id="approve" extensionId="{{id}}"><i class="fas fa-check"></i> Approve</button>
                 <button class="menu-item"><i class="fas fa-pencil-alt"></i> Edit</button>
-                <button class="menu-item"><i class="fas fa-trash-alt"></i> Delete</button>
+                    <button class="menu-item" id="delete" extensionId="{{id}}"><i class="fas fa-trash-alat"></i> Delete</button>
                 <button class="menu-item"><i class="fas fa-sync-alt"></i> GitHub</button>
             </div>
             {{/isAdmin}}
