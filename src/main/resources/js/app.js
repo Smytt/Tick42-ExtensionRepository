@@ -39,7 +39,7 @@ let app = (() => {
                 request = remote.getActive().then(
                 res => {
                     console.log(res);
-                    show.users(res);
+                    show.users(res,"blocked","all","active");
                 }
                 );
             break;
@@ -47,16 +47,15 @@ let app = (() => {
                 request = remote.getBlocked().then(
                 res => {
                     console.log(res);
-                    show.users(res);
+                    show.users(res,"active","all","blocked");
                 }
                 );
-                 console.log('hey1')
             break;
             default:
                 request = remote.getAllUsers().then(
                 res => {
                     console.log(res);
-                    show.users(res);
+                    show.users(res,"active","blocked","all");
                 }
                 );
             return;

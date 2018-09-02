@@ -14,12 +14,15 @@ let show = (() => {
         })
     }
 
-    let users = (users) => {
+    let users = (users, notCurrent, notCurrent1, current) => {
         $.ajax({
              url: './templates/admin-view.html',
              success: (tmpl) => {
                  let $html = Mustache.render(tmpl, users);
                  $content.html($html);
+                 $("#" + notCurrent).removeClass("current");
+                 $("#" + notCurrent1).removeClass("current");
+                 $("#" + current).addClass("current")
              }
          })
 
