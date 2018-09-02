@@ -36,15 +36,15 @@ let app = (() => {
         console.log(buttonId);
         switch (buttonId) {
             case 'active':
-                request = remote.getActive().then(
+                request = remote.getUsers("active").then(
                 res => {
                     console.log(res);
-                    show.users(res,"blocked","all","active");
+                    show.users(res,"block","all","active");
                 }
                 );
             break;
             case 'blocked':
-                request = remote.getBlocked().then(
+                request = remote.getUsers("blocked").then(
                 res => {
                     console.log(res);
                     show.users(res,"active","all","blocked");
@@ -52,7 +52,7 @@ let app = (() => {
                 );
             break;
             default:
-                request = remote.getAllUsers().then(
+                request = remote.getUsers("all").then(
                 res => {
                     console.log(res);
                     show.users(res,"active","blocked","all");
@@ -289,10 +289,20 @@ let app = (() => {
         preventDefault(e);
         let newState = $(this).attr('id');
         let userId = $(this).attr('userId');
-            remote.setUserState(userId, newState).then(
-                res => {
-                getUsers();
-                })
+        remote.setUserState(userId, newState).then(
+            res => {
+        let buttonCurrent = $(".current").attr('id');
+        let ignore = $(".not").attr('id');
+        let ignore1 = $(".not1").attr('id');
+        console.log(ignore);
+        console.log(ignore1)
+               remote.getUsers(buttonCurrent).then(
+                   res => {
+                       console.log(res);
+                       show.users(res,ignore,ignore1,buttonCurrent);
+                   });
+            })
+
     }
 
     let submit = (e) => {

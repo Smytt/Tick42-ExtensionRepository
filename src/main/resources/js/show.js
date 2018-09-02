@@ -22,6 +22,8 @@ let show = (() => {
                  $content.html($html);
                  $("#" + notCurrent).removeClass("current");
                  $("#" + notCurrent1).removeClass("current");
+                 $("#" + notCurrent).addClass("not");
+                 $("#" + notCurrent1).addClass("not1");
                  $("#" + current).addClass("current")
              }
          })
