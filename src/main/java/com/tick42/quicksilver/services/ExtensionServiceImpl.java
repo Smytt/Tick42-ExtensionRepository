@@ -58,6 +58,15 @@ public class ExtensionServiceImpl implements ExtensionService {
         ExtensionDTO extensionDTO = new ExtensionDTO(extension);
         return extensionDTO;
     }
+    @Override
+    public ExtensionDTO update(ExtensionSpec extensionSpec, int userId) {
+        Extension extension = new Extension(extensionSpec);
+        String role = userRepository.findById(userId).getRole();
+        if (userId == extension.getOwner().getId() || role.equals("ROLE_ADMIN")) {
+            extensionRepository.update(extension);
+        }
+        return new ExtensionDTO(extension);
+    }
 
     @Override
     public void delete(int id, int userId) {

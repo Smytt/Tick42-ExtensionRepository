@@ -2,6 +2,7 @@ package com.tick42.quicksilver.controllers;
 
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.DTO.PageDTO;
+import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.security.JwtValidator;
 import com.tick42.quicksilver.services.base.ExtensionService;
@@ -43,14 +44,14 @@ public class ExtensionController {
     }
 
     @PutMapping(value = "/{id}")
-    public ExtensionDTO update(@PathVariable(name = "id") int id) {
-        return extensionService.findById(id);
+    public ExtensionDTO update(@PathVariable(name = "extension") ExtensionSpec extension, HttpServletRequest request) {
+        int userId = validator.getUserIdFromToken(request);
+        return extensionService.update(extension, userId);
     }
 
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable(name = "id") int id, HttpServletRequest request) {
         int userId = validator.getUserIdFromToken(request);
-        System.out.println(userId);
         extensionService.delete(id, userId);
     }
 
@@ -69,7 +70,7 @@ public class ExtensionController {
         return extensionService.findFeatured();
     }
 
-    @GetMapping(value = "/status")
+    @GetMapping(value = "/unpublished")
     public List<ExtensionDTO> pending() {
         return extensionService.findPending();
     }
