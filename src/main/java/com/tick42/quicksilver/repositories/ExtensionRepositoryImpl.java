@@ -193,7 +193,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             Long total = (Long) session
-                    .createQuery("select count(*) from Extension where isPending = false and name like :name")
+                    .createQuery("select count(*) from Extension where isPending = false and owner.isActive = true and name like :name")
                     .setParameter("name", "%" + name + "%").uniqueResult();
             session.getTransaction().commit();
             return total;
