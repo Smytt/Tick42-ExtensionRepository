@@ -33,12 +33,10 @@ let app = (() => {
     function getUsers(e) {
         preventDefault(e);
         let buttonId = $(this).attr('id');
-        console.log(buttonId);
         switch (buttonId) {
             case 'active':
                 request = remote.getUsers("active").then(
                 res => {
-                    console.log(res);
                     show.users(res,"block","all","active");
                 }
                 );
@@ -46,7 +44,6 @@ let app = (() => {
             case 'blocked':
                 request = remote.getUsers("blocked").then(
                 res => {
-                    console.log(res);
                     show.users(res,"active","all","blocked");
                 }
                 );
@@ -54,13 +51,11 @@ let app = (() => {
             default:
                 request = remote.getUsers("all").then(
                 res => {
-                    console.log(res);
                     show.users(res,"active","blocked","all");
                 }
                 );
             return;
         }
-        console.log(buttonId);
         }
 
 
@@ -181,7 +176,6 @@ let app = (() => {
     let getUsersView = (e) => {
         preventDefault(e);
         let id = $(this).attr('id');
-        console.log(id);
         remote.getUsers().then(
             res => {
                 res = render.profile(res);
@@ -246,7 +240,6 @@ let app = (() => {
 
         remote.setPublishedState(id, state).then(
             res => {
-                console.log(res);
                 show.pendingState(res)
             }
         );
@@ -291,16 +284,13 @@ let app = (() => {
         let userId = $(this).attr('userId');
         remote.setUserState(userId, newState).then(
             res => {
-        let buttonCurrent = $(".current").attr('id');
-        let ignore = $(".not").attr('id');
-        let ignore1 = $(".not1").attr('id');
-        console.log(ignore);
-        console.log(ignore1)
-               remote.getUsers(buttonCurrent).then(
-                   res => {
-                       console.log(res);
-                       show.users(res,ignore,ignore1,buttonCurrent);
-                   });
+                let buttonCurrent = $(".current").attr('id');
+                let ignore = $(".not").attr('id');
+                let ignore1 = $(".not1").attr('id');
+                remote.getUsers(buttonCurrent).then(
+                res => {
+                    show.users(res,ignore,ignore1,buttonCurrent);
+                });
             })
 
     }
