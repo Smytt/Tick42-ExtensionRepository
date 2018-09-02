@@ -178,6 +178,26 @@ let show = (() => {
         })
     }
 
+    let pendingState = (extension) => {
+        $.ajax({
+            url: './templates/pending-state.html',
+            success: (tmpl) => {
+                let $html = Mustache.render(tmpl, extension);
+                $('#pending-state').html($html);
+            }
+        })
+    }
+
+    let featuredState = (extension) => {
+        $.ajax({
+            url: './templates/featured-state.html',
+            success: (tmpl) => {
+                let $html = Mustache.render(tmpl, extension);
+                $('#featured-state').html($html);
+            }
+        })
+    }
+
     return {
         home,
         userNav,
@@ -195,6 +215,8 @@ let show = (() => {
         register,
         tag,
         state,
-        pending
+        pending,
+        pendingState,
+        featuredState
     }
 })()

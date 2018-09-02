@@ -1,0 +1,9 @@
+{{#pending}}
+<button class="menu-item" id="approve" extensionId="{{id}}" setState="publish"><i class="fas fa-eye"></i> Publish
+</button>
+{{/pending}}
+{{^pending}}
+<button class="menu-item" id="unpublish" extensionId="{{id}}" setState="unpublish"><i class="fas fa-eye-slash"></i>
+    Unpublish
+</button>
+{{/pending}}

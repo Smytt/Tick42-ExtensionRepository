@@ -9,10 +9,31 @@
         <div class="details">
             {{#isAdmin}}
             <div class="action-btn">
-                <button class="menu-item" id="approve" extensionId="{{id}}"><i class="fas fa-check"></i> Approve</button>
-                <button class="menu-item"><i class="fas fa-pencil-alt"></i> Edit</button>
-                    <button class="menu-item" id="delete" extensionId="{{id}}"><i class="fas fa-trash-alat"></i> Delete</button>
-                <button class="menu-item"><i class="fas fa-sync-alt"></i> GitHub</button>
+                <span id="pending-state">
+                    {{#pending}}
+                    <button class="menu-item" id="approve" extensionId="{{id}}" setState="publish"><i class="fas fa-eye"></i> Publish
+                    </button>
+                    {{/pending}}
+                    {{^pending}}
+                    <button class="menu-item" id="unpublish" extensionId="{{id}}" setState="unpublish"><i class="fas fa-eye-slash"></i>
+                        Unpublish
+                    </button>
+                    {{/pending}}
+                </span>
+                <button class="menu-item" id="edit" extensionId="{{id}}"><i class="fas fa-pencil-alt"></i> Edit</button>
+                <button class="menu-item" id="delete" extensionId="{{id}}"><i class="fas fa-trash-alt"></i> Delete
+                </button>
+                <button class="menu-item" id="refresh-github" extensionId="{{id}}"><i class="fas fa-sync-alt"></i>
+                    GitHub
+                </button>
+                <span id="featured-state">
+                    {{^featured}}
+                    <button class="menu-item" extensionId="{{id}}" setState="feature"><i class="fas fa-crown"></i> Feature</button>
+                    {{/featured}}
+                    {{#featured}}
+                    <button class="menu-item" extensionId="{{id}}" setState="unfeature"><i class="fas fa-crown"></i> Unfeature</button>
+                    {{/featured}}
+                </span>
             </div>
             {{/isAdmin}}
             {{^isAdmin}}
@@ -39,7 +60,7 @@
             <h2><i class="fas fa-arrow-circle-up"></i> Upload date</h2>
             <span>{{uploadDate}}</span>
             <h2><i class="fas fa-arrow-circle-down"></i> Downloads</h2>
-            <span>17</span>
+            <span>{{timesDownloaded}}</span>
         </div>
         <div class="info github">
             <h2><i class="fab fa-github"></i> Last commit</h2>

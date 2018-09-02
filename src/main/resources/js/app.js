@@ -89,6 +89,7 @@ let app = (() => {
         remote.getExtension(id).then(
             res => {
                 res = render.extension(res)
+                console.log(res);
                 show.extension(res)
             }
         );
@@ -106,7 +107,9 @@ let app = (() => {
 
     let getProfileView = function (e) {
         preventDefault(e);
+
         let id = $(this).attr('userId');
+
         remote.getUserProfile(id).then(
             res => {
                 res = render.profile(res);
@@ -201,21 +204,30 @@ let app = (() => {
         localStorage.clear();
         getHomeView();
     }
-    let approveExtension = function (e) {
+
+    let setPublishedState = function (e) {
         preventDefault(e);
-        if (!hitEnter(e)) return;
 
         let extensionId = $(this).attr('extensionId');
+
         remote.approveExtension(extensionId).then(
-            res => {
-                getPendingExtensionsView();
-            }
+            show.pendingState
+        );
+    }
+
+    let setFeaturedState = function (e) {
+        preventDefault(e);
+
+        let extensionId = $(this).attr('extensionId');
+        let newState = $(this).attr('setState');
+
+        remote.setFeaturedState(extensionId, newState).then(
+            show.featuredState
         );
     }
 
     let deleteExtension = function (e) {
         preventDefault(e);
-        if (!hitEnter(e)) return;
 
         let extensionId = $(this).attr('extensionId');
         remote.deleteExtension(extensionId).then(
@@ -231,9 +243,7 @@ let app = (() => {
         let newState = $(this).attr('id');
         let userId = $(this).attr('userId');
         remote.setUserState(userId, newState).then(
-            res => {
-                getUsersView();
-            }
+            show.state
         ).catch((e) => {
             console.log(e);
         })
@@ -312,18 +322,15 @@ let app = (() => {
     $body.on('click', '.hw-extensions .one', getExtensionView)
     $body.on('click', '.pages-control a', search)
     $body.on('click', '#submit-btn', submit)
-    $body.on('click', '#approve', approveExtension)
+    $body.on('click', '#approve', setFeaturedState)
     $body.on('click', '#delete', deleteExtension)
     $body.on('click', '#register-btn', register)
     $body.on('click', '#login-btn', login)
-    $body.on('click', '#approve', approveExtension)
+    $body.on('click', '#approve', setFeaturedState)
     $body.on('click', '.tags a', getTagView)
     $body.on('click', '.user-link', getProfileView)
     $body.on('click', '.list-users .one', setUserState)
-
     $body.on('click', '#orderBy button', search)
-
-
     $body.on('click', '.user-state-controls button', setUserState)
 
 

@@ -66,7 +66,7 @@ remote = (() => {
             url: base + "/api/user/" + id,
             headers: {
                 "Authorization": localStorage.getItem("Authorization")
-           },
+            },
         })
     }
 
@@ -123,16 +123,24 @@ remote = (() => {
         })
     }
 
-    let getUsers = (id) => {
+    let getUsers = () => {
         return $.ajax({
             type: 'GET',
             url: base + "/api/user/all"
-            })
+        })
     }
+
     let loadPending = () => {
         return $.ajax({
             type: 'GET',
             url: base + "/api/extensions/pending"
+        })
+    }
+
+    let setFeaturedState = (id, newState) => {
+        return $.ajax({
+            type: 'GET',
+            url: base + '/api/extensions/' + id + '/featured/' + newState
         })
     }
 
@@ -149,6 +157,7 @@ remote = (() => {
         getUsers,
         getExtension,
         approveExtension,
+        setFeaturedState,
         deleteExtension,
         loadFeatured,
         loadPending,
