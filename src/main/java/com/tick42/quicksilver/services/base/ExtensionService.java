@@ -19,7 +19,7 @@ public interface ExtensionService {
 
     List<ExtensionDTO> findFeatured();
 
-    void approveExtension(int id);
+    ExtensionDTO approveExtension(int id, String newState);
 
     ExtensionDTO changeFeaturedState(int id, String newState);
 

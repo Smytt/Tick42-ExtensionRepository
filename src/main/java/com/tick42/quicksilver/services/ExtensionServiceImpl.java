@@ -61,9 +61,11 @@ public class ExtensionServiceImpl implements ExtensionService {
 
     @Override
     public void delete(int id, int userId) {
-        System.out.println(extensionRepository.findById(id).getOwner().getId());
-        System.out.println(extensionRepository.findById(userId).getId());
-        if(extensionRepository.findById(id).getOwner().getId() == extensionRepository.findById(userId).getId()) {
+        Extension extension = extensionRepository.findById(id);
+        User user = userRepository.findById(userId);
+        System.out.println(user.getUsername());
+        System.out.println(user.getRole());
+        if (userId == extension.getOwner().getId()) {
             extensionRepository.delete(id);
         }
     }
@@ -125,22 +127,37 @@ public class ExtensionServiceImpl implements ExtensionService {
     }
 
     @Override
-    public void approveExtension(int id) {
+    public ExtensionDTO approveExtension(int id, String state) {
         Extension extension = extensionRepository.findById(id);
-        extension.setIsPending(false);
-        extensionRepository.update(extension);
+        switch (state) {
+            case "publish":
+                extension.setIsPending(true);
+                break;
+            case "unpublish":
+                extension.setIsPending(false);
+                break;
+            default:
+                //TODO:Exception
+                break;
+        }
+        return new ExtensionDTO(extensionRepository.update(extension));
     }
 
     @Override
     public ExtensionDTO changeFeaturedState(int id, String state) {
         Extension extension = extensionRepository.findById(id);
-        if (extension.getIsFeatured()) {
-            extension.setIsFeatured(false);
-            extensionRepository.update(extension);
-        } else {
-            extension.setIsFeatured(true);
-            extensionRepository.update(extension);
+        switch (state) {
+            case "feature":
+                extension.setIsFeatured(true);
+                break;
+            case "unfeature":
+                extension.setIsFeatured(false);
+                break;
+            default:
+                //TODO:Exception
+                break;
         }
+        extensionRepository.update(extension);
         return new ExtensionDTO(extension);
     }
 

@@ -50,6 +50,7 @@ public class ExtensionController {
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable(name = "id") int id, HttpServletRequest request) {
         int userId = validator.getUserIdFromToken(request);
+        System.out.println(userId);
         extensionService.delete(id, userId);
     }
 
@@ -68,19 +69,19 @@ public class ExtensionController {
         return extensionService.findFeatured();
     }
 
-    @GetMapping(value = "/pending")
+    @GetMapping(value = "/status")
     public List<ExtensionDTO> pending() {
         return extensionService.findPending();
     }
 
-    @PatchMapping(value = "/approve/{id}")
-    void approveExtension(@PathVariable(name = "id") int id) {
-        extensionService.approveExtension(id);
+    @PatchMapping(value = "{id}/status/{state}")
+    public ExtensionDTO approveExtension(@PathVariable(name = "id") int id,@PathVariable("state") String state) {
+        return extensionService.approveExtension(id, state);
     }
 
-    @PatchMapping(value = "/{id}/featured/{newState}")
-    public ExtensionDTO changeFeaturedState(@PathVariable("id") int id, @PathVariable("newState") String newState) {
-        return extensionService.changeFeaturedState(id, newState);
+    @PatchMapping(value = "/{id}/featured/{state}")
+    public ExtensionDTO changeFeaturedState(@PathVariable("id") int id, @PathVariable("state") String state) {
+        return extensionService.changeFeaturedState(id, state);
     }
 
 }
