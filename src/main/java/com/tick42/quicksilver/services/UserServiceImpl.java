@@ -66,7 +66,9 @@ public class UserServiceImpl implements UserService {
         }
         switch (state) {
             case "active":
+
                 users = userRepository.findUsersByActiveState(true);
+                break;
             case "blocked":
                 users = userRepository.findUsersByActiveState(false);
                 break;
@@ -108,7 +110,7 @@ public class UserServiceImpl implements UserService {
         if (userSpec.getPassword().equals(userSpec.getRepeatPassword())) {
             if (registeredUser == null) {
                 String username = userSpec.getUsername();
-                String password = passwordEncoder.encode(userSpec.getPassword());
+                String password = userSpec.getPassword();
                 String role = "USER";
                 User user = new User(username, password, role);
                 return userRepository.create(user);

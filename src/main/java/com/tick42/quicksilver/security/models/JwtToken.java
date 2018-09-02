@@ -1,12 +1,12 @@
-package com.tick42.quicksilver.models;
+package com.tick42.quicksilver.security.models;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken {
+public class JwtToken extends UsernamePasswordAuthenticationToken {
 
     private String token;
 
-    public JwtAuthenticationToken(String token) {
+    public JwtToken(String token) {
         super(null, null);
         this.token = token;
     }

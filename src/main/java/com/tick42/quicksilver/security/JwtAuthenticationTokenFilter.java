@@ -1,6 +1,6 @@
 package com.tick42.quicksilver.security;
 
-import com.tick42.quicksilver.models.JwtAuthenticationToken;
+import com.tick42.quicksilver.security.models.JwtToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -27,7 +27,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 
         String authenticationToken = header.substring(6);
 
-        JwtAuthenticationToken token = new JwtAuthenticationToken(authenticationToken);
+        JwtToken token = new JwtToken(authenticationToken);
         return getAuthenticationManager().authenticate(token);
     }
 

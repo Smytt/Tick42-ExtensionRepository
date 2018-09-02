@@ -130,17 +130,30 @@ remote = (() => {
         })
     }
 
-    let getUsers = () => {
+    let getAllUsers = () => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/user/all"
+            url: base + "/api/user/get"
+        })
+    }
+    let getActive = () => {
+        return $.ajax({
+            type: 'GET',
+            url: base + "/api/user/get" + "?state=active"
+        })
+    }
+
+    let getBlocked = () => {
+        return $.ajax({
+            type: 'GET',
+            url: base + "/api/user/get" + "?state=blocked"
         })
     }
 
     let loadPending = () => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extensions/status"
+            url: base + "/api/extensions/unpublished"
         })
     }
 
@@ -155,7 +168,9 @@ remote = (() => {
         submitExtension,
         getUserProfile,
         login,
-        getUsers,
+        getAllUsers,
+        getActive,
+        getBlocked,
         getExtension,
         setPublishedState,
         setFeaturedState,

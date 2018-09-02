@@ -1,4 +1,4 @@
-package com.tick42.quicksilver.models;
+package com.tick42.quicksilver.security.models;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,8 +1,8 @@
 package com.tick42.quicksilver.security;
 
-import com.tick42.quicksilver.models.JwtAuthenticationToken;
-import com.tick42.quicksilver.models.JwtUserDetails;
 import com.tick42.quicksilver.models.User;
+import com.tick42.quicksilver.security.models.JwtToken;
+import com.tick42.quicksilver.security.models.JwtUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -27,7 +27,7 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
-        JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) usernamePasswordAuthenticationToken;
+        JwtToken jwtAuthenticationToken = (JwtToken) usernamePasswordAuthenticationToken;
         String token = jwtAuthenticationToken.getToken();
 
         User jwtUser = validator.validate(token);
@@ -45,6 +45,6 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return (JwtAuthenticationToken.class.isAssignableFrom(aClass));
+        return (JwtToken.class.isAssignableFrom(aClass));
     }
 }

@@ -2,10 +2,10 @@ package com.tick42.quicksilver.controllers;
 
 
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
-import com.tick42.quicksilver.models.DTO.AuthDTO;
 import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
+import com.tick42.quicksilver.security.models.JwtUser;
 import com.tick42.quicksilver.services.base.UserService;
 import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
@@ -27,10 +27,10 @@ public class UserController {
 
     @PostMapping(value = "/login")
     @ResponseBody
-    public AuthDTO generateTokenOnLogin(@RequestBody User user, HttpServletResponse response) throws InvalidCredentialsException {
+    public JwtUser generateTokenOnLogin(@RequestBody User user, HttpServletResponse response) throws InvalidCredentialsException {
         User loggedUser = userService.login(user);
         String token = "Token " + userService.generateToken(loggedUser);
-        return new AuthDTO(loggedUser, token);
+        return new JwtUser(loggedUser, token);
     }
 
     @PostMapping(value = "/register")
@@ -49,12 +49,10 @@ public class UserController {
        return userService.setState(id, state);
     }
 
-    @GetMapping(value = "/all")
-    public List<UserDTO> listAllUsers(@RequestParam(name = "activeState", required = false) String state) {
+    @GetMapping(value = "/get")
+    public List<UserDTO> listAllUsers(@RequestParam(name = "state", required = false) String state) {
         return userService.findAll(state);
     }
-
-
     @ExceptionHandler
     ResponseEntity handleInvalidCredentialsException(InvalidCredentialsException e) {
         return ResponseEntity

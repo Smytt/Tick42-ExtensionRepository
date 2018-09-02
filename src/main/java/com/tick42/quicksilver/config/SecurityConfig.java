@@ -23,7 +23,7 @@ import java.util.Collections;
 @EnableGlobalMethodSecurity(prePostEnabled  = true, securedEnabled = true)
 @EnableWebSecurity
 @Configuration
-    public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
+    public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired

@@ -15,7 +15,6 @@ let show = (() => {
     }
 
     let users = (users) => {
-    console.log(users)
         $.ajax({
              url: './templates/admin-view.html',
              success: (tmpl) => {
@@ -51,6 +50,7 @@ let show = (() => {
             success: (tmpl) => {
                 let $html = Mustache.render(tmpl);
                 $nav.html($html);
+                $('#orderBy button').removeClass('current')
             }
         })
     }

@@ -30,6 +30,40 @@ let app = (() => {
             }
         );
     }
+    function getUsers(e) {
+        preventDefault(e);
+        let buttonId = $(this).attr('id');
+        console.log(buttonId);
+        switch (buttonId) {
+            case 'active':
+                request = remote.getActive().then(
+                res => {
+                    console.log(res);
+                    show.users(res);
+                }
+                );
+            break;
+            case 'blocked':
+                request = remote.getBlocked().then(
+                res => {
+                    console.log(res);
+                    show.users(res);
+                }
+                );
+                 console.log('hey1')
+            break;
+            default:
+                request = remote.getAllUsers().then(
+                res => {
+                    console.log(res);
+                    show.users(res);
+                }
+                );
+            return;
+        }
+        console.log(buttonId);
+        }
+
 
     function search(e) {
         preventDefault(e);
@@ -89,7 +123,6 @@ let app = (() => {
         remote.getExtension(id).then(
             res => {
                 res = render.extension(res)
-                console.log(res);
                 show.extension(res)
             }
         );
@@ -165,20 +198,21 @@ let app = (() => {
         let password = $('#password').val();
         let repeatPassword = $('#repeatPassword').val();
 
-        let user = {
+        let registrationForm = {
             username,
             password,
             repeatPassword
         }
+        remote.register(registrationForm).then(
+        res => {
+            login();
+        }
+        );
 
-        remote.register(user).then(
-            remote.login
-        )
     }
 
     let login = function (e) {
         preventDefault(e);
-        if (!hitEnter(e)) return;
 
         let username = $('#username').val();
         let password = $('#password').val();
@@ -252,6 +286,15 @@ let app = (() => {
             console.log(e);
         })
     }
+    function refreshUsersView(e){
+        preventDefault(e);
+        let newState = $(this).attr('id');
+        let userId = $(this).attr('userId');
+            remote.setUserState(userId, newState).then(
+                res => {
+                getUsers();
+                })
+    }
 
     let submit = (e) => {
         preventDefault(e);
@@ -310,13 +353,12 @@ let app = (() => {
         }
         return true
     }
-
-    $body.on('click', '.logo a', getHomeView);
+    $body.on('click', '.logo a', getHomeView)
     $body.on('click', '#login', getLoginView)
-    $body.on('click', '#users', getUsersView)
-    $body.on('click', '#active', getUsersView)
-    $body.on('click', '#blocked', getUsersView)
-    $body.on('click', '#all-users', getUsersView)
+    $body.on('click', '#users', getUsers)
+    $body.on('click', '#active', getUsers)
+    $body.on('click', '#blocked', getUsers)
+    $body.on('click', '#all', getUsers)
     $body.on('click', '#logout', logout)
     $body.on('click', '#register', getRegisterView)
     $body.on('click', '#profile', getOwnProfileView)
@@ -330,10 +372,9 @@ let app = (() => {
     $body.on('click', '#login-btn', login)
     $body.on('click', '.tags a', getTagView)
     $body.on('click', '.user-link', getProfileView)
-    $body.on('click', '.list-users .one', setUserState)
+    $body.on('click', '.list-users .one', refreshUsersView)
     $body.on('click', '#orderBy button', search)
     $body.on('click', '.user-state-controls button', setUserState)
-
     $body.on('click', '.action-btn #change-published-state', setPublishedState)
     // $body.on('click', '.action-btn #edit', setPublishedState)
     $body.on('click', '.action-btn #delete', deleteExtension)

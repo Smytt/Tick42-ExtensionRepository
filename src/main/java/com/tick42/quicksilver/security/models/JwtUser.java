@@ -1,18 +1,18 @@
-package com.tick42.quicksilver.models.DTO;
+package com.tick42.quicksilver.security.models;
 
 import com.tick42.quicksilver.models.User;
 
-public class AuthDTO {
+public class JwtUser {
     private String token;
     private int id;
     private String username;
     private String role;
 
-    public AuthDTO() {
+    public JwtUser() {
 
     }
 
-    public AuthDTO(User user, String token) {
+    public JwtUser(User user, String token) {
         this.setId(user.getId());
         this.setToken(token);
         this.setUsername(user.getUsername());
