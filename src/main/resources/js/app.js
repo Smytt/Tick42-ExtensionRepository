@@ -208,20 +208,24 @@ let app = (() => {
     let setPublishedState = function (e) {
         preventDefault(e);
 
-        let extensionId = $(this).attr('extensionId');
+        let id = $(this).attr('extensionId');
+        let state = $(this).attr('setState');
 
-        remote.approveExtension(extensionId).then(
-            show.pendingState
+        remote.setPublishedState(id, state).then(
+            res => {
+                console.log(res);
+                show.pendingState(res)
+            }
         );
     }
 
     let setFeaturedState = function (e) {
         preventDefault(e);
 
-        let extensionId = $(this).attr('extensionId');
-        let newState = $(this).attr('setState');
+        let id = $(this).attr('extensionId');
+        let state = $(this).attr('setState');
 
-        remote.setFeaturedState(extensionId, newState).then(
+        remote.setFeaturedState(id, state).then(
             show.featuredState
         );
     }
@@ -322,16 +326,19 @@ let app = (() => {
     $body.on('click', '.hw-extensions .one', getExtensionView)
     $body.on('click', '.pages-control a', search)
     $body.on('click', '#submit-btn', submit)
-    $body.on('click', '#approve', setFeaturedState)
-    $body.on('click', '#delete', deleteExtension)
     $body.on('click', '#register-btn', register)
     $body.on('click', '#login-btn', login)
-    $body.on('click', '#approve', setFeaturedState)
     $body.on('click', '.tags a', getTagView)
     $body.on('click', '.user-link', getProfileView)
     $body.on('click', '.list-users .one', setUserState)
     $body.on('click', '#orderBy button', search)
     $body.on('click', '.user-state-controls button', setUserState)
+
+    $body.on('click', '.action-btn #change-published-state', setPublishedState)
+    // $body.on('click', '.action-btn #edit', setPublishedState)
+    $body.on('click', '.action-btn #delete', deleteExtension)
+    // $body.on('click', '.action-btn #refresh-github', deleteExtension)
+    $body.on('click', '.action-btn #change-featured-state', setFeaturedState)
 
 
     return {

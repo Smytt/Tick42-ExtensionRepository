@@ -74,8 +74,8 @@ public class ExtensionController {
         return extensionService.findPending();
     }
 
-    @PatchMapping(value = "{id}/status/{state}")
-    public ExtensionDTO approveExtension(@PathVariable(name = "id") int id,@PathVariable("state") String state) {
+    @PatchMapping(value = "/{id}/status/{state}")
+    public ExtensionDTO approveExtension(@PathVariable(name = "id") int id, @PathVariable("state") String state) {
         return extensionService.approveExtension(id, state);
     }
 

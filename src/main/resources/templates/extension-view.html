@@ -11,11 +11,11 @@
             <div class="action-btn">
                 <span id="pending-state">
                     {{#pending}}
-                    <button class="menu-item" id="approve" extensionId="{{id}}" setState="publish"><i class="fas fa-eye"></i> Publish
+                    <button class="menu-item" id="change-published-state" extensionId="{{id}}" setState="publish"><i class="fas fa-eye"></i> Publish
                     </button>
                     {{/pending}}
                     {{^pending}}
-                    <button class="menu-item" id="unpublish" extensionId="{{id}}" setState="unpublish"><i class="fas fa-eye-slash"></i>
+                    <button class="menu-item" id="change-published-state" extensionId="{{id}}" setState="unpublish"><i class="fas fa-eye-slash"></i>
                         Unpublish
                     </button>
                     {{/pending}}
@@ -28,10 +28,10 @@
                 </button>
                 <span id="featured-state">
                     {{^featured}}
-                    <button class="menu-item" extensionId="{{id}}" setState="feature"><i class="fas fa-crown"></i> Feature</button>
+                    <button class="menu-item" id="change-featured-state" extensionId="{{id}}" setState="feature"><i class="fas fa-crown"></i> Feature</button>
                     {{/featured}}
                     {{#featured}}
-                    <button class="menu-item" extensionId="{{id}}" setState="unfeature"><i class="fas fa-crown"></i> Unfeature</button>
+                    <button class="menu-item" id="change-featured-state" extensionId="{{id}}" setState="unfeature"><i class="fas fa-crown"></i> Unfeature</button>
                     {{/featured}}
                 </span>
             </div>

@@ -88,17 +88,24 @@ remote = (() => {
         })
     }
 
-    let approveExtension = (extensionId) => {
+    let setPublishedState = (id, state) => {
         return $.ajax({
             type: 'PATCH',
-            url: base + '/api/extensions/approve/' + extensionId
+            url: base + '/api/extensions/' + id + '/status/' + state
         })
     }
 
-    let deleteExtension = (extensionId) => {
+    let setFeaturedState = (id, state) => {
+        return $.ajax({
+            type: 'PATCH',
+            url: base + '/api/extensions/' + id + '/featured/' + state
+        })
+    }
+
+    let deleteExtension = (id) => {
         return $.ajax({
             type: 'DELETE',
-            url: base + '/api/extensions/' + extensionId,
+            url: base + '/api/extensions/' + id,
             headers: {
                 'Authorization': localStorage.getItem('Authorization')
             },
@@ -133,16 +140,10 @@ remote = (() => {
     let loadPending = () => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extensions/pending"
+            url: base + "/api/extensions/status"
         })
     }
 
-    let setFeaturedState = (id, newState) => {
-        return $.ajax({
-            type: 'GET',
-            url: base + '/api/extensions/' + id + '/featured/' + newState
-        })
-    }
 
     return {
         isAuth,
@@ -156,7 +157,7 @@ remote = (() => {
         login,
         getUsers,
         getExtension,
-        approveExtension,
+        setPublishedState,
         setFeaturedState,
         deleteExtension,
         loadFeatured,

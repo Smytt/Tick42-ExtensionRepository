@@ -1,6 +1,6 @@
 {{^featured}}
-<button class="menu-item" extensionId="{{id}}" setState="unfeature"><i class="fas fa-crown"></i> Feature</button>
+<button class="menu-item" id="change-featured-state" extensionId="{{id}}" setState="feature"><i class="fas fa-crown"></i> Feature</button>
 {{/featured}}
 {{#featured}}
-<button class="menu-item" extensionId="{{id}}" setState="feature"><i class="fas fa-crown"></i> Unfeature</button>
+<button class="menu-item" id="change-featured-state" extensionId="{{id}}" setState="unfeature"><i class="fas fa-crown"></i> Unfeature</button>
 {{/featured}}
