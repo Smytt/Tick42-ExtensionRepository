@@ -62,10 +62,8 @@ public class ExtensionServiceImpl implements ExtensionService {
     @Override
     public void delete(int id, int userId) {
         Extension extension = extensionRepository.findById(id);
-        User user = userRepository.findById(userId);
-        System.out.println(user.getUsername());
-        System.out.println(user.getRole());
-        if (userId == extension.getOwner().getId()) {
+        String role = userRepository.findById(userId).getRole();
+        if (userId == extension.getOwner().getId() || role.equals("ROLE_ADMIN")) {
             extensionRepository.delete(id);
         }
     }
