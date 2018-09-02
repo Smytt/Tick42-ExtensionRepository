@@ -81,7 +81,7 @@ public class ExtensionController {
     }
 
     @PatchMapping(value = "/{id}/featured/{state}")
-    public ExtensionDTO changeFeaturedState(@PathVariable("id") int id, @PathVariable("state") String state) {
+    public ExtensionDTO setFeaturedState(@PathVariable("id") int id, @PathVariable("state") String state) {
         return extensionService.setFeaturedState(id, state);
     }
 
