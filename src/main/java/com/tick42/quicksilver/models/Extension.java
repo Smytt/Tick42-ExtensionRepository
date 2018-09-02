@@ -40,7 +40,7 @@ public class Extension {
     private String version;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-            @JoinTable(
+    @JoinTable(
             name = "extension_tags",
             joinColumns = @JoinColumn(name = "extension_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))

@@ -101,7 +101,7 @@ remote = (() => {
             url: base + '/api/extensions/' + extensionId,
             headers: {
                 'Authorization': localStorage.getItem('Authorization')
-            }
+            },
         })
 
     }
