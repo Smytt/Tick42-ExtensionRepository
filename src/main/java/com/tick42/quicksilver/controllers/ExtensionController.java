@@ -32,7 +32,7 @@ public class ExtensionController {
 
     @PostMapping
     @ResponseBody
-    public ExtensionDTO create(@Valid @RequestBody ExtensionSpec extension,HttpServletRequest request) {
+    public ExtensionDTO create(@Valid @RequestBody ExtensionSpec extension, HttpServletRequest request) {
         int id = validator.getUserIdFromToken(request);
         return extensionService.create(extension, id);
     }
@@ -47,9 +47,10 @@ public class ExtensionController {
         return extensionService.findById(id);
     }
 
-    @DeleteMapping(value = "delete/{id}")
-    public void  delete(@PathVariable(name = "id") int id) {
-         extensionService.delete(id);
+    @DeleteMapping(value = "/{id}")
+    public void delete(@PathVariable(name = "id") int id, HttpServletRequest request) {
+        int userId = validator.getUserIdFromToken(request);
+        extensionService.delete(id, userId);
     }
 
     @GetMapping(value = "/filter")
@@ -78,8 +79,8 @@ public class ExtensionController {
     }
 
     @PatchMapping(value = "/{id}/featured/{newState}")
-    void changeFeaturedState(@PathVariable("id") int id, @PathVariable("newState") String newState) {
-        extensionService.changeFeaturedState(id, newState);
+    public ExtensionDTO changeFeaturedState(@PathVariable("id") int id, @PathVariable("newState") String newState) {
+        return extensionService.changeFeaturedState(id, newState);
     }
 
 }

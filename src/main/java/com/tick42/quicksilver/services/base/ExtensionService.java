@@ -13,7 +13,7 @@ public interface ExtensionService {
 
     ExtensionDTO findById(int id);
 
-    void delete(int id);
+    void delete(int id, int userId);
 
     PageDTO<ExtensionDTO> findAll(String name, String orderBy, Integer page, Integer perPage);
 
@@ -21,7 +21,7 @@ public interface ExtensionService {
 
     void approveExtension(int id);
 
-    void changeFeaturedState(int id, String newState);
+    ExtensionDTO changeFeaturedState(int id, String newState);
 
     List<ExtensionDTO> findPending();
 }

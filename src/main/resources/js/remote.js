@@ -98,7 +98,10 @@ remote = (() => {
     let deleteExtension = (extensionId) => {
         return $.ajax({
             type: 'DELETE',
-            url: base + '/api/extensions/delete/' + extensionId
+            url: base + '/api/extensions/' + extensionId,
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            }
         })
 
     }

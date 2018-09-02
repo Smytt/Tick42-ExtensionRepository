@@ -2,7 +2,6 @@ package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.DTO.PageDTO;
-import com.tick42.quicksilver.models.DTO.TagDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.User;
@@ -61,8 +60,12 @@ public class ExtensionServiceImpl implements ExtensionService {
     }
 
     @Override
-    public void delete(int id) {
-        extensionRepository.delete(id);
+    public void delete(int id, int userId) {
+        System.out.println(extensionRepository.findById(id).getOwner().getId());
+        System.out.println(extensionRepository.findById(userId).getId());
+        if(extensionRepository.findById(id).getOwner().getId() == extensionRepository.findById(userId).getId()) {
+            extensionRepository.delete(id);
+        }
     }
 
 
@@ -129,7 +132,7 @@ public class ExtensionServiceImpl implements ExtensionService {
     }
 
     @Override
-    public void changeFeaturedState(int id, String state) {
+    public ExtensionDTO changeFeaturedState(int id, String state) {
         Extension extension = extensionRepository.findById(id);
         if (extension.getIsFeatured()) {
             extension.setIsFeatured(false);
@@ -138,6 +141,7 @@ public class ExtensionServiceImpl implements ExtensionService {
             extension.setIsFeatured(true);
             extensionRepository.update(extension);
         }
+        return new ExtensionDTO(extension);
     }
 
     @Override
