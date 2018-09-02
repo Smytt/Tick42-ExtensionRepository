@@ -21,9 +21,9 @@ public interface ExtensionService {
 
     List<ExtensionDTO> findFeatured();
 
-    ExtensionDTO approveExtension(int id, String newState);
+    ExtensionDTO setPublishedState(int id, String newState);
 
-    ExtensionDTO changeFeaturedState(int id, String newState);
+    ExtensionDTO setFeaturedState(int id, String newState);
 
     List<ExtensionDTO> findPending();
 }

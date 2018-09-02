@@ -134,7 +134,7 @@ public class ExtensionServiceImpl implements ExtensionService {
     }
 
     @Override
-    public ExtensionDTO approveExtension(int id, String state) {
+    public ExtensionDTO setPublishedState(int id, String state) {
         Extension extension = extensionRepository.findById(id);
         switch (state) {
             case "publish":
@@ -151,7 +151,7 @@ public class ExtensionServiceImpl implements ExtensionService {
     }
 
     @Override
-    public ExtensionDTO changeFeaturedState(int id, String state) {
+    public ExtensionDTO setFeaturedState(int id, String state) {
         Extension extension = extensionRepository.findById(id);
         switch (state) {
             case "feature":

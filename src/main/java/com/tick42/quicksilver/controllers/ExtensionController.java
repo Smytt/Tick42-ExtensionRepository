@@ -76,13 +76,13 @@ public class ExtensionController {
     }
 
     @PatchMapping(value = "/{id}/status/{state}")
-    public ExtensionDTO approveExtension(@PathVariable(name = "id") int id, @PathVariable("state") String state) {
-        return extensionService.approveExtension(id, state);
+    public ExtensionDTO setPublishedState(@PathVariable(name = "id") int id, @PathVariable("state") String state) {
+        return extensionService.setPublishedState(id, state);
     }
 
     @PatchMapping(value = "/{id}/featured/{state}")
     public ExtensionDTO changeFeaturedState(@PathVariable("id") int id, @PathVariable("state") String state) {
-        return extensionService.changeFeaturedState(id, state);
+        return extensionService.setFeaturedState(id, state);
     }
 
 }
