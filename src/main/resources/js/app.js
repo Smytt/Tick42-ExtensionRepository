@@ -371,7 +371,7 @@ let app = (() => {
     $body.on('click', '#login-btn', login)
     $body.on('click', '.tags a', getTagView)
     $body.on('click', '.user-link', getProfileView)
-    $body.on('click', '.list-users .one', refreshUsersView)
+    $body.on('click', '.list-users .action', refreshUsersView)
     $body.on('click', '#orderBy button', search)
     $body.on('click', '.user-state-controls button', setUserState)
     $body.on('click', '.action-btn #change-published-state', setPublishedState)
@@ -379,6 +379,7 @@ let app = (() => {
     $body.on('click', '.action-btn #delete', deleteExtension)
     // $body.on('click', '.action-btn #refresh-github', deleteExtension)
     $body.on('click', '.action-btn #change-featured-state', setFeaturedState)
+    $body.on('click', '.list-users .name', getProfileView)
 
 
     return {

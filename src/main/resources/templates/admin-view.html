@@ -8,15 +8,15 @@
         </div>
         {{#.}}
             {{#isActive}}
-            <div class="one on" id="block" userId="{{id}}">
-                <a href="" class="name">{{username}}</a>
-                <button class="action" ><i class="fas fa-toggle-on"></i></button>
+            <div class="one on">
+                <a href="" class="name" userId="{{id}}">{{username}}</a>
+                <button class="action" id="block" userId="{{id}}" ><i class="fas fa-toggle-on"></i></button>
             </div>
             {{/isActive}}
             {{^isActive}}
-            <div class="one off" id="enable" userId="{{id}}">
-                <a href="" class="name">{{username}}</a>
-                <button class="action"><i class="fas fa-toggle-off"></i></button>
+            <div class="one off">
+                <a href="" class="name" userId="{{id}}">{{username}}</a>
+                <button class="action" id="enable" userId="{{id}}"><i class="fas fa-toggle-off"></i></button>
             </div>
             {{/isActive}}
 
