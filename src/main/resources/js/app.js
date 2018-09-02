@@ -270,7 +270,7 @@ let app = (() => {
     function setUserState(e) {
         preventDefault(e);
 
-        let newState = $(this).attr('id');
+        let newState = $(this).attr('newState');
         let userId = $(this).attr('userId');
         remote.setUserState(userId, newState).then(
             show.state
