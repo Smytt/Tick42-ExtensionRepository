@@ -13,6 +13,8 @@ public interface ExtensionService {
 
     ExtensionDTO findById(int id);
 
+    ExtensionDTO update(ExtensionSpec extension, int userId);
+
     void delete(int id, int userId);
 
     PageDTO<ExtensionDTO> findAll(String name, String orderBy, Integer page, Integer perPage);
