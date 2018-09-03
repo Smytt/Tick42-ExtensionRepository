@@ -1,5 +1,8 @@
 package com.tick42.quicksilver.services;
 
+import com.tick42.quicksilver.exceptions.ExtensionNotFoundException;
+import com.tick42.quicksilver.exceptions.InvalidStateException;
+import com.tick42.quicksilver.exceptions.UserNotFoundException;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.DTO.PageDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
@@ -11,6 +14,7 @@ import com.tick42.quicksilver.security.JwtValidator;
 import com.tick42.quicksilver.services.base.ExtensionService;
 import com.tick42.quicksilver.services.base.GitHubService;
 import com.tick42.quicksilver.services.base.TagService;
+import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,8 +59,11 @@ public class ExtensionServiceImpl implements ExtensionService {
     @Override
     public ExtensionDTO findById(int id) {
         Extension extension = extensionRepository.findById(id);
-        ExtensionDTO extensionDTO = new ExtensionDTO(extension);
-        return extensionDTO;
+        if (extension != null){
+            ExtensionDTO extensionDTO = new ExtensionDTO(extension);
+            return extensionDTO;
+        }
+        throw new ExtensionNotFoundException("Extension doesn't exist.");
     }
 
     @Override
@@ -146,6 +153,9 @@ public class ExtensionServiceImpl implements ExtensionService {
     @Override
     public ExtensionDTO setPublishedState(int id, String state) {
         Extension extension = extensionRepository.findById(id);
+        if (extension == null){
+            throw new ExtensionNotFoundException("Extension not found.");
+        }
         switch (state) {
             case "publish":
                 extension.setIsPending(false);
@@ -154,8 +164,7 @@ public class ExtensionServiceImpl implements ExtensionService {
                 extension.setIsPending(true);
                 break;
             default:
-                //TODO:Exception
-                break;
+                throw new InvalidStateException("Invalid state.");
         }
         return new ExtensionDTO(extensionRepository.update(extension));
     }
@@ -163,6 +172,9 @@ public class ExtensionServiceImpl implements ExtensionService {
     @Override
     public ExtensionDTO setFeaturedState(int id, String state) {
         Extension extension = extensionRepository.findById(id);
+        if (extension == null){
+            throw new ExtensionNotFoundException("Extension not found.");
+        }
         switch (state) {
             case "feature":
                 extension.setIsFeatured(true);
@@ -171,8 +183,7 @@ public class ExtensionServiceImpl implements ExtensionService {
                 extension.setIsFeatured(false);
                 break;
             default:
-                //TODO:Exception
-                break;
+                throw new InvalidStateException("Invalid state.");
         }
         extensionRepository.update(extension);
         return new ExtensionDTO(extension);

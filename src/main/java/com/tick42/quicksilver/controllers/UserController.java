@@ -1,6 +1,8 @@
 package com.tick42.quicksilver.controllers;
 
 
+import com.tick42.quicksilver.exceptions.InvalidStateException;
+import com.tick42.quicksilver.exceptions.PasswordsMissMatchException;
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.Spec.UserSpec;
@@ -10,6 +12,7 @@ import com.tick42.quicksilver.services.base.UserService;
 import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -66,5 +69,28 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());
+    }
+
+    @ExceptionHandler
+    ResponseEntity handlePasswordsMissMatchException(PasswordsMissMatchException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler
+    ResponseEntity InvalidStateException(PasswordsMissMatchException e){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public ResponseEntity handleDMSRESTException(MethodArgumentNotValidException e)
+    {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage()).toArray());
     }
 }

@@ -22,7 +22,6 @@ public class JwtGenerator {
     public String generate(User user) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
-
         Claims claims = Jwts.claims()
                 .setSubject(user.getUsername());
         claims.put("userId", String.valueOf(user.getId()));

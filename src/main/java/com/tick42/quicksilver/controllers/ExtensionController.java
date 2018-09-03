@@ -1,5 +1,9 @@
 package com.tick42.quicksilver.controllers;
 
+import com.tick42.quicksilver.exceptions.ExtensionNotFoundException;
+import com.tick42.quicksilver.exceptions.ExtensionUnavailableException;
+import com.tick42.quicksilver.exceptions.InvalidStateException;
+import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.DTO.PageDTO;
 import com.tick42.quicksilver.models.Extension;
@@ -11,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.omg.CORBA.DynAnyPackage.Invalid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.http.HttpStatus;
@@ -99,4 +104,26 @@ public class ExtensionController {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage()).toArray());
     }
+
+    @ExceptionHandler
+    ResponseEntity handleExtensionNotFoundException(ExtensionNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler
+    ResponseEntity handleExtensionUnavailable(ExtensionUnavailableException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler
+    ResponseEntity InvalidStateException(InvalidStateException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
 }

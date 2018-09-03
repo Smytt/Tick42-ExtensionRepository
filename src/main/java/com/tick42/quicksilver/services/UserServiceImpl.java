@@ -1,5 +1,8 @@
 package com.tick42.quicksilver.services;
 
+import com.tick42.quicksilver.exceptions.GenerateTokenException;
+import com.tick42.quicksilver.exceptions.PasswordsMissMatchException;
+import com.tick42.quicksilver.exceptions.UserNotFoundException;
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.Spec.UserSpec;
@@ -90,7 +93,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findById(int id) {
         User user = userRepository.findById(id);
-        return new UserDTO(user);
+        if (user != null){
+            return new UserDTO(user);
+        }
+        throw new UserNotFoundException("User doesn't exist.");
     }
 
     @Override
@@ -117,11 +123,14 @@ public class UserServiceImpl implements UserService {
             }
             throw new UsernameExistsException("Username is already taken.");
         }
-        throw new UsernameExistsException("passwords don't match");
+        throw new PasswordsMissMatchException("Passwords must match");
     }
 
     @Override
     public String generateToken(User user) {
-        return jwtGenerator.generate(user);
+        if(jwtGenerator.generate(user) != null) {
+            return jwtGenerator.generate(user);
+        }
+        throw new GenerateTokenException("Couldn't generate authentication token");
     }
 }
