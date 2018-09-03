@@ -30,34 +30,34 @@ let app = (() => {
             }
         );
     }
-
     function getUsers(e) {
         preventDefault(e);
         let buttonId = $(this).attr('id');
         switch (buttonId) {
             case 'active':
                 request = remote.getUsers("active").then(
-                    res => {
-                        show.users(res, "block", "all", "active");
-                    }
+                res => {
+                    show.users(res,"block","all","active");
+                }
                 );
-                break;
+            break;
             case 'blocked':
                 request = remote.getUsers("blocked").then(
-                    res => {
-                        show.users(res, "active", "all", "blocked");
-                    }
+                res => {
+                    show.users(res,"active","all","blocked");
+                }
                 );
-                break;
+            break;
             default:
                 request = remote.getUsers("all").then(
-                    res => {
-                        show.users(res, "active", "blocked", "all");
-                    }
+                res => {
+                    show.users(res,"active","blocked","all");
+                }
                 );
-                return;
+            return;
         }
-    }
+        }
+
 
     function search(e) {
         preventDefault(e);
@@ -109,12 +109,10 @@ let app = (() => {
 
     }
 
-    let getExtensionView = function (e, id) {
+    let getExtensionView = function (e) {
         preventDefault(e);
 
-        if (!id) {
-            id = $(this).attr('extensionId');
-        }
+        let id = $(this).attr('extensionId');
 
         remote.getExtension(id).then(
             res => {
