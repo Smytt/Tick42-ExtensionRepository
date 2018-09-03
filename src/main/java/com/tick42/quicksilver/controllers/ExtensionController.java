@@ -12,8 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.BindResult;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.parameters.P;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +38,6 @@ public class ExtensionController {
     }
 
     @PostMapping
-    @ResponseBody
     public ExtensionDTO create(@Valid @RequestBody ExtensionSpec extension, HttpServletRequest request) {
         int id = validator.getUserIdFromToken(request);
         return extensionService.create(extension, id);
@@ -86,4 +91,12 @@ public class ExtensionController {
         return extensionService.setFeaturedState(id, state);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public ResponseEntity handleDMSRESTException(MethodArgumentNotValidException e)
+    {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage()).toArray());
+    }
 }

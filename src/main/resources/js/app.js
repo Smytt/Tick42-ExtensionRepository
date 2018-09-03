@@ -30,33 +30,34 @@ let app = (() => {
             }
         );
     }
+
     function getUsers(e) {
         preventDefault(e);
         let buttonId = $(this).attr('id');
         switch (buttonId) {
             case 'active':
                 request = remote.getUsers("active").then(
-                res => {
-                    show.users(res,"block","all","active");
-                }
+                    res => {
+                        show.users(res, "block", "all", "active");
+                    }
                 );
-            break;
+                break;
             case 'blocked':
                 request = remote.getUsers("blocked").then(
-                res => {
-                    show.users(res,"active","all","blocked");
-                }
+                    res => {
+                        show.users(res, "active", "all", "blocked");
+                    }
                 );
-            break;
+                break;
             default:
                 request = remote.getUsers("all").then(
-                res => {
-                    show.users(res,"active","blocked","all");
-                }
+                    res => {
+                        show.users(res, "active", "blocked", "all");
+                    }
                 );
-            return;
+                return;
         }
-        }
+    }
 
 
     function search(e) {
@@ -233,7 +234,7 @@ let app = (() => {
                 localStorage.setItem('role', res['role']);
                 getHomeView();
             }
-        );
+        ).catch(e => console.log(e['responseText']));
     }
 
     let logout = (e) => {
@@ -335,7 +336,7 @@ let app = (() => {
             tags
         }
 
-        if ($(this).attr('id') === 'submit-btn')
+        if ($(this).attr('id') === 'submit-btn') {
             remote.submitExtension(extension).then(
                 res => {
                     let extensionId = res['id'];
@@ -367,11 +368,9 @@ let app = (() => {
                         getExtensionView(null, extensionId)
                 }
             ).catch(e => {
-                console.log(e);
-                e['responseJSON']['errors'].forEach(er => {
-                    console.log(er['defaultMessage']);
-                });
+                e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
             })
+        }
         else
             remote.editExtension(extensionId, extension).then(
                 res => {

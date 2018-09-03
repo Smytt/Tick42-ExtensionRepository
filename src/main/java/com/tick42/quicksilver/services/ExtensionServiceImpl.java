@@ -58,10 +58,12 @@ public class ExtensionServiceImpl implements ExtensionService {
         ExtensionDTO extensionDTO = new ExtensionDTO(extension);
         return extensionDTO;
     }
+
     @Override
     public ExtensionDTO update(int extensionsId, ExtensionSpec extensionSpec, int userId) {
 
         Extension extension = extensionRepository.findById(extensionsId);
+
         extension.setName(extensionSpec.getName());
         extension.setVersion(extensionSpec.getVersion());
         extension.setDescription(extensionSpec.getDescription());
