@@ -3,27 +3,22 @@ package com.tick42.quicksilver.controllers;
 import com.tick42.quicksilver.exceptions.ExtensionNotFoundException;
 import com.tick42.quicksilver.exceptions.ExtensionUnavailableException;
 import com.tick42.quicksilver.exceptions.InvalidStateException;
-import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.DTO.PageDTO;
-import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.security.JwtValidator;
 import com.tick42.quicksilver.services.base.ExtensionService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.omg.CORBA.DynAnyPackage.Invalid;
+import com.tick42.quicksilver.services.base.GitHubService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.parameters.P;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
