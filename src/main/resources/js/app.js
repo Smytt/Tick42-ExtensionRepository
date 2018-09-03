@@ -31,34 +31,24 @@ let app = (() => {
         );
     }
 
-    function getUsers(e) {
+     let getUsers = function(e) {
         preventDefault(e);
+        $('.action-btn button').removeClass('current');
         let buttonId = $(this).attr('id');
-        switch (buttonId) {
-            case 'active':
-                request = remote.getUsers("active").then(
-                    res => {
-                        show.users(res, "block", "all", "active");
-                    }
-                );
-                break;
-            case 'blocked':
-                request = remote.getUsers("blocked").then(
-                    res => {
-                        show.users(res, "active", "all", "blocked");
-                    }
-                );
-                break;
-            default:
-                request = remote.getUsers("all").then(
-                    res => {
-                        show.users(res, "active", "blocked", "all");
-                    }
-                );
-                return;
-        }
-    }
+        $('.action-btn #' + buttonId).addClass('current');
+        remote.getUsers(buttonId).then(
+            res => {
+                show.users(res)
+            }
+        )
+     }
+     let getAdminView = (e) => {
+        preventDefault(e);
+        remote.getUsers().then(
+            show.adminView
 
+        )
+     }
 
     function search(e) {
         preventDefault(e);
@@ -290,20 +280,19 @@ let app = (() => {
         })
     }
 
-    function refreshUsersView(e) {
+    function setMultipleUsersState(e) {
         preventDefault(e);
         let newState = $(this).attr('id');
         let userId = $(this).attr('userId');
+        let state = $(".current").attr('id')
         remote.setUserState(userId, newState).then(
-            res => {
-                let buttonCurrent = $(".current").attr('id');
-                let ignore = $(".not").attr('id');
-                let ignore1 = $(".not1").attr('id');
-                remote.getUsers(buttonCurrent).then(
+            res =>{
+                remote.getUsers(state).then(
                     res => {
-                        show.users(res, ignore, ignore1, buttonCurrent);
-                    });
-            })
+                        show.users(res)
+                    })
+            }
+        )
 
     }
 
@@ -448,7 +437,7 @@ let app = (() => {
     let start = () => {
         $body.on('click', '.logo a', getHomeView)
         $body.on('click', '#login', getLoginView)
-        $body.on('click', '#users', getUsers)
+        $body.on('click', '#users', getAdminView)
         $body.on('click', '#active', getUsers)
         $body.on('click', '#blocked', getUsers)
         $body.on('click', '#all', getUsers)
@@ -466,7 +455,8 @@ let app = (() => {
         $body.on('click', '#login-btn', login)
         $body.on('click', '.tags a', getTagView)
         $body.on('click', '.user-link', getProfileView)
-        $body.on('click', '.list-users .one', refreshUsersView)
+        $body.on('click', '.list-users .one button', setMultipleUsersState)
+        $body.on('click', '.list-users .one a', getProfileView)
         $body.on('click', '#orderBy button', search)
         $body.on('click', '.user-state-controls button', setUserState)
         $body.on('click', '.action-btn #change-published-state', setPublishedState)

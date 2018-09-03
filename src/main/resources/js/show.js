@@ -14,21 +14,26 @@ let show = (() => {
         })
     }
 
-    let users = (users, notCurrent, notCurrent1, current) => {
+    let users = (users) => {
+        $.ajax({
+             url: './templates/list-users.html',
+             success: (tmpl) => {
+                 let $html = Mustache.render(tmpl, users);
+                 $('#all-users').html($html);
+             }
+         })
+    }
+
+    let adminView = (users) => {
         $.ajax({
              url: './templates/admin-view.html',
              success: (tmpl) => {
                  let $html = Mustache.render(tmpl, users);
                  $content.html($html);
-                 $("#" + notCurrent).removeClass("current");
-                 $("#" + notCurrent1).removeClass("current");
-                 $("#" + notCurrent).addClass("not");
-                 $("#" + notCurrent1).addClass("not1");
-                 $("#" + current).addClass("current")
              }
          })
-
     }
+
     let userNav = () => {
         $.ajax({
             url: './templates/nav-user.html',
@@ -226,6 +231,7 @@ let show = (() => {
         submit,
         user,
         users,
+        adminView,
         login,
         extension,
         register,
