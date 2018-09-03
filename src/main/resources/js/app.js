@@ -201,7 +201,7 @@ let app = (() => {
             res => {
                 login();
             }
-        );
+        ).catch(e => console.log(e['responseText']));
 
     }
 
@@ -254,7 +254,7 @@ let app = (() => {
 
         remote.setFeaturedState(id, state).then(
             show.featuredState
-        );
+        ).catch(e => console.log(e['responseText']));
     }
 
     let deleteExtension = function (e) {
@@ -275,9 +275,7 @@ let app = (() => {
         let userId = $(this).attr('userId');
         remote.setUserState(userId, newState).then(
             show.state
-        ).catch((e) => {
-            console.log(e);
-        })
+        ).catch(e => console.log(e['responseText']));
     }
 
     function setMultipleUsersState(e) {
@@ -292,7 +290,7 @@ let app = (() => {
                         show.users(res)
                     })
             }
-        )
+        ).catch(e => console.log(e['responseText']));
 
     }
 

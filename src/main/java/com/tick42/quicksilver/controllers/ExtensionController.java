@@ -21,6 +21,7 @@ import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -47,8 +48,8 @@ public class ExtensionController {
         int id = validator.getUserIdFromToken(request);
         return extensionService.create(extension, id);
     }
-
-    @GetMapping(value = "/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(value = "/secured/{id}")
     public ExtensionDTO get(@PathVariable(name = "id") int id) {
         return extensionService.findById(id);
     }

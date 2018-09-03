@@ -12,6 +12,7 @@ import com.tick42.quicksilver.services.base.UserService;
 import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +53,7 @@ public class UserController {
        return userService.setState(id, state);
     }
 
-    @GetMapping(value = "/get")
+    @GetMapping(value = "/secured/get")
     public List<UserDTO> listAllUsers(@RequestParam(name = "state", required = false) String state) {
         return userService.findAll(state);
     }
