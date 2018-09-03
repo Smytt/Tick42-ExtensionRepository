@@ -71,6 +71,7 @@ public class TagServiceImpl implements TagService {
                 Arrays.stream(tagString.split(","))
                         .map(String::toLowerCase)
                         .map(String::trim)
+                        .distinct()
                         .collect(Collectors.toList());
 
         tagNames.forEach(tagName -> {
@@ -78,7 +79,7 @@ public class TagServiceImpl implements TagService {
             if (existingTag != null) {
                 tags.add(existingTag);
             } else {
-                tags.add(tagRepository.create(new Tag(tagName)));
+                tags.add(new Tag(tagName));
             }
         });
 

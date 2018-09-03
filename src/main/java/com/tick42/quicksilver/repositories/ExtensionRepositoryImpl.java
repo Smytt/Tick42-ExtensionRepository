@@ -24,6 +24,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
     public Extension create(Extension extension) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
+            extension.getTags().forEach(session::saveOrUpdate);
             session.save(extension);
             session.getTransaction().commit();
         } catch (Exception e) {
