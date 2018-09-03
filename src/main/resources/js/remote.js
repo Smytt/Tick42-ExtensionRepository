@@ -60,6 +60,26 @@ remote = (() => {
         })
     }
 
+    let submitFile = (id, file) => {
+        return $.ajax({
+            type: 'POST',
+            url: base + "/api/upload/file/" + id,
+            data: file,
+            contentType: false,
+            processData: false
+        })
+    }
+
+    let submitImage = (id, image) => {
+        return $.ajax({
+            type: 'POST',
+            url: base + "/api/upload/images/" + id,
+            data: image,
+            contentType: false,
+            processData: false
+        })
+    }
+
     let getUserProfile = (id) => {
         return $.ajax({
             type: 'GET',
@@ -155,6 +175,8 @@ remote = (() => {
         loadByTimesDownloaded,
         loadByLatestCommit,
         submitExtension,
+        submitFile,
+        submitImage,
         getUserProfile,
         login,
         getUsers,

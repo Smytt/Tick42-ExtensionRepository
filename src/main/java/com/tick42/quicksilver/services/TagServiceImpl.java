@@ -78,7 +78,7 @@ public class TagServiceImpl implements TagService {
             if (existingTag != null) {
                 tags.add(existingTag);
             } else {
-                tags.add(new Tag(tagName));
+                tags.add(tagRepository.create(new Tag(tagName)));
             }
         });
 

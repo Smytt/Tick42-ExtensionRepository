@@ -30,34 +30,34 @@ let app = (() => {
             }
         );
     }
+
     function getUsers(e) {
         preventDefault(e);
         let buttonId = $(this).attr('id');
         switch (buttonId) {
             case 'active':
                 request = remote.getUsers("active").then(
-                res => {
-                    show.users(res,"block","all","active");
-                }
+                    res => {
+                        show.users(res, "block", "all", "active");
+                    }
                 );
-            break;
+                break;
             case 'blocked':
                 request = remote.getUsers("blocked").then(
-                res => {
-                    show.users(res,"active","all","blocked");
-                }
+                    res => {
+                        show.users(res, "active", "all", "blocked");
+                    }
                 );
-            break;
+                break;
             default:
                 request = remote.getUsers("all").then(
-                res => {
-                    show.users(res,"active","blocked","all");
-                }
+                    res => {
+                        show.users(res, "active", "blocked", "all");
+                    }
                 );
-            return;
+                return;
         }
-        }
-
+    }
 
     function search(e) {
         preventDefault(e);
@@ -109,10 +109,12 @@ let app = (() => {
 
     }
 
-    let getExtensionView = function (e) {
+    let getExtensionView = function (e, id) {
         preventDefault(e);
 
-        let id = $(this).attr('extensionId');
+        if (!id) {
+            id = $(this).attr('extensionId');
+        }
 
         remote.getExtension(id).then(
             res => {
@@ -197,9 +199,9 @@ let app = (() => {
             repeatPassword
         }
         remote.register(registrationForm).then(
-        res => {
-            login();
-        }
+            res => {
+                login();
+            }
         );
 
     }
@@ -278,7 +280,8 @@ let app = (() => {
             console.log(e);
         })
     }
-    function refreshUsersView(e){
+
+    function refreshUsersView(e) {
         preventDefault(e);
         let newState = $(this).attr('id');
         let userId = $(this).attr('userId');
@@ -288,22 +291,31 @@ let app = (() => {
                 let ignore = $(".not").attr('id');
                 let ignore1 = $(".not1").attr('id');
                 remote.getUsers(buttonCurrent).then(
-                res => {
-                    show.users(res,ignore,ignore1,buttonCurrent);
-                });
+                    res => {
+                        show.users(res, ignore, ignore1, buttonCurrent);
+                    });
             })
 
     }
 
-    let submit = (e) => {
+    let submit = function (e) {
         preventDefault(e);
         if (!hitEnter(e)) return;
 
         let name = $('#name').val();
         let version = $('#version').val();
-        let description = $('#description').val();
+        let description = $('#description').val().replace(/\n\r?/g, '<br />');
         let github = $('#github').val();
         let tags = $('#tags').val();
+
+        let file = $('#file').prop('files')[0];
+        let fileData = new FormData();
+        fileData.append('file', file);
+
+        let image = $('#image').prop('files')[0];
+        let imageData = new FormData();
+        imageData.append('image', image);
+
 
         let extension = {
             name,
@@ -312,9 +324,20 @@ let app = (() => {
             github,
             tags
         }
+
         remote.submitExtension(extension).then(
             res => {
-                getHomeView();
+                let extensionId = res['id'];
+                console.log(res);
+                remote.submitFile(extensionId, fileData).then(
+                    resFile => {
+                        remote.submitImage(extensionId, imageData).then(
+                            resImage => {
+                                getExtensionView(null, extensionId)
+                            }
+                        )
+                    }
+                )
             }
         )
     }
@@ -325,6 +348,12 @@ let app = (() => {
         remote.loadPending().then(
             show.pending
         )
+    }
+
+    let selectFile = function () {
+        let filename = $(this).val().split(/(\\|\/)/g).pop();
+        let id = $(this).attr('id');
+        $('label[for="' + id + '"]').find('span').html(filename);
     }
 
     function preventDefault(e) {
@@ -352,39 +381,45 @@ let app = (() => {
         }
         return true
     }
-    $body.on('click', '.logo a', getHomeView)
-    $body.on('click', '#login', getLoginView)
-    $body.on('click', '#users', getUsers)
-    $body.on('click', '#active', getUsers)
-    $body.on('click', '#blocked', getUsers)
-    $body.on('click', '#all', getUsers)
-    $body.on('click', '#logout', logout)
-    $body.on('click', '#register', getRegisterView)
-    $body.on('click', '#profile', getOwnProfileView)
-    $body.on('click', '#pending', getPendingExtensionsView)
-    $body.on('click', '#search, #discover', search)
-    $body.on('click', '#submit', getSubmitView)
-    $body.on('click', '.hw-extensions .one', getExtensionView)
-    $body.on('click', '.pages-control a', search)
-    $body.on('click', '#submit-btn', submit)
-    $body.on('click', '#register-btn', register)
-    $body.on('click', '#login-btn', login)
-    $body.on('click', '.tags a', getTagView)
-    $body.on('click', '.user-link', getProfileView)
-    $body.on('click', '.list-users .one', refreshUsersView)
-    $body.on('click', '#orderBy button', search)
-    $body.on('click', '.user-state-controls button', setUserState)
-    $body.on('click', '.action-btn #change-published-state', setPublishedState)
-    // $body.on('click', '.action-btn #edit', setPublishedState)
-    $body.on('click', '.action-btn #delete', deleteExtension)
-    // $body.on('click', '.action-btn #refresh-github', deleteExtension)
-    $body.on('click', '.action-btn #change-featured-state', setFeaturedState)
 
+    let start = () => {
+        $body.on('click', '.logo a', getHomeView)
+        $body.on('click', '#login', getLoginView)
+        $body.on('click', '#users', getUsers)
+        $body.on('click', '#active', getUsers)
+        $body.on('click', '#blocked', getUsers)
+        $body.on('click', '#all', getUsers)
+        $body.on('click', '#logout', logout)
+        $body.on('click', '#register', getRegisterView)
+        $body.on('click', '#profile', getOwnProfileView)
+        $body.on('click', '#pending', getPendingExtensionsView)
+        $body.on('click', '#search, #discover', search)
+        $body.on('click', '#submit', getSubmitView)
+        $body.on('click', '.hw-extensions .one', getExtensionView)
+        $body.on('click', '.pages-control a', search)
+        $body.on('click', '#submit-btn', submit)
+        $body.on('click', '#register-btn', register)
+        $body.on('click', '#login-btn', login)
+        $body.on('click', '.tags a', getTagView)
+        $body.on('click', '.user-link', getProfileView)
+        $body.on('click', '.list-users .one', refreshUsersView)
+        $body.on('click', '#orderBy button', search)
+        $body.on('click', '.user-state-controls button', setUserState)
+        $body.on('click', '.action-btn #change-published-state', setPublishedState)
+        // $body.on('click', '.action-btn #edit', setPublishedState)
+        $body.on('click', '.action-btn #delete', deleteExtension)
+        // $body.on('click', '.action-btn #refresh-github', deleteExtension)
+        $body.on('click', '.action-btn #change-featured-state', setFeaturedState)
+        $body.on('change', '.submit-file', selectFile)
+
+
+        getHomeView();
+    }
 
     return {
-        getHomeView,
+        start,
         getHome
     }
 })();
 
-app.getHomeView();
+app.start();
