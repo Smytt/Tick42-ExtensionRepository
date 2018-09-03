@@ -47,13 +47,15 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @PatchMapping(value = "/setState/{id}/{newState}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PatchMapping(value = "auth/setState/{id}/{newState}")
     public UserDTO setState(@PathVariable("newState") String state,
                          @PathVariable("id") int id) {
        return userService.setState(id, state);
     }
 
-    @GetMapping(value = "/secured/get")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(value = "/auth/get")
     public List<UserDTO> listAllUsers(@RequestParam(name = "state", required = false) String state) {
         return userService.findAll(state);
     }
