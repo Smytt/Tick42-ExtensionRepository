@@ -19,11 +19,8 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebMvc
-@ConfigurationProperties(prefix = "app.github")
 public class AppConfig {
 
-    private String user;
-    private String token;
 
     @Bean
     public SessionFactory createSessionFactory() {
@@ -35,31 +32,5 @@ public class AppConfig {
                 .addAnnotatedClass(File.class)
                 .addAnnotatedClass(GitHubModel.class)
                 .buildSessionFactory();
-    }
-
-    @Bean
-    public GitHub createGitHub() {
-        try {
-            return GitHub.connect(this.user, this.token);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 }

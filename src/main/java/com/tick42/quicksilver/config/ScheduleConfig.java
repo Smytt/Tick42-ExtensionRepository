@@ -37,7 +37,7 @@ public class ScheduleConfig implements SchedulingConfigurer {
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        gitHubService.createScheduledTask(taskRegistrar, null, null);
+        gitHubService.createScheduledTask(taskRegistrar, null);
     }
 
     public String getThreadPrefix() {

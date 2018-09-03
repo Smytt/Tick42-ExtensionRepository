@@ -2,6 +2,7 @@ package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.config.Scheduler;
 import com.tick42.quicksilver.models.GitHubModel;
+import com.tick42.quicksilver.models.Spec.GitHubSettingSpec;
 import com.tick42.quicksilver.repositories.base.GenericRepository;
 import com.tick42.quicksilver.services.base.GitHubService;
 import org.kohsuke.github.*;
@@ -29,12 +30,12 @@ public class GitHubServiceImpl implements GitHubService {
 
 
     @Autowired
-    public GitHubServiceImpl(GenericRepository<GitHubModel> gitHubRepository, GitHub gitHub, Scheduler scheduler, ThreadPoolTaskScheduler threadPoolTaskScheduler) {
+    public GitHubServiceImpl(GenericRepository<GitHubModel> gitHubRepository, Scheduler scheduler, ThreadPoolTaskScheduler threadPoolTaskScheduler) throws IOException {
         this.gitHubRepository = gitHubRepository;
-        this.gitHub = gitHub;
         this.scheduler = scheduler;
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;
         prefs = Preferences.userRoot().node(this.getClass().getName());
+        this.gitHub = GitHub.connect(prefs.get("username", "-"), prefs.get("token", "-"));
     }
 
     @Override
@@ -77,11 +78,18 @@ public class GitHubServiceImpl implements GitHubService {
     }
 
     @Override
-    public void createScheduledTask(ScheduledTaskRegistrar taskRegistrar, Integer rate, Integer wait) {
+    public void createScheduledTask(ScheduledTaskRegistrar taskRegistrar, GitHubSettingSpec gitHubSettingSpec) {
 
-        if (rate != null && wait != null) {
+        if (gitHubSettingSpec != null) {
+            Integer rate = gitHubSettingSpec.getRate();
+            Integer wait = gitHubSettingSpec.getWait();
+            String token = gitHubSettingSpec.getToken();
+            String username = gitHubSettingSpec.getUsername();
+
             prefs.putInt("updateRate", rate);
             prefs.putInt("updateWait", wait);
+            prefs.put("token", token);
+            prefs.put("username", username);
         }
 
         if (scheduler.getTask() != null) {

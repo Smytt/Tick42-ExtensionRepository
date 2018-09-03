@@ -35,9 +35,4 @@ public class TestController {
     @GetMapping()
     public void test(ScheduledTaskRegistrar taskRegistrar) {
     }
-
-    @GetMapping("/{rate}/{wait}")
-    public void test1(ScheduledTaskRegistrar taskRegistrar, @PathVariable(name = "rate") int rate, @PathVariable(name = "wait") int wait) {
-        gitHubService.createScheduledTask(taskRegistrar, rate, wait);
-    }
 }
