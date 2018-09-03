@@ -333,9 +333,13 @@ footer * {
     top: -2px;
 }
 
-.extension-details .image button, .extension-details .image a {
+.extension-details .image button, .extension-details .image a, .extension-details .image span {
     width:  100%;
     margin-top: 10px;
+}
+
+.extension-details .image span {
+    background-color: #f6cd61;
 }
 
 .action-btn {

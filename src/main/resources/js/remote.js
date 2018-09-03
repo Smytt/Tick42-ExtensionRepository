@@ -73,10 +73,22 @@ remote = (() => {
     let submitImage = (id, image) => {
         return $.ajax({
             type: 'POST',
-            url: base + "/api/upload/images/" + id,
+            url: base + "/api/upload/image/" + id,
             data: image,
             contentType: false,
             processData: false
+        })
+    }
+
+    let editExtension = (id, extension) => {
+        return $.ajax({
+            type: 'PATCH',
+            url: base + "/api/extensions/" + id,
+            data: JSON.stringify(extension),
+            contentType: 'application/json',
+            headers: {
+                "Authorization": localStorage.getItem("Authorization")
+            },
         })
     }
 
@@ -177,6 +189,7 @@ remote = (() => {
         submitExtension,
         submitFile,
         submitImage,
+        editExtension,
         getUserProfile,
         login,
         getUsers,

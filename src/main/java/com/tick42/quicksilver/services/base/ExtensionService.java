@@ -13,7 +13,7 @@ public interface ExtensionService {
 
     ExtensionDTO findById(int id);
 
-    ExtensionDTO update(ExtensionSpec extension, int userId);
+    ExtensionDTO update(int extensionId, ExtensionSpec extension, int userId);
 
     void delete(int id, int userId);
 

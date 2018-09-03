@@ -175,6 +175,16 @@ let app = (() => {
         show.submit();
     }
 
+    let getEditView = function (e) {
+        preventDefault(e);
+
+        let extensionId = $(this).attr('extensionId');
+
+        remote.getExtension(extensionId).then(
+            show.edit
+        )
+    }
+
     let getUsersView = (e) => {
         preventDefault(e);
         let id = $(this).attr('id');
@@ -302,6 +312,8 @@ let app = (() => {
         preventDefault(e);
         if (!hitEnter(e)) return;
 
+        let extensionId = $(this).attr('extensionId');
+
         let name = $('#name').val();
         let version = $('#version').val();
         let description = $('#description').val().replace(/\n\r?/g, '<br />');
@@ -325,21 +337,75 @@ let app = (() => {
             tags
         }
 
-        remote.submitExtension(extension).then(
-            res => {
-                let extensionId = res['id'];
-                console.log(res);
-                remote.submitFile(extensionId, fileData).then(
-                    resFile => {
-                        remote.submitImage(extensionId, imageData).then(
-                            resImage => {
-                                getExtensionView(null, extensionId)
+        if ($(this).attr('id') === 'submit-btn')
+            remote.submitExtension(extension).then(
+                res => {
+                    let extensionId = res['id'];
+                    if (file)
+                        remote.submitFile(extensionId, fileData).then(
+                            resFile => {
+                                if (image)
+                                    remote.submitImage(extensionId, imageData).then(
+                                        resImage => {
+                                            getExtensionView(null, extensionId)
+                                        }
+                                    )
+                                else getExtensionView(null, extensionId)
                             }
                         )
-                    }
-                )
-            }
-        )
+                    else if (image)
+                        remote.submitImage(extensionId, fileData).then(
+                            resFile => {
+                                if (file)
+                                    remote.submitFile(extensionId, imageData).then(
+                                        resImage => {
+                                            getExtensionView(null, extensionId)
+                                        }
+                                    )
+                                else getExtensionView(null, extensionId)
+                            }
+                        )
+                    else
+                        getExtensionView(null, extensionId)
+                }
+            ).catch(e => {
+                console.log(e);
+                e['responseJSON']['errors'].forEach(er => {
+                    console.log(er['defaultMessage']);
+                });
+            })
+        else
+            remote.editExtension(extensionId, extension).then(
+                res => {
+                    let extensionId = res['id'];
+                    if (file)
+                        remote.submitFile(extensionId, fileData).then(
+                            resFile => {
+                                if (image)
+                                    remote.submitImage(extensionId, imageData).then(
+                                        resImage => {
+                                            getExtensionView(null, extensionId)
+                                        }
+                                    )
+                                else getExtensionView(null, extensionId)
+                            }
+                        )
+                    else if (image)
+                        remote.submitImage(extensionId, imageData).then(
+                            resImage => {
+                                if (file)
+                                    remote.submitFile(extensionId, fileData).then(
+                                        resFile => {
+                                            getExtensionView(null, extensionId)
+                                        }
+                                    )
+                                else getExtensionView(null, extensionId)
+                            }
+                        )
+                    else
+                        getExtensionView(null, extensionId)
+                }
+            )
     }
 
     let getPendingExtensionsView = (e) => {
@@ -398,6 +464,7 @@ let app = (() => {
         $body.on('click', '.hw-extensions .one', getExtensionView)
         $body.on('click', '.pages-control a', search)
         $body.on('click', '#submit-btn', submit)
+        $body.on('click', '#submit-edit-btn', submit)
         $body.on('click', '#register-btn', register)
         $body.on('click', '#login-btn', login)
         $body.on('click', '.tags a', getTagView)
@@ -406,7 +473,7 @@ let app = (() => {
         $body.on('click', '#orderBy button', search)
         $body.on('click', '.user-state-controls button', setUserState)
         $body.on('click', '.action-btn #change-published-state', setPublishedState)
-        // $body.on('click', '.action-btn #edit', setPublishedState)
+        $body.on('click', '.action-btn #edit', getEditView)
         $body.on('click', '.action-btn #delete', deleteExtension)
         // $body.on('click', '.action-btn #refresh-github', deleteExtension)
         $body.on('click', '.action-btn #change-featured-state', setFeaturedState)

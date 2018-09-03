@@ -100,6 +100,17 @@ let show = (() => {
         })
     }
 
+
+    let edit = (extension) => {
+        $.ajax({
+            url: './templates/edit-view.html',
+            success: (tmpl) => {
+                let $html = Mustache.render(tmpl, extension);
+                $content.html($html);
+            }
+        })
+    }
+
     let results = (results) => {
         $.ajax({
             url: './templates/search-results.html',
@@ -218,6 +229,7 @@ let show = (() => {
         login,
         extension,
         register,
+        edit,
         tag,
         state,
         pending,

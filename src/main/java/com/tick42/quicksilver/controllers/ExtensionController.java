@@ -43,10 +43,11 @@ public class ExtensionController {
         return extensionService.findById(id);
     }
 
-    @PutMapping(value = "/{id}")
-    public ExtensionDTO update(@PathVariable(name = "extension") ExtensionSpec extension, HttpServletRequest request) {
+    @PatchMapping(value = "/{id}")
+    public ExtensionDTO update(@PathVariable int id, @RequestBody ExtensionSpec extension, HttpServletRequest request) {
+        System.out.println("in");
         int userId = validator.getUserIdFromToken(request);
-        return extensionService.update(extension, userId);
+        return extensionService.update(id, extension, userId);
     }
 
     @DeleteMapping(value = "/{id}")

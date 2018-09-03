@@ -1,0 +1,28 @@
+<div class="wrap middle">
+    <h1>Edit extension</h1>
+    <form action="" class="regular" id="submit-form">
+        <label for="name">Name</label>
+        <input type="text" id="name" value="{{name}}">
+        <label for="version">Version</label>
+        <input type="text" id="version" value="{{version}}">
+        <label for="name">Description</label>
+        <textarea type="text" id="description">{{description}}</textarea>
+        <label for="github">Link to GitHub repository</label>
+        <input type="text" id="github" value="{{gitHubLink}}">
+        <label for="tags">Comma separated tags</label>
+        <input type="text" id="tags" value="{{#tags}}{{.}}, {{/tags}}">
+        <label for="file" class="as-field">
+            <div class="menu-item"><i class="fas fa-cloud-upload-alt"></i> File: <span>select file or keep current</span>
+            </div>
+        </label>
+        <input type="file" id="file" class="submit-file">
+        <label for="image" class="as-field">
+            <div class="menu-item"><i class="fas fa-image"></i> Icon: <span>select image or keep current</span></div>
+        </label>
+        <input type="file" id="image" class="submit-file">
+        <button type="submit" class="menu-item" id="submit-edit-btn" extensionId="{{id}}"><i class="fas fa-angle-double-right"></i> submit for
+            review
+        </button>
+
+    </form>
+</div>

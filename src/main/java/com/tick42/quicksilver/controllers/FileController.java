@@ -30,18 +30,15 @@ public class FileController {
         this.fileService = fileService;
     }
 
-    @PostMapping(value = "upload/file/{id}")
+    @PostMapping("upload/file/{id}")
     @ResponseBody
     public File uploadFile(@RequestParam("file") MultipartFile receivedFile, @PathVariable(name = "id") int extensionId) {
         return fileService.storeFile(receivedFile, extensionId);
     }
 
-    @PostMapping("upload/images/{id}")
-    public List<File> uploadImages(@RequestParam("images") MultipartFile[] images, @PathVariable(name = "id") int extensionId) {
-        return Arrays.asList(images)
-                .stream()
-                .map(image -> fileService.storeImage(image, extensionId))
-                .collect(Collectors.toList());
+    @PostMapping("upload/image/{id}")
+    public File uploadImage(@RequestParam("image") MultipartFile receivedImage, @PathVariable(name = "id") int extensionId) {
+        return fileService.storeImage(receivedImage, extensionId);
     }
 
     @GetMapping("/download/{fileName:.+}")

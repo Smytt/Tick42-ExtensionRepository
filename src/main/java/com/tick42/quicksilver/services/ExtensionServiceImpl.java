@@ -59,12 +59,20 @@ public class ExtensionServiceImpl implements ExtensionService {
         return extensionDTO;
     }
     @Override
-    public ExtensionDTO update(ExtensionSpec extensionSpec, int userId) {
-        Extension extension = new Extension(extensionSpec);
+    public ExtensionDTO update(int extensionsId, ExtensionSpec extensionSpec, int userId) {
+
+        Extension extension = extensionRepository.findById(extensionsId);
+        extension.setName(extensionSpec.getName());
+        extension.setVersion(extensionSpec.getVersion());
+        extension.setDescription(extensionSpec.getDescription());
+        extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
+        extension.setTags(tagService.generateTags(extensionSpec.getTags()));
+
         String role = userRepository.findById(userId).getRole();
         if (userId == extension.getOwner().getId() || role.equals("ROLE_ADMIN")) {
             extensionRepository.update(extension);
         }
+
         return new ExtensionDTO(extension);
     }
 

@@ -1,10 +1,25 @@
 <div>
     <div class="wrap extension-details">
         <div class="image">
+            {{#imageLocation}}
             <div style="background-image: url({{imageLocation}})"></div>
+            {{/imageLocation}}
+            {{^imageLocation}}
+            <div style="background-image: url(../img/icons/internet.png)"></div>
+            {{/imageLocation}}
+            {{#fileLocation}}
             <a href="{{fileLocation}}" class="menu-item" target="_blank"><i class="fas fa-download"></i> download</a>
+            {{/fileLocation}}
+            {{^fileLocation}}
+            <span class="menu-item"><i class="fas fa-ban"></i> no file provided</span>
+            {{/fileLocation}}
             <a class="menu-item user-link" userId="{{ownerId}}"><i class="fas fa-user"></i> {{ownerName}}</a>
+            {{#gitHubLink}}
             <a href="{{gitHubLink}}" target="_blank" class="menu-item"><i class="fab fa-github"></i> GitHub</a>
+            {{/gitHubLink}}
+            {{^gitHubLink}}
+            <span href="{{gitHubLink}}" target="_blank" class="menu-item"><i class="fas fa-ban"></i> no GitHub link</span>
+            {{/gitHubLink}}
         </div>
         <div class="details">
             {{#isAdmin}}

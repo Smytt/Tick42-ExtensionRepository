@@ -3,9 +3,12 @@
     <div>
         {{#.}}
         <div class="one" extensionId="{{id}}">
-            <div class="image" style="background-image: url({{imageLocation}})">
-
-            </div>
+            {{#imageLocation}}
+            <div class="image" style="background-image: url({{imageLocation}})"></div>
+            {{/imageLocation}}
+            {{^imageLocation}}
+            <div class="image" style="background-image: url(../img/icons/internet.png)"></div>
+            {{/imageLocation}}
             <h3>{{name}}</h3>
             <span><i class="fas fa-download"></i> {{timesDownloaded}}</span>
         </div>
