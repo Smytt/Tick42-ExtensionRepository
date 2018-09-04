@@ -84,7 +84,6 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new UserNotFoundException("User doesn't exist.");
         }
-
         return new UserDTO(user);
     }
 
