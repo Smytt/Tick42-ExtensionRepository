@@ -68,11 +68,10 @@ public class ExtensionServiceImpl implements ExtensionService {
             throw new ExtensionNotFoundException("Extension doesn't exist.");
         }
 
-        if (extension.getIsPending() && (extension.getOwner().getId() == userId || role.equals("ROLE_ADMIN"))) {
-            return new ExtensionDTO(extension);
+        if (extension.getIsPending() && (extension.getOwner().getId() != userId || !role.equals("ROLE_ADMIN"))) {
+            throw new ExtensionUnavailableException("Extension is unavailable.");
         }
-
-        throw new ExtensionUnavailableException("Extension is unavailable.");
+        return new ExtensionDTO(extension);
     }
 
     @Override

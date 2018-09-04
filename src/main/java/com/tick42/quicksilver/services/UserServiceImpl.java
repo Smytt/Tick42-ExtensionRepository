@@ -119,16 +119,16 @@ public class UserServiceImpl implements UserService {
     public User register(UserRegistrationSpec userRegistrationSpec) {
         User registeredUser = userRepository.findByUsername(userRegistrationSpec.getUsername());
         if (userRegistrationSpec.getPassword().equals(userRegistrationSpec.getRepeatPassword())) {
-            if (registeredUser == null) {
-                String username = userRegistrationSpec.getUsername();
-                String password = userRegistrationSpec.getPassword();
-                String role = "USER";
-                User user = new User(username, password, role);
-                return userRepository.create(user);
-            }
+            throw new PasswordsMissMatchException("Passwords must match");
+        }
+        if (registeredUser != null) {
             throw new UsernameExistsException("Username is already taken.");
         }
-        throw new PasswordsMissMatchException("Passwords must match");
+        String username = userRegistrationSpec.getUsername();
+        String password = userRegistrationSpec.getPassword();
+        String role = "USER";
+        User user = new User(username, password, role);
+        return userRepository.create(user);
     }
 
     @Override

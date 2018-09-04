@@ -45,7 +45,10 @@ public class ExtensionController {
 
     @GetMapping(value = "/{id}")
     public ExtensionDTO get(@PathVariable(name = "id") int id, HttpServletRequest request) {
-        int userId = validator.getUserIdFromToken(request);
+        int userId = 0;
+        if (request.getHeader("Authorization").startsWith("Token ")) {
+            userId = validator.getUserIdFromToken(request);
+        }
         return extensionService.findById(id, userId);
     }
 
