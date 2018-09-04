@@ -73,6 +73,8 @@ let app = (() => {
         remote.setGitHubSettings(gitHubSettings).then(
             res =>{
             getHomeView();
+        }).catch(e =>{
+            handle(e);
         })
      }
 
@@ -138,7 +140,9 @@ let app = (() => {
                 res = render.extension(res)
                 show.extension(res)
             }
-        );
+        ).catch(e =>{
+            handle(e);
+        });
     }
 
     let getTagView = function (e) {
@@ -148,7 +152,9 @@ let app = (() => {
 
         remote.getTag(tagName).then(
             show.tag
-        )
+        ).catch(e =>{
+            handle(e);
+        })
     }
 
     function getRegisterAdminView(e){
@@ -167,7 +173,9 @@ let app = (() => {
                 res = render.profile(res);
                 show.user(res);
             }
-        )
+        ).catch(e =>{
+            handle(e);
+        })
     }
 
     let getOwnProfileView = function (e) {
@@ -205,7 +213,9 @@ let app = (() => {
 
         remote.getExtension(extensionId).then(
             show.edit
-        ).catch
+        ).catch(e =>{
+            handle(e);
+        })
     }
 
     let getUsersView = (e) => {
@@ -236,31 +246,16 @@ let app = (() => {
                     login();
                 }
             ).catch(e =>{
-                $('.errors').empty();
-                if(e['responseJSON'] != null){
-                    e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
-                    console.log(e['responseJSON'])
-                }else{
-                    $('.errors').append('<p>'+ e['responseText'] +'</p>');
-                    console.log(e['responseText'])
-                }
+                handle(e);
             })
-         }else{
+        }else{
             remote.registerAdmin(registrationForm).then(
                 res =>{
                     getHomeView();
                 }
             ).catch(e =>{
-                $('.errors').empty();
-                if(e['responseJSON'] != null){
-                    e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
-                    console.log(e['responseJSON'])
-                }else{
-                    $('.errors').append('<p>'+ e['responseText'] +'</p>');
-                    console.log(e['responseText'])
-                }
+                handle(e);
             })
-
         }
     }
     let login = function (e) {
@@ -282,18 +277,9 @@ let app = (() => {
                 localStorage.setItem('role', res['role']);
                 getHomeView();
             }
-        ).catch(e=>{
-            $('.errors').empty();
-            if(e['responseJSON'] != null){
-            console.log(e['responseJSON'])
-            e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
-            }else{
-            console.log(e['responseText'])
-            $('.errors').append('<p>'+ e['responseText'] +'</p>');
-            }
+        ).catch(e=>{ handle(e);
         })
         }
-
     let logout = (e) => {
         preventDefault(e);
         localStorage.clear();
@@ -430,14 +416,7 @@ let app = (() => {
                     }
                 }
             ).catch(e => {
-                $('.errors').empty();
-                if(e['responseJSON'] != null){
-                    console.log(e['responseJSON'])
-                    e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
-                }else{
-                    console.log(e['responseText'])
-                    $('.errors').append('<p>'+ e['responseText'] +'</p>');
-            }
+                handle(e);
             })
         }else{
             remote.editExtension(extensionId, extension).then(
@@ -478,14 +457,7 @@ let app = (() => {
                         }
                 }
             ).catch(e => {
-                $('.errors').empty();
-                if(e['responseJSON'] != null){
-                    console.log(e['responseJSON'])
-                    e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
-                }else{
-                    console.log(e['responseText'])
-                    $('.errors').append('<p>'+ e['responseText'] +'</p>');
-                }
+                handle(e);
             })
         }
     }
@@ -509,6 +481,18 @@ let app = (() => {
             e.preventDefault();
             e.stopPropagation();
         }
+    }
+
+    function handle(e){
+
+            $('.errors').empty();
+            if(e['responseJSON'] != null){
+            console.log(e['responseJSON'])
+            e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
+            }else{
+            console.log(e['responseText'])
+            $('.errors').append('<p>'+ e['responseText'] +'</p>');
+            }
     }
 
     let loadNav = () => {
