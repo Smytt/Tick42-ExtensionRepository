@@ -2,7 +2,7 @@ package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.UserDTO;
-import com.tick42.quicksilver.models.Spec.UserSpec;
+import com.tick42.quicksilver.models.Spec.UserRegistrationSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.UserRepository;
 import com.tick42.quicksilver.security.JwtGenerator;
@@ -116,12 +116,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(UserSpec userSpec) {
-        User registeredUser = userRepository.findByUsername(userSpec.getUsername());
-        if (userSpec.getPassword().equals(userSpec.getRepeatPassword())) {
+    public User register(UserRegistrationSpec userRegistrationSpec) {
+        User registeredUser = userRepository.findByUsername(userRegistrationSpec.getUsername());
+        if (userRegistrationSpec.getPassword().equals(userRegistrationSpec.getRepeatPassword())) {
             if (registeredUser == null) {
-                String username = userSpec.getUsername();
-                String password = userSpec.getPassword();
+                String username = userRegistrationSpec.getUsername();
+                String password = userRegistrationSpec.getPassword();
                 String role = "USER";
                 User user = new User(username, password, role);
                 return userRepository.create(user);

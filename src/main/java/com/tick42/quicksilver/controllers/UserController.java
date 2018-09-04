@@ -6,7 +6,7 @@ import com.tick42.quicksilver.exceptions.PasswordsMissMatchException;
 import com.tick42.quicksilver.exceptions.UserNotFoundException;
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.DTO.UserDTO;
-import com.tick42.quicksilver.models.Spec.UserSpec;
+import com.tick42.quicksilver.models.Spec.UserRegistrationSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.security.models.JwtUser;
 import com.tick42.quicksilver.services.base.UserService;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public User register(@RequestBody UserSpec user) {
+    public User register(@Valid @RequestBody UserRegistrationSpec user) {
         return userService.register(user);
     }
 
