@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.security;
 
 import com.tick42.quicksilver.models.User;
+import com.tick42.quicksilver.security.Exceptions.JwtTokenIsIncorrectException;
 import com.tick42.quicksilver.security.models.JwtToken;
 import com.tick42.quicksilver.security.models.JwtUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
         User jwtUser = validator.validate(token);
 
         if (jwtUser == null) {
-            throw new RuntimeException("JWT Token is incorrect");
+            throw new JwtTokenIsIncorrectException("JWT Token is incorrect");
         }
 
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils

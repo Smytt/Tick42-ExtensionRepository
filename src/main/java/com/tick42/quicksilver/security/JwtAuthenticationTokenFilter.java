@@ -1,5 +1,6 @@
 package com.tick42.quicksilver.security;
 
+import com.tick42.quicksilver.security.Exceptions.JwtTokenIsMissingException;
 import com.tick42.quicksilver.security.models.JwtToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -22,7 +23,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 
         String header = httpServletRequest.getHeader("Authorization");
         if (header == null || !header.startsWith("Token ")) {
-            throw new RuntimeException("JWT Token is missing");
+            throw new JwtTokenIsMissingException("JWT Token is missing");
         }
 
         String authenticationToken = header.substring(6);

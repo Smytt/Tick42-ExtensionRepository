@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.security;
 
 import com.tick42.quicksilver.models.User;
+import com.tick42.quicksilver.security.Exceptions.JwtTokenIsMissingException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +30,6 @@ public class JwtValidator {
             jwtUser.setUsername(body.getSubject());
             jwtUser.setId(Integer.parseInt((String) body.get("userId")));
             jwtUser.setRole((String)body.get("role"));
-            System.out.println((String)body.get("role"));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -41,7 +41,7 @@ public class JwtValidator {
         int id = 0;
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Token ")) {
-            throw new RuntimeException("JWT Token is missing");
+            throw new JwtTokenIsMissingException("JWT Token is missing");
         }
         String token = header.substring(6);
         try {
