@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/extensions")
+@RequestMapping(value = "/api")
 public class ExtensionController {
 
     private final ExtensionService extensionService;
@@ -36,14 +36,7 @@ public class ExtensionController {
         this.validator = validator;
     }
 
-
-    @PostMapping
-    public ExtensionDTO create(@Valid @RequestBody ExtensionSpec extension, HttpServletRequest request) {
-        int id = validator.getUserIdFromToken(request);
-        return extensionService.create(extension, id);
-    }
-
-    @GetMapping(value = "/{id}")
+    @GetMapping("/extensions/{id}")
     public ExtensionDTO get(@PathVariable(name = "id") int id, HttpServletRequest request) {
         User user = null;
         if(request.getHeader("Authorization") != null) {
@@ -57,19 +50,7 @@ public class ExtensionController {
         return extensionService.findById(id, user);
     }
 
-    @PatchMapping(value = "/{id}")
-    public ExtensionDTO update(@PathVariable int id, @RequestBody ExtensionSpec extension, HttpServletRequest request) {
-        int userId = validator.getUserIdFromToken(request);
-        return extensionService.update(id, extension, userId);
-    }
-
-    @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable(name = "id") int id, HttpServletRequest request) {
-        int userId = validator.getUserIdFromToken(request);
-        extensionService.delete(id, userId);
-    }
-
-    @GetMapping(value = "/filter")
+    @GetMapping("/extensions/filter")
     public PageDTO<ExtensionDTO> findAll(
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "orderBy", required = false) String orderBy,
@@ -79,27 +60,52 @@ public class ExtensionController {
         return extensionService.findAll(name, orderBy, page, perPage);
     }
 
-    @GetMapping(value = "/featured")
+    @GetMapping("/extensions/featured")
     public List<ExtensionDTO> featured() {
         return extensionService.findFeatured();
     }
 
-    @GetMapping(value = "/unpublished")
+    @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
+    @PostMapping("/auth/extensions")
+    public ExtensionDTO create(@Valid @RequestBody ExtensionSpec extension, HttpServletRequest request) {
+        int id = validator.getUserIdFromToken(request);
+        return extensionService.create(extension, id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
+    @PatchMapping("/auth/extensions/{id}")
+    public ExtensionDTO update(@PathVariable int id, @RequestBody ExtensionSpec extension, HttpServletRequest request) {
+        int userId = validator.getUserIdFromToken(request);
+        return extensionService.update(id, extension, userId);
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/auth/extensions/{id}")
+    public void delete(@PathVariable(name = "id") int id, HttpServletRequest request) {
+        int userId = validator.getUserIdFromToken(request);
+        extensionService.delete(id, userId);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(value = "/auth/extensions/unpublished")
     public List<ExtensionDTO> pending() {
         return extensionService.findPending();
     }
 
-    @PatchMapping(value = "/{id}/status/{state}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PatchMapping(value = "/auth/extensions/{id}/status/{state}")
     public ExtensionDTO setPublishedState(@PathVariable(name = "id") int id, @PathVariable("state") String state) {
         return extensionService.setPublishedState(id, state);
     }
 
-    @PatchMapping(value = "/{id}/featured/{state}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PatchMapping(value = "/auth/extensions/{id}/featured/{state}")
     public ExtensionDTO setFeaturedState(@PathVariable("id") int id, @PathVariable("state") String state) {
         return extensionService.setFeaturedState(id, state);
     }
 
-    @PatchMapping(value = "/{id}/github")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PatchMapping(value = "/auth/extensions/{id}/github")
     public ExtensionDTO fetchGitHubData(@PathVariable("id") int id, HttpServletRequest request) {
         int userId = validator.getUserIdFromToken(request);
         return extensionService.fetchGitHub(id, userId);
