@@ -106,7 +106,11 @@ public class UserServiceImpl implements UserService {
         String password = user.getPassword();
         User foundUser = userRepository.findByUsername(username);
         if (foundUser != null && password.equals(foundUser.getPassword())) {
-            return foundUser;
+            if (foundUser.getIsActive()) {
+
+                return foundUser;
+            }
+            throw new UserIsDisabledException("User is disabled.");
         }
         throw new InvalidCredentialsException("Invalid credentials.");
     }
