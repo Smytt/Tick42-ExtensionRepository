@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.config.Scheduler;
+import com.tick42.quicksilver.exceptions.GitHubRepositoryException;
 import com.tick42.quicksilver.models.GitHubModel;
 import com.tick42.quicksilver.models.Spec.GitHubSettingSpec;
 import com.tick42.quicksilver.repositories.base.GitHubRepository;
@@ -39,7 +40,13 @@ public class GitHubServiceImpl implements GitHubService {
     @Override
     public void setRemoteDetails(GitHubModel gitHubModel) {
         try {
-            GHRepository repo = gitHub.getRepository(gitHubModel.getUser() + "/" + gitHubModel.getRepo());
+            GHRepository repo = null;
+            try {
+                repo = gitHub.getRepository(gitHubModel.getUser() + "/" + gitHubModel.getRepo());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                throw new GitHubRepositoryException("Couldn't connect to " + gitHubModel.getUser() + "/" + gitHubModel.getRepo());
+            }
             int pulls = repo.getPullRequests(GHIssueState.OPEN).size();
             int issues = repo.getIssues(GHIssueState.OPEN).size() - pulls;
             Date lastCommit = null;

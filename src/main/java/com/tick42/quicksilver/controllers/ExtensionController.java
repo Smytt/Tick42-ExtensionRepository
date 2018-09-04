@@ -2,6 +2,7 @@ package com.tick42.quicksilver.controllers;
 
 import com.tick42.quicksilver.exceptions.ExtensionNotFoundException;
 import com.tick42.quicksilver.exceptions.ExtensionUnavailableException;
+import com.tick42.quicksilver.exceptions.InvalidParameterException;
 import com.tick42.quicksilver.exceptions.InvalidStateException;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.DTO.PageDTO;
@@ -37,9 +38,11 @@ public class ExtensionController {
         this.validator = validator;
     }
 
+
     @PostMapping
     public ExtensionDTO create(@Valid @RequestBody ExtensionSpec extension, HttpServletRequest request) {
         int id = validator.getUserIdFromToken(request);
+        System.out.println(id);
         return extensionService.create(extension, id);
     }
 
@@ -115,7 +118,14 @@ public class ExtensionController {
     }
 
     @ExceptionHandler
-    ResponseEntity InvalidStateException(InvalidStateException e) {
+    ResponseEntity handleInvalidStateException(InvalidStateException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler
+    ResponseEntity handleInvalidParameterException(InvalidParameterException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());

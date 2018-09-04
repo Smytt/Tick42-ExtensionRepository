@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.exceptions.ExtensionNotFoundException;
+import com.tick42.quicksilver.exceptions.InvalidParameterException;
 import com.tick42.quicksilver.exceptions.InvalidStateException;
 import com.tick42.quicksilver.exceptions.UserNotFoundException;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
@@ -14,7 +15,6 @@ import com.tick42.quicksilver.security.JwtValidator;
 import com.tick42.quicksilver.services.base.ExtensionService;
 import com.tick42.quicksilver.services.base.GitHubService;
 import com.tick42.quicksilver.services.base.TagService;
-import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,13 +45,14 @@ public class ExtensionServiceImpl implements ExtensionService {
     @Override
     public ExtensionDTO create(ExtensionSpec extensionSpec, int id) {
 
-        Extension extension = new Extension(extensionSpec);
         User user = userRepository.findById(id);
+        Extension extension = new Extension(extensionSpec);
         extension.setIsPending(true);
         extension.setOwner(user);
         extension.setUploadDate(new Date());
-        extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
         extension.setTags(tagService.generateTags(extensionSpec.getTags()));
+
+        extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
 
         return new ExtensionDTO(extensionRepository.create(extension));
     }
@@ -59,7 +60,7 @@ public class ExtensionServiceImpl implements ExtensionService {
     @Override
     public ExtensionDTO findById(int id) {
         Extension extension = extensionRepository.findById(id);
-        if (extension != null){
+        if (extension != null) {
             ExtensionDTO extensionDTO = new ExtensionDTO(extension);
             return extensionDTO;
         }
@@ -70,17 +71,20 @@ public class ExtensionServiceImpl implements ExtensionService {
     public ExtensionDTO update(int extensionsId, ExtensionSpec extensionSpec, int userId) {
 
         Extension extension = extensionRepository.findById(extensionsId);
+        if (extension == null) {
+            throw new ExtensionNotFoundException("Extension not found.");
+        }
+
+        String role = userRepository.findById(userId).getRole();
+        if (userId == extension.getOwner().getId() || role.equals("ROLE_ADMIN")) {
+            extensionRepository.update(extension);
+        }
 
         extension.setName(extensionSpec.getName());
         extension.setVersion(extensionSpec.getVersion());
         extension.setDescription(extensionSpec.getDescription());
         extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
         extension.setTags(tagService.generateTags(extensionSpec.getTags()));
-
-        String role = userRepository.findById(userId).getRole();
-        if (userId == extension.getOwner().getId() || role.equals("ROLE_ADMIN")) {
-            extensionRepository.update(extension);
-        }
 
         return new ExtensionDTO(extension);
     }
@@ -98,6 +102,14 @@ public class ExtensionServiceImpl implements ExtensionService {
     @Override
     public PageDTO<ExtensionDTO> findAll(String name, String orderBy, Integer page, Integer perPage) {
 
+        if (page < 1) {
+            throw new InvalidParameterException("\"page\" should be a positive number.");
+        }
+
+        if (perPage < 1) {
+            throw new InvalidParameterException("\"perPage\" should be a positive number.");
+        }
+
         if (name == null) {
             name = "";
         }
@@ -106,7 +118,7 @@ public class ExtensionServiceImpl implements ExtensionService {
             orderBy = "date";
         }
 
-        if (page == null || page < 1) {
+        if (page == null) {
             page = 1;
         }
 
@@ -118,7 +130,7 @@ public class ExtensionServiceImpl implements ExtensionService {
         int totalPages = (int) Math.ceil(totalResults * 1.0 / perPage);
 
         if (page > totalPages && totalResults != 0) {
-            throw new RuntimeException("No such page");
+            throw new InvalidParameterException("Page" + totalPages + " is the last page. Page " + page + " is invalid.");
         }
 
         List<Extension> extensions = new ArrayList<>();
@@ -136,8 +148,7 @@ public class ExtensionServiceImpl implements ExtensionService {
                 extensions = extensionRepository.findAllByDownloads(name, page, perPage);
                 break;
             default:
-                extensions = extensionRepository.findAllByDate(name, page, perPage);
-                break;
+                throw new InvalidParameterException("\"" + orderBy + "\" is not a valid parameter. Use \"date\", \"commits\", \"name\" or \"downloads\".");
         }
 
         List<ExtensionDTO> extensionDTOS = generateExtensionDTOList(extensions);
@@ -153,7 +164,7 @@ public class ExtensionServiceImpl implements ExtensionService {
     @Override
     public ExtensionDTO setPublishedState(int id, String state) {
         Extension extension = extensionRepository.findById(id);
-        if (extension == null){
+        if (extension == null) {
             throw new ExtensionNotFoundException("Extension not found.");
         }
         switch (state) {
@@ -164,7 +175,7 @@ public class ExtensionServiceImpl implements ExtensionService {
                 extension.setIsPending(true);
                 break;
             default:
-                throw new InvalidStateException("Invalid state.");
+                throw new InvalidStateException("\"" + state + "\" is not a valid extension state. Use \"publish\" or \"unpublish\".");
         }
         return new ExtensionDTO(extensionRepository.update(extension));
     }
@@ -172,7 +183,7 @@ public class ExtensionServiceImpl implements ExtensionService {
     @Override
     public ExtensionDTO setFeaturedState(int id, String state) {
         Extension extension = extensionRepository.findById(id);
-        if (extension == null){
+        if (extension == null) {
             throw new ExtensionNotFoundException("Extension not found.");
         }
         switch (state) {
@@ -183,7 +194,7 @@ public class ExtensionServiceImpl implements ExtensionService {
                 extension.setIsFeatured(false);
                 break;
             default:
-                throw new InvalidStateException("Invalid state.");
+                throw new InvalidStateException("\"" + state + "\" is not a valid featured state. Use \"feature\" or \"unfeature\".");
         }
         extensionRepository.update(extension);
         return new ExtensionDTO(extension);
