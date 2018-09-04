@@ -60,12 +60,7 @@ public class UserController {
         return userService.findAll(state);
     }
 
-    @ExceptionHandler
-    ResponseEntity handleInvalidCredentialsException(InvalidCredentialsException e) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(e.getMessage());
-    }
+
 
     @ExceptionHandler
     ResponseEntity handleUsernameExistsException(UsernameExistsException e) {
@@ -82,7 +77,7 @@ public class UserController {
     }
 
     @ExceptionHandler
-    ResponseEntity InvalidStateException(PasswordsMissMatchException e){
+    ResponseEntity InvalidStateException(InvalidStateException e){
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());

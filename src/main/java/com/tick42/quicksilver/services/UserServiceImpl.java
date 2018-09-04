@@ -1,16 +1,12 @@
 package com.tick42.quicksilver.services;
 
-import com.tick42.quicksilver.exceptions.GenerateTokenException;
-import com.tick42.quicksilver.exceptions.PasswordsMissMatchException;
-import com.tick42.quicksilver.exceptions.UserNotFoundException;
-import com.tick42.quicksilver.exceptions.UsernameExistsException;
+import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.UserRepository;
 import com.tick42.quicksilver.security.JwtGenerator;
 import com.tick42.quicksilver.services.base.UserService;
-import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,6 +42,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO setState(int id, String state) {
         User user = userRepository.findById(id);
+        if (user == null) {
+            throw new UserNotFoundException("User not found.");
+        }
         switch (state) {
             case "enable":
                 user.setIsActive(true);
@@ -54,8 +53,7 @@ public class UserServiceImpl implements UserService {
                 user.setIsActive(false);
                 break;
             default:
-                //TODO:exception
-                break;
+                throw new InvalidStateException("Invalid state.");
         }
         return new UserDTO(userRepository.update(user));
     }
@@ -69,7 +67,6 @@ public class UserServiceImpl implements UserService {
         }
         switch (state) {
             case "active":
-
                 users = userRepository.findUsersByActiveState(true);
                 break;
             case "blocked":
@@ -93,19 +90,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findById(int id) {
         User user = userRepository.findById(id);
-        if (user != null){
+        if (user != null) {
             return new UserDTO(user);
         }
         throw new UserNotFoundException("User doesn't exist.");
     }
 
     @Override
-    public User login(User user) throws InvalidCredentialsException {
+    public User login(User user) {
         String username = user.getUsername();
         String password = user.getPassword();
         User foundUser = userRepository.findByUsername(username);
         if (foundUser != null && password.equals(foundUser.getPassword())) {
-            return foundUser;
+            if (foundUser.getIsActive()) {
+
+                return foundUser;
+            }
+            throw new UserIsDisabledException("User is disabled.");
         }
         throw new InvalidCredentialsException("Invalid credentials.");
     }
@@ -128,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String generateToken(User user) {
-        if(jwtGenerator.generate(user) != null) {
+        if (jwtGenerator.generate(user) != null) {
             return jwtGenerator.generate(user);
         }
         throw new GenerateTokenException("Couldn't generate authentication token");
