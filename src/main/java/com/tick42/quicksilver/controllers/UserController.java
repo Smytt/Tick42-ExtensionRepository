@@ -5,6 +5,7 @@ import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
+import com.tick42.quicksilver.security.JwtValidator;
 import com.tick42.quicksilver.security.models.JwtUser;
 import com.tick42.quicksilver.services.base.UserService;
 import org.apache.http.auth.InvalidCredentialsException;
@@ -14,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
@@ -23,9 +25,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private JwtValidator validator;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtValidator validator) {
         this.userService = userService;
+        this.validator = validator;
     }
 
     @PostMapping(value = "/users/login")
@@ -42,8 +46,17 @@ public class UserController {
     }
 
     @GetMapping(value = "/users/{id}")
-    public UserDTO profile(@PathVariable(name = "id") int id) {
-        return userService.findById(id);
+    public UserDTO profile(@PathVariable(name = "id") int id, HttpServletRequest request) {
+        User loggedUser = null;
+        if(request.getHeader("Authorization") != null) {
+            try {
+                loggedUser = validator.validate(request.getHeader("Authorization").substring(6));
+            }
+            catch (Exception e) {
+                loggedUser = null;
+            }
+        }
+        return userService.findById(id, loggedUser);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -98,6 +111,14 @@ public class UserController {
     ResponseEntity handleDisabledUserException(DisabledUserException e){
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
+
+    @ExceptionHandler
+    ResponseEntity handleUserProfileUnavailableException(UserProfileUnavailableException e){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(e.getMessage());
     }
 

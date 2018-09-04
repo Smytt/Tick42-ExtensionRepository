@@ -79,11 +79,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findById(int id) {
+    public UserDTO findById(int id, User loggedUser) {
         User user = userRepository.findById(id);
         if (user == null) {
             throw new UserNotFoundException("User doesn't exist.");
         }
+
+        if (!user.getIsActive() && !user.getRole().equals("ROLE_ADMIN")) {
+            throw new UserProfileUnavailableException("User profile is disabled.");
+        }
+
         return new UserDTO(user);
     }
 

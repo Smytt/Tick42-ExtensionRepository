@@ -1,8 +1,8 @@
 package com.tick42.quicksilver.exceptions;
 
-public class ExtensionUnavailableException extends RuntimeException {
+public class UserProfileUnavailableException extends RuntimeException {
 
-    public ExtensionUnavailableException(String exception) {
+    public UserProfileUnavailableException(String exception) {
         super(exception);
     }
 }

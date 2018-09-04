@@ -14,7 +14,7 @@ public interface UserService {
 
     List<UserDTO> findAll(String state);
 
-    UserDTO findById(int id);
+    UserDTO findById(int id, User loggedUser);
 
     User login(User user) throws InvalidCredentialsException;
 
