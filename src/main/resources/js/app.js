@@ -204,11 +204,11 @@ let app = (() => {
         ).catch(e =>{
             $('.errors').empty();
             if(e['responseJSON'] != null){
-            e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
-            console.log(e['responseJSON'])
+                e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
+                console.log(e['responseJSON'])
             }else{
-            console.log(e['responseText'])
-            $('.errors').append('<p>'+ e['responseText'] +'</p>');
+                $('.errors').append('<p>'+ e['responseText'] +'</p>');
+                console.log(e['responseText'])
             }
 
         })

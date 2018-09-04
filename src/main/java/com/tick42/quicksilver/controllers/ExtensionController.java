@@ -45,16 +45,8 @@ public class ExtensionController {
 
     @GetMapping(value = "/{id}")
     public ExtensionDTO get(@PathVariable(name = "id") int id, HttpServletRequest request) {
-        User user = null;
-        if(request.getHeader("Authorization") != null) {
-            try {
-                user = validator.validate(request.getHeader("Authorization").substring(6));
-            }
-            catch (Exception e) {
-                user = null;
-            }
-        }
-        return extensionService.findById(id, user);
+        int userId = validator.getUserIdFromToken(request);
+        return extensionService.findById(id, userId);
     }
 
     @PatchMapping(value = "/{id}")
