@@ -5,6 +5,6 @@ import com.tick42.quicksilver.models.Tag;
 
 import java.util.List;
 
-public interface TagRepository extends GenericRepository<Tag> {
+public interface TagRepository {
     Tag findByName(String name);
 }

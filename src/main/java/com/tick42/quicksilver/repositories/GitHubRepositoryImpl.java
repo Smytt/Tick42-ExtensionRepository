@@ -1,7 +1,7 @@
 package com.tick42.quicksilver.repositories;
 
 import com.tick42.quicksilver.models.GitHubModel;
-import com.tick42.quicksilver.repositories.base.GenericRepository;
+import com.tick42.quicksilver.repositories.base.GitHubRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class GitHubRepositoryImpl implements GenericRepository<GitHubModel> {
+public class GitHubRepositoryImpl implements GitHubRepository {
 
     private final SessionFactory sessionFactory;
 
     @Autowired
     public GitHubRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-    }
-
-    @Override
-    public GitHubModel create(GitHubModel model) {
-        return null;
     }
 
     @Override
@@ -38,11 +33,6 @@ public class GitHubRepositoryImpl implements GenericRepository<GitHubModel> {
     }
 
     @Override
-    public void delete(int id) {
-
-    }
-
-    @Override
     public List<GitHubModel> findAll() {
         List<GitHubModel> gitHubModels = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
@@ -55,10 +45,5 @@ public class GitHubRepositoryImpl implements GenericRepository<GitHubModel> {
             System.out.println(e.getMessage());
         }
         return gitHubModels;
-    }
-
-    @Override
-    public GitHubModel findById(int id) {
-        return null;
     }
 }

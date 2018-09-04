@@ -4,9 +4,15 @@ import com.tick42.quicksilver.models.Extension;
 
 import java.util.List;
 
-public interface ExtensionRepository extends GenericRepository<Extension> {
+public interface ExtensionRepository {
 
-    List<Extension> findFeatured();
+    Extension findById(int id);
+
+    Extension create(Extension extension);
+
+    Extension update(Extension extension);
+
+    void delete(int id);
 
     List<Extension> findAll();
 
@@ -19,6 +25,8 @@ public interface ExtensionRepository extends GenericRepository<Extension> {
     List<Extension> findAllByDownloads(String name, Integer page, Integer perPage);
 
     Long getTotalResults(String name);
+
+    List<Extension> findFeatured();
 
     List<Extension> findPending();
 }

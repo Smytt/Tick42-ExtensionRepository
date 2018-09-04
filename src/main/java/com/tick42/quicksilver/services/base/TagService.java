@@ -9,11 +9,9 @@ import java.util.List;
 
 public interface TagService {
 
-    Tag create(Tag model);
-
-    Tag findById(int id);
-
     TagDTO findByName(String name);
+
+    String normalize(String name);
 
     List<Tag> prepareTags(List<Tag> tags);
 

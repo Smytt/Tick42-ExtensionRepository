@@ -3,6 +3,7 @@ package com.tick42.quicksilver.controllers;
 
 import com.tick42.quicksilver.exceptions.InvalidStateException;
 import com.tick42.quicksilver.exceptions.PasswordsMissMatchException;
+import com.tick42.quicksilver.exceptions.UserNotFoundException;
 import com.tick42.quicksilver.exceptions.UsernameExistsException;
 import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.Spec.UserSpec;
@@ -48,7 +49,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PatchMapping(value = "auth/setState/{id}/{newState}")
+    @PatchMapping(value = "/auth/setState/{id}/{newState}")
     public UserDTO setState(@PathVariable("newState") String state,
                          @PathVariable("id") int id) {
        return userService.setState(id, state);
@@ -68,6 +69,13 @@ public class UserController {
     }
 
     @ExceptionHandler
+    ResponseEntity handleUserNotFoundException(UserNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler
     ResponseEntity handleUsernameExistsException(UsernameExistsException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -82,7 +90,7 @@ public class UserController {
     }
 
     @ExceptionHandler
-    ResponseEntity InvalidStateException(PasswordsMissMatchException e){
+    ResponseEntity handleInvalidStateException(InvalidStateException e){
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());
@@ -94,6 +102,10 @@ public class UserController {
     {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(e.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage()).toArray());
+                .body(e.getBindingResult().
+                        getFieldErrors()
+                        .stream()
+                        .map(x -> x.getDefaultMessage())
+                        .toArray());
     }
 }

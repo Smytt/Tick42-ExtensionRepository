@@ -1,9 +1,6 @@
 package com.tick42.quicksilver.services;
 
-import com.tick42.quicksilver.exceptions.GenerateTokenException;
-import com.tick42.quicksilver.exceptions.PasswordsMissMatchException;
-import com.tick42.quicksilver.exceptions.UserNotFoundException;
-import com.tick42.quicksilver.exceptions.UsernameExistsException;
+import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
@@ -46,6 +43,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO setState(int id, String state) {
         User user = userRepository.findById(id);
+
+        if (user == null) {
+            throw new UserNotFoundException("User not found.");
+        }
+
         switch (state) {
             case "enable":
                 user.setIsActive(true);
@@ -54,8 +56,7 @@ public class UserServiceImpl implements UserService {
                 user.setIsActive(false);
                 break;
             default:
-                //TODO:exception
-                break;
+                throw new InvalidStateException("\"" + state + "\" is not a valid user state. Use \"enable\" or \"block\".");
         }
         return new UserDTO(userRepository.update(user));
     }
@@ -70,10 +71,10 @@ public class UserServiceImpl implements UserService {
         switch (state) {
             case "active":
 
-                users = userRepository.findUsersByActiveState(true);
+                users = userRepository.findUsersByState(true);
                 break;
             case "blocked":
-                users = userRepository.findUsersByActiveState(false);
+                users = userRepository.findUsersByState(false);
                 break;
             default:
                 users = userRepository.findAll();
@@ -93,7 +94,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findById(int id) {
         User user = userRepository.findById(id);
-        if (user != null){
+        if (user != null) {
             return new UserDTO(user);
         }
         throw new UserNotFoundException("User doesn't exist.");
@@ -128,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String generateToken(User user) {
-        if(jwtGenerator.generate(user) != null) {
+        if (jwtGenerator.generate(user) != null) {
             return jwtGenerator.generate(user);
         }
         throw new GenerateTokenException("Couldn't generate authentication token");

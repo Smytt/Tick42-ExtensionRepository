@@ -1,16 +1,14 @@
 package com.tick42.quicksilver.repositories;
 
 import com.tick42.quicksilver.models.File;
-import com.tick42.quicksilver.repositories.base.GenericRepository;
+import com.tick42.quicksilver.repositories.base.FileRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public class FileRepositoryImpl implements GenericRepository<File> {
+public class FileRepositoryImpl implements FileRepository {
 
     private final SessionFactory sessionFactory;
 
@@ -29,25 +27,5 @@ public class FileRepositoryImpl implements GenericRepository<File> {
             System.out.println(e.getMessage());
         }
         return file;
-    }
-
-    @Override
-    public File update(File file) {
-        return null;
-    }
-
-    @Override
-    public void delete(int id) {
-
-    }
-
-    @Override
-    public List<File> findAll() {
-        return null;
-    }
-
-    @Override
-    public File findById(int id) {
-        return null;
     }
 }

@@ -3,12 +3,10 @@ package com.tick42.quicksilver.services;
 import com.tick42.quicksilver.config.Scheduler;
 import com.tick42.quicksilver.models.GitHubModel;
 import com.tick42.quicksilver.models.Spec.GitHubSettingSpec;
-import com.tick42.quicksilver.repositories.base.GenericRepository;
+import com.tick42.quicksilver.repositories.base.GitHubRepository;
 import com.tick42.quicksilver.services.base.GitHubService;
 import org.kohsuke.github.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.config.FixedRateTask;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
@@ -22,7 +20,7 @@ import java.util.prefs.Preferences;
 @Service
 public class GitHubServiceImpl implements GitHubService {
 
-    private final GenericRepository<GitHubModel> gitHubRepository;
+    private final GitHubRepository gitHubRepository;
     private final GitHub gitHub;
     private final Scheduler scheduler;
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
@@ -30,7 +28,7 @@ public class GitHubServiceImpl implements GitHubService {
 
 
     @Autowired
-    public GitHubServiceImpl(GenericRepository<GitHubModel> gitHubRepository, Scheduler scheduler, ThreadPoolTaskScheduler threadPoolTaskScheduler) throws IOException {
+    public GitHubServiceImpl(GitHubRepository gitHubRepository, Scheduler scheduler, ThreadPoolTaskScheduler threadPoolTaskScheduler) throws IOException {
         this.gitHubRepository = gitHubRepository;
         this.scheduler = scheduler;
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;

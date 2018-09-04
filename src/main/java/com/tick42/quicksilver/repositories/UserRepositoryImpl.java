@@ -45,18 +45,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void delete(int id) {
-        User user = findById(id);
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.delete(user);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
@@ -103,7 +91,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> findUsersByActiveState(boolean state) {
+    public List<User> findUsersByState(boolean state) {
         List<User> users = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();

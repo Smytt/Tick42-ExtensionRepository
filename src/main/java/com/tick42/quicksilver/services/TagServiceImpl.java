@@ -26,20 +26,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag create(Tag model) {
-        return tagRepository.create(model);
-    }
-
-    @Override
-    public Tag findById(int id) {
-        return tagRepository.findById(id);
-    }
-
-    @Override
     public TagDTO findByName(String name) {
         return new TagDTO(tagRepository.findByName(name));
     }
 
+    @Override
     public String normalize(String name) {
         name = name.trim().replaceAll(" +", "-");
         name = name.toLowerCase();
