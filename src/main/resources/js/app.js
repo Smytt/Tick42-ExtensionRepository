@@ -190,7 +190,6 @@ let app = (() => {
             }
         )
     }
-
     let register = function (e) {
         preventDefault(e);
 
@@ -203,24 +202,39 @@ let app = (() => {
             password,
             repeatPassword
         }
-        remote.register(registrationForm).then(
-            res => {
-                login();
-            }
-        ).catch(e =>{
-            $('.errors').empty();
-            if(e['responseJSON'] != null){
-                e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
-                console.log(e['responseJSON'])
-            }else{
-                $('.errors').append('<p>'+ e['responseText'] +'</p>');
-                console.log(e['responseText'])
-            }
+        if($(this).attr('id') == "register-btn"){
+            remote.register(registrationForm).then(
+                res => {
+                    login();
+                }
+            ).catch(e =>{
+                $('.errors').empty();
+                if(e['responseJSON'] != null){
+                    e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
+                    console.log(e['responseJSON'])
+                }else{
+                    $('.errors').append('<p>'+ e['responseText'] +'</p>');
+                    console.log(e['responseText'])
+                }
+            })
+         }else{
+            remote.registerAdmin(registrationForm).then(
+                res =>{
+                    getHomeView();
+                }
+            ).catch(e =>{
+                $('.errors').empty();
+                if(e['responseJSON'] != null){
+                    e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
+                    console.log(e['responseJSON'])
+                }else{
+                    $('.errors').append('<p>'+ e['responseText'] +'</p>');
+                    console.log(e['responseText'])
+                }
+            })
 
-        })
-
+        }
     }
-
     let login = function (e) {
         preventDefault(e);
 
@@ -497,6 +511,7 @@ let app = (() => {
         $body.on('click', '.tags a', getTagView)
         $body.on('click', '.user-link', getProfileView)
         $body.on('click', '#register-admin', getRegisterAdminView)
+        $body.on('click', '#register-admin-btn', register)
         $body.on('click', '.admin-view .one button', setMultipleUsersState)
         $body.on('click', '.admin-view .one a', getProfileView)
         $body.on('click', '#orderBy button', search)

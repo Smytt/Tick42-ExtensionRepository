@@ -12,6 +12,7 @@ import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,11 @@ public class UserController {
         return userService.register(user);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping(value = "auth/users/adminRegistration")
+    public User registerAdmin(@Valid @RequestBody UserSpec user){
+        return userService.registerAdmin(user);
+    }
     @GetMapping(value = "/users/{id}")
     public UserDTO profile(@PathVariable(name = "id") int id, HttpServletRequest request) {
         User loggedUser = null;

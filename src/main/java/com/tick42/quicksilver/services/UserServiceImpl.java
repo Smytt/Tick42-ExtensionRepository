@@ -131,6 +131,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User registerAdmin(UserSpec userSpec) {
+        User user = userRepository.findByUsername(userSpec.getUsername());
+
+        if (user != null) {
+            throw new UsernameExistsException("Username is already taken.");
+        }
+
+        if (!userSpec.getPassword().equals(userSpec.getRepeatPassword())) {
+            throw new PasswordsMissMatchException("Passwords must match.");
+        }
+
+        user = new User(userSpec, "ROLE_ADMIN");
+        return userRepository.create(user);
+    }
+
+    @Override
     public String generateToken(User user) {
         if (jwtGenerator.generate(user) == null) {
             throw new GenerateTokenException("Couldn't generate authentication token");

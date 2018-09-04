@@ -20,5 +20,7 @@ public interface UserService {
 
     User register(UserSpec userSpec);
 
+    User registerAdmin(UserSpec userSpec);
+
     String generateToken(User user);
 }

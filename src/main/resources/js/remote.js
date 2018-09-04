@@ -95,7 +95,7 @@ remote = (() => {
     let getUserProfile = (id) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/user/" + id,
+            url: base + "/api/users/" + id,
             headers: {
                 "Authorization": localStorage.getItem("Authorization")
             },
@@ -114,9 +114,24 @@ remote = (() => {
     let register = (user) => {
         return $.ajax({
             type: 'POST',
-            url: base + "/api/user/register",
+            url: base + "/api/users/register",
             data: JSON.stringify(user),
-            contentType: 'application/json'
+            contentType: 'application/json',
+            headers: {
+                "Authorization": localStorage.getItem("Authorization")
+            },
+        })
+    }
+
+    let registerAdmin = (user) => {
+        return $.ajax({
+            type: 'POST',
+            url: base + "/api/auth/users/adminRegistration",
+            data: JSON.stringify(user),
+            contentType: 'application/json',
+            headers: {
+                "Authorization": localStorage.getItem("Authorization")
+            },
         })
     }
 
@@ -148,7 +163,7 @@ remote = (() => {
     let setUserState = (id, state) => {
         return $.ajax({
             type: 'PATCH',
-            url: base + '/api/user/setState/' + id + '/' + state,
+            url: base + '/api/users/setState/' + id + '/' + state,
             headers: {
                 'Authorization': localStorage.getItem('Authorization')
             }
@@ -203,6 +218,7 @@ remote = (() => {
         loadFeatured,
         loadPending,
         setUserState,
-        register
+        register,
+        registerAdmin
     }
 })()
