@@ -165,7 +165,10 @@ remote = (() => {
     let getUsers = (state) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/user/get" + "?state=" + state
+            url: base + "/api/user/auth/get" + "?state=" + state,
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            }
         })
     }
 
