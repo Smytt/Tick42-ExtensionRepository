@@ -171,7 +171,7 @@ let app = (() => {
 
         remote.getExtension(extensionId).then(
             show.edit
-        )
+        ).catch
     }
 
     let getUsersView = (e) => {
@@ -204,9 +204,11 @@ let app = (() => {
         ).catch(e =>{
             $('.errors').empty();
             if(e['responseJSON'] != null){
-            e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
+                e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
+                console.log(e['responseJSON'])
             }else{
-            $('.errors').append('<p>'+ e['responseText'] +'</p>');
+                $('.errors').append('<p>'+ e['responseText'] +'</p>');
+                console.log(e['responseText'])
             }
 
         })
@@ -232,8 +234,16 @@ let app = (() => {
                 localStorage.setItem('role', res['role']);
                 getHomeView();
             }
-        ).catch(e=> $('.errors').empty().append('<p>'+ e['responseText'] +'</p>'));
-
+        ).catch(e=>{
+            $('.errors').empty();
+            if(e['responseJSON'] != null){
+            console.log(e['responseJSON'])
+            e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
+            }else{
+            console.log(e['responseText'])
+            $('.errors').append('<p>'+ e['responseText'] +'</p>');
+            }
+        })
         }
 
     let logout = (e) => {
@@ -363,9 +373,18 @@ let app = (() => {
                     else
                         getExtensionView(null, extensionId)
                 }
-            ).catch(e => {$('.errors').empty(); e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
-                                  })
+            ).catch(e => {
+                $('.errors').empty();
+                if(e['responseJSON'] != null){
+                    console.log(e['responseJSON'])
+                    e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
+                }else{
+                    console.log(e['responseText'])
+                    $('.errors').append('<p>'+ e['responseText'] +'</p>');
+            }
+            })
         }
+
         else
             remote.editExtension(extensionId, extension).then(
                 res => {
@@ -398,8 +417,15 @@ let app = (() => {
                         getExtensionView(null, extensionId)
                 }
             ).catch(e => {
-            $('.errors').empty();
-            e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));})
+                $('.errors').empty();
+                if(e['responseJSON'] != null){
+                    console.log(e['responseJSON'])
+                    e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
+                }else{
+                    console.log(e['responseText'])
+                    $('.errors').append('<p>'+ e['responseText'] +'</p>');
+                }
+            })
     }
 
     let getPendingExtensionsView = (e) => {

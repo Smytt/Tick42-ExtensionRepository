@@ -19,7 +19,6 @@ public class JwtValidator {
     private byte[] encodedBytes = Base64.getEncoder().encode(secret.getBytes());
 
     public User validate(String token) {
-
         User jwtUser = null;
         try {
             Claims body = Jwts.parser()

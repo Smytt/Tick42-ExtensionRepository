@@ -45,15 +45,16 @@ public class ExtensionController {
 
     @GetMapping(value = "/{id}")
     public ExtensionDTO get(@PathVariable(name = "id") int id, HttpServletRequest request) {
+
         User user = null;
-        if(request.getHeader("Authorization") != null) {
+        if (request.getHeader("Authorization") != null) {
             try {
                 user = validator.validate(request.getHeader("Authorization").substring(6));
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 user = null;
             }
         }
+
         return extensionService.findById(id, user);
     }
 
@@ -107,8 +108,7 @@ public class ExtensionController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseEntity handleDMSRESTException(MethodArgumentNotValidException e)
-    {
+    public ResponseEntity handleDMSRESTException(MethodArgumentNotValidException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage()).toArray());
