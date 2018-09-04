@@ -13,7 +13,7 @@ public interface ExtensionService {
 
     ExtensionDTO create(ExtensionSpec model, int id);
 
-    ExtensionDTO findById(int id, int UserId);
+    ExtensionDTO findById(int id, User user);
 
     ExtensionDTO update(int extensionId, ExtensionSpec extension, int userId);
 

@@ -59,18 +59,13 @@ public class ExtensionServiceImpl implements ExtensionService {
     }
 
     @Override
-    public ExtensionDTO findById(int id, int userId) {
+    public ExtensionDTO findById(int id, User user) {
         Extension extension = extensionRepository.findById(id);
-        User user = null;
-        if (userId != 0) {
-            user = userRepository.findById(userId);
-        }
-
         if (extension == null) {
             throw new ExtensionNotFoundException("Extension doesn't exist.");
         }
 
-        if (extension.getIsPending() && (user == null || extension.getOwner().getId() != userId || !user.getRole().equals("ROLE_ADMIN"))) {
+        if (extension.getIsPending() && ((user == null) || (extension.getOwner().getId() != user.getId()) && (!user.getRole().equals("ROLE_ADMIN")))) {
             throw new ExtensionUnavailableException("Extension is unavailable.");
         }
         return new ExtensionDTO(extension);
