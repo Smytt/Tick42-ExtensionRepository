@@ -19,7 +19,7 @@ let show = (() => {
              url: './templates/list-users.html',
              success: (tmpl) => {
                  let $html = Mustache.render(tmpl, users);
-                 $('#all-users').html($html);
+                 $('#admin-view-container').html($html);
              }
          })
     }
@@ -28,8 +28,9 @@ let show = (() => {
         $.ajax({
              url: './templates/admin-view.html',
              success: (tmpl) => {
-                 let $html = Mustache.render(tmpl, users);
+                 let $html = Mustache.render(tmpl);
                  $content.html($html);
+                 show.users(users)
              }
          })
     }
@@ -148,6 +149,17 @@ let show = (() => {
         })
     }
 
+    let registerAdminView = () => {
+        $.ajax({
+            url: './templates/register-admin.html',
+            success: (tmpl) => {
+                let $html = Mustache.render(tmpl);
+                $('#admin-view-container').empty();
+                $('#admin-view-container').html($html);
+            }
+        })
+    }
+
     let user = (extensions) => {
         $.ajax({
             url: './templates/profile-view.html',
@@ -235,6 +247,7 @@ let show = (() => {
         login,
         extension,
         register,
+        registerAdminView,
         edit,
         tag,
         state,

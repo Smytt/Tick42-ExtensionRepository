@@ -42,11 +42,11 @@ let app = (() => {
             }
         )
      }
-     let getAdminView = (e) => {
+     function getAdminView(e){
         preventDefault(e);
-        remote.getUsers().then(
+        let state = $(this).attr('id')
+        remote.getUsers(state).then(
             show.adminView
-
         )
      }
 
@@ -123,6 +123,12 @@ let app = (() => {
         )
     }
 
+    function getRegisterAdminView(e){
+        preventDefault(e);
+        $('.admin-buttons button').removeClass('current');
+        $(this).addClass("current");
+        show.registerAdminView();
+    }
     let getProfileView = function (e) {
         preventDefault(e);
 
@@ -471,10 +477,11 @@ let app = (() => {
     let start = () => {
         $body.on('click', '.logo a', getHomeView)
         $body.on('click', '#login', getLoginView)
-        $body.on('click', '#users', getAdminView)
+        $body.on('click', '#admin', getAdminView)
         $body.on('click', '#active', getUsers)
         $body.on('click', '#blocked', getUsers)
         $body.on('click', '#all', getUsers)
+        $body.on('click', '#users', getAdminView)
         $body.on('click', '#logout', logout)
         $body.on('click', '#register', getRegisterView)
         $body.on('click', '#profile', getOwnProfileView)
@@ -489,8 +496,9 @@ let app = (() => {
         $body.on('click', '#login-btn', login)
         $body.on('click', '.tags a', getTagView)
         $body.on('click', '.user-link', getProfileView)
-        $body.on('click', '.list-users .one button', setMultipleUsersState)
-        $body.on('click', '.list-users .one a', getProfileView)
+        $body.on('click', '#register-admin', getRegisterAdminView)
+        $body.on('click', '.admin-view .one button', setMultipleUsersState)
+        $body.on('click', '.admin-view .one a', getProfileView)
         $body.on('click', '#orderBy button', search)
         $body.on('click', '.user-state-controls button', setUserState)
         $body.on('click', '.action-btn #change-published-state', setPublishedState)

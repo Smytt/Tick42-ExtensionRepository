@@ -421,17 +421,17 @@ label button:hover {
     color: #fff ;
 }
 
-.list-users .one {
+.admin-view .one {
     display:  inline-block;
     margin-bottom:  10px;
     margin-right:  20px;
 }
 
-.list-users .one .name {
+.admin-view .one .name {
     width: 160px;
 }
 
-.list-users .one > * {
+.admin-view .one > * {
     display: inline-block;
     height: 70px;
     line-height: 70px;
@@ -440,7 +440,12 @@ label button:hover {
     padding: 0 20px;
 }
 
-.list-users .off:hover > * {
+.admin-view .off:hover > * {
+}
+
+
+.admin-view .admin-view-container h1{
+float:left;
 }
 
 .action-btn.heading-btn {
@@ -457,6 +462,23 @@ label button:hover {
     color: #4a4e4d;
 }
 
+.admin-buttons menu-item{
+    display: inline-block;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    padding: 0 20px;
+    background-color: #3da4ab;
+    /*border-radius: 5px;*/
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 18px;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+.admin-buttons {
+float:right;
+}
 .middle > h1 {
     float: none;
 }
