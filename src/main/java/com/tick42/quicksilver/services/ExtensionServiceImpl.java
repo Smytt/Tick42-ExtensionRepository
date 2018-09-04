@@ -1,9 +1,6 @@
 package com.tick42.quicksilver.services;
 
-import com.tick42.quicksilver.exceptions.ExtensionNotFoundException;
-import com.tick42.quicksilver.exceptions.InvalidParameterException;
-import com.tick42.quicksilver.exceptions.InvalidStateException;
-import com.tick42.quicksilver.exceptions.UserNotFoundException;
+import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.DTO.PageDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
@@ -21,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,25 +44,32 @@ public class ExtensionServiceImpl implements ExtensionService {
     public ExtensionDTO create(ExtensionSpec extensionSpec, int id) {
 
         User user = userRepository.findById(id);
+        if (user == null) {
+            throw new UserNotFoundException("User not found.");
+        }
+
         Extension extension = new Extension(extensionSpec);
         extension.setIsPending(true);
         extension.setOwner(user);
         extension.setUploadDate(new Date());
         extension.setTags(tagService.generateTags(extensionSpec.getTags()));
-
         extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
 
         return new ExtensionDTO(extensionRepository.create(extension));
     }
 
     @Override
-    public ExtensionDTO findById(int id) {
+    public ExtensionDTO findById(int id, User user) {
         Extension extension = extensionRepository.findById(id);
-        if (extension != null) {
-            ExtensionDTO extensionDTO = new ExtensionDTO(extension);
-            return extensionDTO;
+        if (extension == null) {
+            throw new ExtensionNotFoundException("Extension doesn't exist.");
         }
-        throw new ExtensionNotFoundException("Extension doesn't exist.");
+
+        if (extension.getIsPending() == true && (user == null || !user.getRole().equals("ROLE_ADMIN"))) {
+            throw new ExtensionUnavailableException("Extension is unavailable.");
+        }
+
+        return new ExtensionDTO(extension);
     }
 
     @Override
@@ -75,9 +80,9 @@ public class ExtensionServiceImpl implements ExtensionService {
             throw new ExtensionNotFoundException("Extension not found.");
         }
 
-        String role = userRepository.findById(userId).getRole();
-        if (userId == extension.getOwner().getId() || role.equals("ROLE_ADMIN")) {
-            extensionRepository.update(extension);
+        User user = userRepository.findById(userId);
+        if (user == null) {
+            throw new ExtensionNotFoundException("User not found.");
         }
 
         extension.setName(extensionSpec.getName());
@@ -86,15 +91,27 @@ public class ExtensionServiceImpl implements ExtensionService {
         extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
         extension.setTags(tagService.generateTags(extensionSpec.getTags()));
 
+        if (user.getId() == extension.getOwner().getId() || user.getRole().equals("ROLE_ADMIN")) {
+            extensionRepository.update(extension);
+        }
+
         return new ExtensionDTO(extension);
     }
 
     @Override
-    public void delete(int id, int userId) {
-        Extension extension = extensionRepository.findById(id);
-        String role = userRepository.findById(userId).getRole();
-        if (userId == extension.getOwner().getId() || role.equals("ROLE_ADMIN")) {
-            extensionRepository.delete(id);
+    public void delete(int extensionsId, int userId) {
+        Extension extension = extensionRepository.findById(extensionsId);
+        if (extension == null) {
+            throw new ExtensionNotFoundException("Extension not found.");
+        }
+
+        User user = userRepository.findById(userId);
+        if (user == null) {
+            throw new ExtensionNotFoundException("User not found.");
+        }
+
+        if (user.getId() == extension.getOwner().getId() || user.getRole().equals("ROLE_ADMIN")) {
+            extensionRepository.delete(extensionsId);
         }
     }
 
@@ -167,6 +184,7 @@ public class ExtensionServiceImpl implements ExtensionService {
         if (extension == null) {
             throw new ExtensionNotFoundException("Extension not found.");
         }
+
         switch (state) {
             case "publish":
                 extension.setIsPending(false);
@@ -177,7 +195,9 @@ public class ExtensionServiceImpl implements ExtensionService {
             default:
                 throw new InvalidStateException("\"" + state + "\" is not a valid extension state. Use \"publish\" or \"unpublish\".");
         }
-        return new ExtensionDTO(extensionRepository.update(extension));
+
+        extensionRepository.update(extension);
+        return new ExtensionDTO(extension);
     }
 
     @Override
@@ -186,6 +206,7 @@ public class ExtensionServiceImpl implements ExtensionService {
         if (extension == null) {
             throw new ExtensionNotFoundException("Extension not found.");
         }
+
         switch (state) {
             case "feature":
                 extension.setIsFeatured(true);
@@ -196,6 +217,7 @@ public class ExtensionServiceImpl implements ExtensionService {
             default:
                 throw new InvalidStateException("\"" + state + "\" is not a valid featured state. Use \"feature\" or \"unfeature\".");
         }
+
         extensionRepository.update(extension);
         return new ExtensionDTO(extension);
     }
@@ -205,7 +227,8 @@ public class ExtensionServiceImpl implements ExtensionService {
         return generateExtensionDTOList(extensionRepository.findPending());
     }
 
-    private List<ExtensionDTO> generateExtensionDTOList(List<Extension> extensions) {
+    @Override
+    public List<ExtensionDTO> generateExtensionDTOList(List<Extension> extensions) {
         List<ExtensionDTO> extensionsDTO = extensions
                 .stream()
                 .map(ExtensionDTO::new)

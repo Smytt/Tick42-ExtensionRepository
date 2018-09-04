@@ -1,12 +1,10 @@
 package com.tick42.quicksilver.controllers;
 
-import com.tick42.quicksilver.exceptions.ExtensionNotFoundException;
-import com.tick42.quicksilver.exceptions.ExtensionUnavailableException;
-import com.tick42.quicksilver.exceptions.InvalidParameterException;
-import com.tick42.quicksilver.exceptions.InvalidStateException;
+import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.DTO.PageDTO;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
+import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.security.JwtValidator;
 import com.tick42.quicksilver.services.base.ExtensionService;
 
@@ -42,18 +40,25 @@ public class ExtensionController {
     @PostMapping
     public ExtensionDTO create(@Valid @RequestBody ExtensionSpec extension, HttpServletRequest request) {
         int id = validator.getUserIdFromToken(request);
-        System.out.println(id);
         return extensionService.create(extension, id);
     }
 
     @GetMapping(value = "/{id}")
-    public ExtensionDTO get(@PathVariable(name = "id") int id) {
-        return extensionService.findById(id);
+    public ExtensionDTO get(@PathVariable(name = "id") int id, HttpServletRequest request) {
+        User user = null;
+        if(request.getHeader("Authorization") != null) {
+            try {
+                user = validator.validate(request.getHeader("Authorization").substring(6));
+            }
+            catch (Exception e) {
+                user = null;
+            }
+        }
+        return extensionService.findById(id, user);
     }
 
     @PatchMapping(value = "/{id}")
     public ExtensionDTO update(@PathVariable int id, @RequestBody ExtensionSpec extension, HttpServletRequest request) {
-        System.out.println("in");
         int userId = validator.getUserIdFromToken(request);
         return extensionService.update(id, extension, userId);
     }
@@ -126,6 +131,14 @@ public class ExtensionController {
 
     @ExceptionHandler
     ResponseEntity handleInvalidParameterException(InvalidParameterException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler
+    ResponseEntity handleGitHubRepositoryException(GitHubRepositoryException e) {
+        e.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());
