@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +37,8 @@ public class FileController {
         this.validator = validator;
     }
 
-    @PostMapping("upload/file/{id}")
+    @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
+    @PostMapping("/auth/upload/file/{id}")
     @ResponseBody
     public File uploadFile(@RequestParam("file") MultipartFile receivedFile, @PathVariable(name = "id") int extensionId, HttpServletRequest request) {
 
@@ -44,7 +46,8 @@ public class FileController {
         return fileService.storeFile(receivedFile, extensionId, userId);
     }
 
-    @PostMapping("upload/image/{id}")
+    @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
+    @PostMapping("/auth/upload/image/{id}")
     public File uploadImage(@RequestParam("image") MultipartFile receivedImage, @PathVariable(name = "id") int extensionId, HttpServletRequest request) {
         int userId = validator.getUserIdFromToken(request);
         return fileService.storeImage(receivedImage, extensionId, userId);

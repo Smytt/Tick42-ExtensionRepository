@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
@@ -28,7 +28,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/login")
+    @PostMapping(value = "/users/login")
     @ResponseBody
     public JwtUser login(@RequestBody User user, HttpServletResponse response) throws InvalidCredentialsException {
         User loggedUser = userService.login(user);
@@ -36,25 +36,25 @@ public class UserController {
         return new JwtUser(loggedUser, token);
     }
 
-    @PostMapping(value = "/register")
+    @PostMapping(value = "/users/register")
     public User register(@Valid @RequestBody UserSpec user) {
         return userService.register(user);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/users/{id}")
     public UserDTO profile(@PathVariable(name = "id") int id) {
         return userService.findById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PatchMapping(value = "/auth/setState/{id}/{newState}")
+    @PatchMapping(value = "/auth/users/setState/{id}/{newState}")
     public UserDTO setState(@PathVariable("newState") String state,
                          @PathVariable("id") int id) {
        return userService.setState(id, state);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(value = "/auth/get")
+    @GetMapping(value = "/auth/users/all")
     public List<UserDTO> listAllUsers(@RequestParam(name = "state", required = false) String state) {
         return userService.findAll(state);
     }
