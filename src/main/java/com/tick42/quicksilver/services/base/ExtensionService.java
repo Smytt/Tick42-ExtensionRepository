@@ -3,7 +3,9 @@ package com.tick42.quicksilver.services.base;
 
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.DTO.PageDTO;
+import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
+import com.tick42.quicksilver.models.User;
 
 import java.util.List;
 
@@ -11,7 +13,7 @@ public interface ExtensionService {
 
     ExtensionDTO create(ExtensionSpec model, int id);
 
-    ExtensionDTO findById(int id);
+    ExtensionDTO findById(int id, User user);
 
     ExtensionDTO update(int extensionId, ExtensionSpec extension, int userId);
 
@@ -26,4 +28,6 @@ public interface ExtensionService {
     ExtensionDTO setFeaturedState(int id, String newState);
 
     List<ExtensionDTO> findPending();
+
+    List<ExtensionDTO> generateExtensionDTOList(List<Extension> extensions);
 }

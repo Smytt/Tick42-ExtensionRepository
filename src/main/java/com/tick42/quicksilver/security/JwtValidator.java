@@ -34,6 +34,8 @@ public class JwtValidator {
             jwtUser.setRole((String) body.get("role"));
         } catch (ExpiredJwtException e) {
             throw e;
+        } catch (Exception e) {
+            System.out.println(e);
         }
 
         return jwtUser;

@@ -45,7 +45,7 @@ public class GitHubServiceImpl implements GitHubService {
                 repo = gitHub.getRepository(gitHubModel.getUser() + "/" + gitHubModel.getRepo());
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                throw new GitHubRepositoryException("Couldn't connect to " + gitHubModel.getUser() + "/" + gitHubModel.getRepo());
+                throw new GitHubRepositoryException("Couldn't connect to " + gitHubModel.getUser() + "/" + gitHubModel.getRepo() + ". Check URL.");
             }
             int pulls = repo.getPullRequests(GHIssueState.OPEN).size();
             int issues = repo.getIssues(GHIssueState.OPEN).size() - pulls;
@@ -59,6 +59,7 @@ public class GitHubServiceImpl implements GitHubService {
             gitHubModel.setLastCommit(lastCommit);
         } catch (IOException e) {
             e.printStackTrace();
+            throw new GitHubRepositoryException("A problem occurred while fetching GitHub data for " + gitHubModel.getUser() + "/" + gitHubModel.getRepo());
         }
     }
 
@@ -76,7 +77,7 @@ public class GitHubServiceImpl implements GitHubService {
     public void updateExtensionDetails() {
         List<GitHubModel> gitHubModels = gitHubRepository.findAll();
         gitHubModels.forEach(gitHub -> {
-            System.out.println("updating... " + gitHub.getId());
+            System.out.println("updating... " + gitHub.getRepo());
             setRemoteDetails(gitHub);
             gitHubRepository.update(gitHub);
         });
