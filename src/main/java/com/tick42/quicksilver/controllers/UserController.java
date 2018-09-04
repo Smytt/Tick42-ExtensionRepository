@@ -32,7 +32,7 @@ public class UserController {
 
     @PostMapping(value = "/login")
     @ResponseBody
-    public JwtUser generateTokenOnLogin(@RequestBody User user, HttpServletResponse response) throws InvalidCredentialsException {
+    public JwtUser login(@RequestBody User user, HttpServletResponse response) throws InvalidCredentialsException {
         User loggedUser = userService.login(user);
         String token = "Token " + userService.generateToken(loggedUser);
         return new JwtUser(loggedUser, token);
