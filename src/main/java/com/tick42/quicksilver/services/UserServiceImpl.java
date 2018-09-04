@@ -94,10 +94,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findById(int id) {
         User user = userRepository.findById(id);
-        if (user != null) {
-            return new UserDTO(user);
+        if (user == null) {
+            throw new UserNotFoundException("User doesn't exist.");
         }
-        throw new UserNotFoundException("User doesn't exist.");
+        return new UserDTO(user);
     }
 
     @Override
@@ -105,14 +105,13 @@ public class UserServiceImpl implements UserService {
         String username = user.getUsername();
         String password = user.getPassword();
         User foundUser = userRepository.findByUsername(username);
-        if (foundUser != null && password.equals(foundUser.getPassword())) {
-            if (foundUser.getIsActive()) {
-
-                return foundUser;
-            }
+        if (foundUser == null && !password.equals(foundUser.getPassword())) {
+            throw new InvalidCredentialsException("Invalid credentials.");
+        }
+        if (!foundUser.getIsActive()) {
             throw new UserIsDisabledException("User is disabled.");
         }
-        throw new InvalidCredentialsException("Invalid credentials.");
+        return foundUser;
     }
 
     @Override
