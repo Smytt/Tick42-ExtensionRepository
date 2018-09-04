@@ -163,7 +163,7 @@ remote = (() => {
     let setUserState = (id, state) => {
         return $.ajax({
             type: 'PATCH',
-            url: base + '/api/users/setState/' + id + '/' + state,
+            url: base + '/api/auth/users/setState/' + id + '/' + state,
             headers: {
                 'Authorization': localStorage.getItem('Authorization')
             }
@@ -173,7 +173,10 @@ remote = (() => {
     let getExtension = (id) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extensions/" + id
+            url: base + "/api/extensions/" + id,
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            }
         })
     }
 
@@ -192,7 +195,10 @@ remote = (() => {
     let loadPending = () => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extensions/unpublished"
+            url: base + "/api/auth/extensions/unpublished",
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            }
         })
     }
 

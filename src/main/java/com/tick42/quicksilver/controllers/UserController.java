@@ -5,6 +5,7 @@ import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
+import com.tick42.quicksilver.security.Exceptions.JwtTokenIsMissingException;
 import com.tick42.quicksilver.security.JwtValidator;
 import com.tick42.quicksilver.security.models.JwtUser;
 import com.tick42.quicksilver.services.base.UserService;
@@ -85,6 +86,12 @@ public class UserController {
                 .body(e.getMessage());
     }
 
+    @ExceptionHandler
+    ResponseEntity handleJwtTokenIsMissingException(JwtTokenIsMissingException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
     @ExceptionHandler
     ResponseEntity handleUserNotFoundException(UserNotFoundException e) {
         return ResponseEntity
