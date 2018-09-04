@@ -14,12 +14,14 @@ let show = (() => {
         })
     }
 
-    let users = (users) => {
+    let users = (users, buttonId) => {
         $.ajax({
              url: './templates/list-users.html',
              success: (tmpl) => {
-                 let $html = Mustache.render(tmpl, users);
-                 $('#admin-view-container').html($html);
+                let $html = Mustache.render(tmpl, users);
+                $('#admin-view-container').html($html);
+                $('.action-btn button').removeClass('current');
+                $('.action-btn #' + buttonId).addClass('current');
              }
          })
     }
@@ -30,7 +32,7 @@ let show = (() => {
              success: (tmpl) => {
                  let $html = Mustache.render(tmpl);
                  $content.html($html);
-                 show.users(users)
+                 show.users(users, "all")
              }
          })
     }
@@ -160,6 +162,17 @@ let show = (() => {
         })
     }
 
+    let gitHubSettingsView = () => {
+        $.ajax({
+            url: './templates/github-settings.html',
+            success: (tmpl) => {
+                let $html = Mustache.render(tmpl);
+                $('#admin-view-container').empty();
+                $('#admin-view-container').html($html);
+            }
+        })
+    }
+
     let user = (extensions) => {
         $.ajax({
             url: './templates/profile-view.html',
@@ -248,6 +261,7 @@ let show = (() => {
         extension,
         register,
         registerAdminView,
+        gitHubSettingsView,
         edit,
         tag,
         state,

@@ -90,7 +90,7 @@ public class ExtensionServiceImpl implements ExtensionService {
         extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
         extension.setTags(tagService.generateTags(extensionSpec.getTags()));
 
-        if (user.getId() != extension.getOwner().getId() && user.getRole().equals("ROLE_ADMIN")) {
+        if (user.getId() != extension.getOwner().getId() && !user.getRole().equals("ROLE_ADMIN")) {
             throw new UnauthorizedExtensionModificationException("You are not authorized to edit this extension.");
         }
 

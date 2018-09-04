@@ -9,53 +9,53 @@ remote = (() => {
     let getTag = (tagName) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/tag/" + tagName,
+            url: base + '/api/tag/' + tagName,
         })
     }
 
     let loadByUploadDate = (name, page, perPage) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extensions/filter" + "?name=" + name + "&orderBy=date" + "&page=" + page + "&perPage=" + perPage
+            url: base + '/api/extensions/filter' + '?name=' + name + '&orderBy=date' + '&page=' + page + '&perPage=' + perPage
         })
     }
 
     let loadByName = (name, page, perPage) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extensions/filter" + "?name=" + name + "&orderBy=name" + "&page=" + page + "&perPage=" + perPage
+            url: base + '/api/extensions/filter' + '?name=' + name + '&orderBy=name' + '&page=' + page + '&perPage=' + perPage
         })
     }
 
     let loadByTimesDownloaded = (name, page, perPage) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extensions/filter" + "?name=" + name + "&orderBy=downloads" + "&page=" + page + "&perPage=" + perPage
+            url: base + '/api/extensions/filter' + '?name=' + name + '&orderBy=downloads' + '&page=' + page + '&perPage=' + perPage
         })
     }
 
     let loadByLatestCommit = (name, page, perPage) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extensions/filter" + "?name=" + name + "&orderBy=commits" + "&page=" + page + "&perPage=" + perPage
+            url: base + '/api/extensions/filter' + '?name=' + name + '&orderBy=commits' + '&page=' + page + '&perPage=' + perPage
         })
     }
 
     let loadFeatured = () => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extensions/featured"
+            url: base + '/api/extensions/featured'
         })
     }
 
     let submitExtension = (extension) => {
         return $.ajax({
             type: 'POST',
-            url: base + "/api/extensions",
+            url: base + '/api/auth/extensions',
             data: JSON.stringify(extension),
             contentType: 'application/json',
             headers: {
-                "Authorization": localStorage.getItem("Authorization")
+                'Authorization': localStorage.getItem('Authorization')
             },
         })
     }
@@ -63,7 +63,7 @@ remote = (() => {
     let submitFile = (id, file) => {
         return $.ajax({
             type: 'POST',
-            url: base + "/api/upload/file/" + id,
+            url: base + '/api/upload/file/' + id,
             data: file,
             contentType: false,
             processData: false
@@ -73,7 +73,7 @@ remote = (() => {
     let submitImage = (id, image) => {
         return $.ajax({
             type: 'POST',
-            url: base + "/api/upload/image/" + id,
+            url: base + '/api/upload/image/' + id,
             data: image,
             contentType: false,
             processData: false
@@ -83,11 +83,11 @@ remote = (() => {
     let editExtension = (id, extension) => {
         return $.ajax({
             type: 'PATCH',
-            url: base + "/api/extensions/" + id,
+            url: base + '/api/auth/extensions/' + id,
             data: JSON.stringify(extension),
             contentType: 'application/json',
             headers: {
-                "Authorization": localStorage.getItem("Authorization")
+                'Authorization': localStorage.getItem('Authorization')
             },
         })
     }
@@ -95,9 +95,9 @@ remote = (() => {
     let getUserProfile = (id) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/users/" + id,
+            url: base + '/api/users/' + id,
             headers: {
-                "Authorization": localStorage.getItem("Authorization")
+                'Authorization': localStorage.getItem('Authorization')
             },
         })
     }
@@ -105,7 +105,7 @@ remote = (() => {
     let login = (user) => {
         return $.ajax({
             type: 'POST',
-            url: base + "/api/users/login",
+            url: base + '/api/users/login',
             data: JSON.stringify(user),
             contentType: 'application/json'
         })
@@ -114,11 +114,11 @@ remote = (() => {
     let register = (user) => {
         return $.ajax({
             type: 'POST',
-            url: base + "/api/users/register",
+            url: base + '/api/users/register',
             data: JSON.stringify(user),
             contentType: 'application/json',
             headers: {
-                "Authorization": localStorage.getItem("Authorization")
+                'Authorization': localStorage.getItem('Authorization')
             },
         })
     }
@@ -126,11 +126,11 @@ remote = (() => {
     let registerAdmin = (user) => {
         return $.ajax({
             type: 'POST',
-            url: base + "/api/auth/users/adminRegistration",
+            url: base + '/api/auth/users/adminRegistration',
             data: JSON.stringify(user),
             contentType: 'application/json',
             headers: {
-                "Authorization": localStorage.getItem("Authorization")
+                'Authorization': localStorage.getItem('Authorization')
             },
         })
     }
@@ -138,21 +138,27 @@ remote = (() => {
     let setPublishedState = (id, state) => {
         return $.ajax({
             type: 'PATCH',
-            url: base + '/api/extensions/' + id + '/status/' + state
+            url: base + '/api/auth/extensions/' + id + '/status/' + state,
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            },
         })
     }
 
     let setFeaturedState = (id, state) => {
         return $.ajax({
             type: 'PATCH',
-            url: base + '/api/extensions/' + id + '/featured/' + state
+            url: base + '/api/auth/extensions/' + id + '/featured/' + state,
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            },
         })
     }
 
     let deleteExtension = (id) => {
         return $.ajax({
             type: 'DELETE',
-            url: base + '/api/extensions/' + id,
+            url: base + '/api/auth/extensions/' + id,
             headers: {
                 'Authorization': localStorage.getItem('Authorization')
             },
@@ -173,35 +179,52 @@ remote = (() => {
     let getExtension = (id) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/extensions/" + id,
+            url: base + '/api/extensions/' + id,
             headers: {
                 'Authorization': localStorage.getItem('Authorization')
             }
         })
     }
 
+    let setGitHubSettings = (gitHubSettings) => {
+        return $.ajax({
+            type: 'POST',
+            url: base + '/api/auth/github',
+            data: JSON.stringify(gitHubSettings),
+            contentType: 'application/json',
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            },
+        })
+    }
+    let refreshGitHub = (id) => {
+        return $.ajax({
+            type: 'PATCH',
+            url: base + 'api/auth/extensions/' + id + '/github',
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            }
+        })
+    }
     let getUsers = (state) => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/auth/users/all" + "?state=" + state,
+            url: base + '/api/auth/users/all' + '?state=' + state,
             headers: {
                 'Authorization': localStorage.getItem('Authorization')
             }
         })
     }
-
-
 
     let loadPending = () => {
         return $.ajax({
             type: 'GET',
-            url: base + "/api/auth/extensions/unpublished",
+            url: base + '/api/auth/extensions/unpublished',
             headers: {
                 'Authorization': localStorage.getItem('Authorization')
             }
         })
     }
-
 
     return {
         isAuth,
@@ -215,6 +238,8 @@ remote = (() => {
         submitImage,
         editExtension,
         getUserProfile,
+        setGitHubSettings,
+        refreshGitHub,
         login,
         getUsers,
         getExtension,

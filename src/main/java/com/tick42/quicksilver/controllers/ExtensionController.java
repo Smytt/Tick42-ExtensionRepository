@@ -74,7 +74,7 @@ public class ExtensionController {
 
     @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
     @PatchMapping("/auth/extensions/{id}")
-    public ExtensionDTO update(@PathVariable int id, @RequestBody ExtensionSpec extension, HttpServletRequest request) {
+    public ExtensionDTO update(@Valid @PathVariable int id, @RequestBody ExtensionSpec extension, HttpServletRequest request) {
         int userId = validator.getUserIdFromToken(request);
         return extensionService.update(id, extension, userId);
     }
