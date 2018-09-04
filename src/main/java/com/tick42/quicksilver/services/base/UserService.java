@@ -18,9 +18,7 @@ public interface UserService {
 
     User login(User user) throws InvalidCredentialsException;
 
-    User register(UserSpec userSpec);
-
-    User registerAdmin(UserSpec userSpec);
+    User register(UserSpec userSpec, String role);
 
     String generateToken(User user);
 }

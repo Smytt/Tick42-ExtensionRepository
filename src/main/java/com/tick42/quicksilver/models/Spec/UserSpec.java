@@ -14,7 +14,7 @@ public class UserSpec {
     private String password;
 
     @NotNull
-    @Size(min=7, message="password should be be between 7 and 22 char.")
+    @Size(min=7, message="password should be be between 11 and 22 char.")
     private String repeatPassword;
 
     public UserSpec() {

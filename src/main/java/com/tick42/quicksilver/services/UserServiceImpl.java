@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(UserSpec userSpec) {
+    public User register(UserSpec userSpec, String role) {
         User user = userRepository.findByUsername(userSpec.getUsername());
 
         if (user != null) {
@@ -126,26 +126,9 @@ public class UserServiceImpl implements UserService {
             throw new PasswordsMissMatchException("Passwords must match.");
         }
 
-        user = new User(userSpec, "ROLE_USER");
+        user = new User(userSpec, role);
         return userRepository.create(user);
     }
-
-    @Override
-    public User registerAdmin(UserSpec userSpec) {
-        User user = userRepository.findByUsername(userSpec.getUsername());
-
-        if (user != null) {
-            throw new UsernameExistsException("Username is already taken.");
-        }
-
-        if (!userSpec.getPassword().equals(userSpec.getRepeatPassword())) {
-            throw new PasswordsMissMatchException("Passwords must match.");
-        }
-
-        user = new User(userSpec, "ROLE_ADMIN");
-        return userRepository.create(user);
-    }
-
     @Override
     public String generateToken(User user) {
         if (jwtGenerator.generate(user) == null) {

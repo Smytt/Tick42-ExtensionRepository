@@ -43,13 +43,13 @@ public class UserController {
 
     @PostMapping(value = "/users/register")
     public User register(@Valid @RequestBody UserSpec user) {
-        return userService.register(user);
+        return userService.register(user,"ROLE_USER");
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = "auth/users/adminRegistration")
     public User registerAdmin(@Valid @RequestBody UserSpec user){
-        return userService.registerAdmin(user);
+        return userService.register(user, "ROLE_ADMIN");
     }
     @GetMapping(value = "/users/{id}")
     public UserDTO profile(@PathVariable(name = "id") int id, HttpServletRequest request) {
