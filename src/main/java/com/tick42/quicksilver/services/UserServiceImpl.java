@@ -2,7 +2,7 @@ package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.UserDTO;
-import com.tick42.quicksilver.models.Spec.UserRegistrationSpec;
+import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.UserRepository;
 import com.tick42.quicksilver.security.JwtGenerator;
@@ -28,16 +28,6 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.jwtGenerator = jwtGenerator;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @Override
-    public User create(User user) {
-        return userRepository.create(user);
-    }
-
-    @Override
-    public void update(User user) {
-        userRepository.update(user);
     }
 
     @Override
@@ -68,17 +58,19 @@ public class UserServiceImpl implements UserService {
         if (state == null) {
             state = "";
         }
+
         switch (state) {
             case "active":
-
                 users = userRepository.findUsersByState(true);
                 break;
             case "blocked":
                 users = userRepository.findUsersByState(false);
                 break;
             default:
+                //todo should not return all, but is already set in the JS part. fcuk.
                 users = userRepository.findAll();
         }
+
         List<UserDTO> usersDto = users
                 .stream()
                 .map(UserDTO::new)
@@ -87,55 +79,59 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    @Override
     public UserDTO findById(int id) {
         User user = userRepository.findById(id);
-        if (user != null) {
-            return new UserDTO(user);
+        if (user == null) {
+            throw new UserNotFoundException("User doesn't exist.");
         }
-        throw new UserNotFoundException("User doesn't exist.");
+
+        return new UserDTO(user);
     }
 
     @Override
     public User login(User user) throws InvalidCredentialsException {
         String username = user.getUsername();
         String password = user.getPassword();
-        User foundUser = userRepository.findByUsername(username);
-        if (foundUser != null && password.equals(foundUser.getPassword())) {
-            if (foundUser.getIsActive()) {
 
-                return foundUser;
-            }
-            throw new UserIsDisabledException("User is disabled.");
+        User foundUser = userRepository.findByUsername(username);
+
+        if (foundUser == null) {
+            throw new InvalidCredentialsException("Invalid credentials.");
         }
-        throw new InvalidCredentialsException("Invalid credentials.");
+
+        if (!password.equals(foundUser.getPassword())) {
+            throw new InvalidCredentialsException("Invalid credentials.");
+        }
+
+        if (!foundUser.getIsActive()) {
+            throw new DisabledUserException("User is disabled.");
+        }
+
+        return foundUser;
     }
 
     @Override
-    public User register(UserRegistrationSpec userRegistrationSpec) {
-        User registeredUser = userRepository.findByUsername(userRegistrationSpec.getUsername());
-        if (userRegistrationSpec.getPassword().equals(userRegistrationSpec.getRepeatPassword())) {
-            if (registeredUser == null) {
-                String username = userRegistrationSpec.getUsername();
-                String password = userRegistrationSpec.getPassword();
-                String role = "USER";
-                User user = new User(username, password, role);
-                return userRepository.create(user);
-            }
+    public User register(UserSpec userSpec) {
+        User user = userRepository.findByUsername(userSpec.getUsername());
+
+        if (user != null) {
             throw new UsernameExistsException("Username is already taken.");
         }
-        throw new PasswordsMissMatchException("Passwords must match");
+
+        if (!userSpec.getPassword().equals(userSpec.getRepeatPassword())) {
+            throw new PasswordsMissMatchException("Passwords must match.");
+        }
+
+        user = new User(userSpec, "ROLE_USER");
+        return userRepository.create(user);
     }
 
     @Override
     public String generateToken(User user) {
-        if (jwtGenerator.generate(user) != null) {
-            return jwtGenerator.generate(user);
+        if (jwtGenerator.generate(user) == null) {
+            throw new GenerateTokenException("Couldn't generate authentication token");
         }
-        throw new GenerateTokenException("Couldn't generate authentication token");
+
+        return jwtGenerator.generate(user);
     }
 }

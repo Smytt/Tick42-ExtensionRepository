@@ -65,7 +65,8 @@ public class ExtensionServiceImpl implements ExtensionService {
             throw new ExtensionNotFoundException("Extension doesn't exist.");
         }
 
-        if (extension.getIsPending() == true && (user == null || !user.getRole().equals("ROLE_ADMIN"))) {
+        if (extension.getIsPending() &&
+                (user == null || !user.getRole().equals("ROLE_ADMIN")) || extension.getOwner().getId() != user.getId()) {
             throw new ExtensionUnavailableException("Extension is unavailable.");
         }
 
@@ -91,10 +92,11 @@ public class ExtensionServiceImpl implements ExtensionService {
         extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
         extension.setTags(tagService.generateTags(extensionSpec.getTags()));
 
-        if (user.getId() == extension.getOwner().getId() || user.getRole().equals("ROLE_ADMIN")) {
-            extensionRepository.update(extension);
+        if (user.getId() != extension.getOwner().getId() && user.getRole().equals("ROLE_ADMIN")) {
+            throw new UnauthorizedExtensionModificationException("You are not authorized to edit this extension.");
         }
 
+        extensionRepository.update(extension);
         return new ExtensionDTO(extension);
     }
 
@@ -110,9 +112,11 @@ public class ExtensionServiceImpl implements ExtensionService {
             throw new ExtensionNotFoundException("User not found.");
         }
 
-        if (user.getId() == extension.getOwner().getId() || user.getRole().equals("ROLE_ADMIN")) {
-            extensionRepository.delete(extensionsId);
+        if (user.getId() != extension.getOwner().getId() && !user.getRole().equals("ROLE_ADMIN")) {
+            throw new UnauthorizedExtensionModificationException("You are not authorized to delete this extension.");
         }
+
+        extensionRepository.delete(extensionsId);
     }
 
 
@@ -235,5 +239,27 @@ public class ExtensionServiceImpl implements ExtensionService {
                 .collect(Collectors.toList());
 
         return extensionsDTO;
+    }
+
+    @Override
+    public ExtensionDTO fetchGitHub(int extensionId, int userId) {
+        Extension extension = extensionRepository.findById(extensionId);
+        if (extension == null) {
+            throw new ExtensionNotFoundException("Extension not found.");
+        }
+
+        User user = userRepository.findById(userId);
+        if (user == null) {
+            throw new ExtensionNotFoundException("User not found.");
+        }
+
+        if (!user.getRole().equals("ROLE_ADMIN")) {
+            throw new UnauthorizedExtensionModificationException("You are not authorized to trgigger a github refresh.");
+        }
+
+        gitHubService.setRemoteDetails(extension.getGithub());
+        extensionRepository.update(extension);
+
+        return new ExtensionDTO(extension);
     }
 }

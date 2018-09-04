@@ -1,12 +1,9 @@
 package com.tick42.quicksilver.controllers;
 
 
-import com.tick42.quicksilver.exceptions.InvalidStateException;
-import com.tick42.quicksilver.exceptions.PasswordsMissMatchException;
-import com.tick42.quicksilver.exceptions.UserNotFoundException;
-import com.tick42.quicksilver.exceptions.UsernameExistsException;
+import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.UserDTO;
-import com.tick42.quicksilver.models.Spec.UserRegistrationSpec;
+import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.security.models.JwtUser;
 import com.tick42.quicksilver.services.base.UserService;
@@ -40,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public User register(@Valid @RequestBody UserRegistrationSpec user) {
+    public User register(@Valid @RequestBody UserSpec user) {
         return userService.register(user);
     }
 
@@ -92,6 +89,13 @@ public class UserController {
 
     @ExceptionHandler
     ResponseEntity handleInvalidStateException(InvalidStateException e){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler
+    ResponseEntity handleDisabledUserException(DisabledUserException e){
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());

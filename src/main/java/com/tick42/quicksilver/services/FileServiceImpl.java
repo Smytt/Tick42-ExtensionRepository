@@ -1,11 +1,12 @@
 package com.tick42.quicksilver.services;
 
-import com.tick42.quicksilver.exceptions.FileStorageException;
-import com.tick42.quicksilver.exceptions.FileNotFoundException;
+import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.File;
+import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.FileRepositoryImpl;
 import com.tick42.quicksilver.repositories.base.ExtensionRepository;
+import com.tick42.quicksilver.repositories.base.UserRepository;
 import com.tick42.quicksilver.services.base.FileService;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,14 @@ public class FileServiceImpl implements FileService {
     private final FileRepositoryImpl fileRepository;
     private final ExtensionServiceImpl extensionsService;
     private final ExtensionRepository extensionRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public FileServiceImpl(FileRepositoryImpl fileRepository, ExtensionServiceImpl extensionsService, ExtensionRepository extensionRepository) {
+    public FileServiceImpl(FileRepositoryImpl fileRepository, ExtensionServiceImpl extensionsService, ExtensionRepository extensionRepository, UserRepository userRepository) {
         this.fileRepository = fileRepository;
         this.extensionsService = extensionsService;
         this.extensionRepository = extensionRepository;
+        this.userRepository = userRepository;
         this.fileLocation = Paths.get("./uploads")
                 .toAbsolutePath().normalize();
 
@@ -46,9 +49,22 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public File storeFile(MultipartFile receivedFile, int extensionId) {
+    public File storeFile(MultipartFile receivedFile, int extensionId, int userId) {
 
         Extension extension = extensionRepository.findById(extensionId);
+        if (extension == null) {
+            throw new ExtensionNotFoundException("Extension not found.");
+        }
+
+        User user = userRepository.findById(userId);
+        if (user == null) {
+            throw new ExtensionNotFoundException("User not found.");
+        }
+
+        if (user.getId() != extension.getOwner().getId() && !user.getRole().equals("ROLE_ADMIN")) {
+            throw new UnauthorizedExtensionModificationException("You are not authorized to add files to this extension.");
+        }
+
         File file = generateFile(receivedFile, "file", extensionId);
 
         try {
@@ -65,14 +81,27 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
-    public File storeImage(MultipartFile receivedFile, int extensionId) {
+    public File storeImage(MultipartFile receivedFile, int extensionId, int userId) {
+
+        Extension extension = extensionRepository.findById(extensionId);
+        if (extension == null) {
+            throw new ExtensionNotFoundException("Extension not found.");
+        }
+
+        User user = userRepository.findById(userId);
+        if (user == null) {
+            throw new ExtensionNotFoundException("User not found.");
+        }
+
+        if (user.getId() != extension.getOwner().getId() && !user.getRole().equals("ROLE_ADMIN")) {
+            throw new UnauthorizedExtensionModificationException("You are not authorized to add images to this extension.");
+        }
 
         File image = generateFile(receivedFile, "image", extensionId);
-        Extension extension = extensionRepository.findById(extensionId);
 
         try {
             if (!image.getType().startsWith("image/")) {
-                throw new FileStorageException("File should be of type IMAGE");
+                throw new FileFormatException("File should be of type IMAGE.");
             }
 
             saveFile(image, receivedFile);

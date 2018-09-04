@@ -99,6 +99,12 @@ public class ExtensionController {
         return extensionService.setFeaturedState(id, state);
     }
 
+    @PatchMapping(value = "/{id}/github")
+    public ExtensionDTO fetchGitHubData(@PathVariable("id") int id, HttpServletRequest request) {
+        int userId = validator.getUserIdFromToken(request);
+        return extensionService.fetchGitHub(id, userId);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ResponseEntity handleDMSRESTException(MethodArgumentNotValidException e)
@@ -118,7 +124,7 @@ public class ExtensionController {
     @ExceptionHandler
     ResponseEntity handleExtensionUnavailable(ExtensionUnavailableException e) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(e.getMessage());
     }
 
@@ -141,6 +147,14 @@ public class ExtensionController {
         e.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler
+    ResponseEntity handleUnauthorizedExtensionModificationException(UnauthorizedExtensionModificationException e) {
+        e.printStackTrace();
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(e.getMessage());
     }
 

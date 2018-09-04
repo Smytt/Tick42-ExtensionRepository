@@ -3,7 +3,7 @@ package com.tick42.quicksilver.models.Spec;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class UserRegistrationSpec {
+public class UserSpec {
 
     @NotNull
     @Size(min=7, max=22, message="Name should be be between 7 and 18 char.")
@@ -17,7 +17,7 @@ public class UserRegistrationSpec {
     @Size(min=7, message="password should be be between 7 and 22 char.")
     private String repeatPassword;
 
-    public UserRegistrationSpec() {
+    public UserSpec() {
 
     }
 

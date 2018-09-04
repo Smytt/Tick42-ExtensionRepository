@@ -30,4 +30,6 @@ public interface ExtensionService {
     List<ExtensionDTO> findPending();
 
     List<ExtensionDTO> generateExtensionDTOList(List<Extension> extensions);
+
+    ExtensionDTO fetchGitHub(int extensionId, int userId);
 }

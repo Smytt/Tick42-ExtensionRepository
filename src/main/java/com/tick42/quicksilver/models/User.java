@@ -7,6 +7,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.tick42.quicksilver.models.Spec.UserSpec;
 import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -37,14 +39,23 @@ public class User {
     private boolean isActive = true;
 
     private String role;
+
     public User(){
 
     }
+
     public User(String username, String password, String role) {
         this.username = username;
         this.password = password;
         this.role = role;
     }
+
+    public User(UserSpec userSpec, String role) {
+        this.setUsername(userSpec.getUsername());
+        this.setPassword(userSpec.getPassword());
+        this.setRole(role);
+    }
+
     public String getUsername() {
         return username;
     }
