@@ -1,8 +1,10 @@
 package com.tick42.quicksilver.security;
 
 import com.tick42.quicksilver.models.User;
+import com.tick42.quicksilver.security.Exceptions.JwtTokenIsIncorrectException;
 import com.tick42.quicksilver.security.Exceptions.JwtTokenIsMissingException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -29,31 +31,24 @@ public class JwtValidator {
 
             jwtUser.setUsername(body.getSubject());
             jwtUser.setId(Integer.parseInt((String) body.get("userId")));
-            jwtUser.setRole((String)body.get("role"));
-        } catch (Exception e) {
-            System.out.println(e);
+            jwtUser.setRole((String) body.get("role"));
+        } catch (ExpiredJwtException e) {
+            throw e;
         }
 
         return jwtUser;
     }
 
     public int getUserIdFromToken(HttpServletRequest request) {
-        int id = 0;
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Token ")) {
             throw new JwtTokenIsMissingException("JWT Token is missing");
         }
         String token = header.substring(6);
-        try {
-            Claims body = Jwts.parser()
-                    .setSigningKey(new String(encodedBytes))
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            id = Integer.parseInt((String) body.get("userId"));
-        } catch (Exception e) {
-            System.out.println(e);
+        User user = validate(token);
+        if(user == null) {
+            throw new JwtTokenIsIncorrectException("JWT Token is incorrect");
         }
-        return id;
+        return user.getId();
     }
 }

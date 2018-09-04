@@ -20,10 +20,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.util.Collections;
 
-@EnableGlobalMethodSecurity(prePostEnabled  = true, securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @EnableWebSecurity
 @Configuration
-    public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
@@ -35,10 +35,12 @@ import java.util.Collections;
     public AuthenticationManager authenticationManager() {
         return new ProviderManager(Collections.singletonList(authenticationProvider));
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public JwtAuthenticationTokenFilter authenticationTokenFilter() {
         JwtAuthenticationTokenFilter filter = new JwtAuthenticationTokenFilter();
