@@ -11,12 +11,14 @@ import com.tick42.quicksilver.services.base.TagService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 public class ExtensionServiceImplTests {
     @Mock
     private ExtensionRepository extensionRepository;
@@ -41,9 +43,8 @@ public class ExtensionServiceImplTests {
     public void setFeaturedState_whenSetToFeatured_returnFeaturedExtensionDTO() {
         // Arrange
         Extension extensionBeforeUpdate = new Extension();
+        extensionBeforeUpdate.setId(1);
         extensionBeforeUpdate.setIsFeatured(false);
-
-        ExtensionDTO extensisonAfterUpdate = new ExtensionDTO(extensionBeforeUpdate);
 
         when(extensionRepository.findById(1)).thenReturn(extensionBeforeUpdate);
 

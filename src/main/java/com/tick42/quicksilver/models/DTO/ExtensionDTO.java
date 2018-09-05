@@ -53,7 +53,9 @@ public class ExtensionDTO {
         this.setPending(extension.getIsPending());
         extension.getTags().forEach(tag -> this.tags.add(tag.getName()));
         this.setTimesDownloaded(extension.getTimesDownloaded());
-        this.setUploadDate(extension.getUploadDate());
+        if (extension.getUploadDate() != null) {
+            this.setUploadDate(extension.getUploadDate());
+        }
         this.setVersion(extension.getVersion());
     }
 
