@@ -78,6 +78,50 @@ public class ExtensionServiceImplTests {
     }
 
     @Test
+    public void setPublishedState_whenSetToPublished_returnPublishedExtensionDTO() {
+        // Arrange
+        Extension extension = new Extension();
+        extension.setIsPending(true);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        //Act
+        ExtensionDTO extensionShouldBePending = extensionService.setPublishedState(1, "publish");
+
+        //Assert
+        Assert.assertFalse(extensionShouldBePending.isPending());
+    }
+
+    @Test
+    public void setPublishedState_whenSetToUnpublished_returnUnpublishedExtensionDTO() {
+        // Arrange
+        Extension extension = new Extension();
+        extension.setIsPending(false);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        //Act
+        ExtensionDTO extensionShouldBeUnpublished = extensionService.setPublishedState(1, "unpublish");
+
+        //Assert
+        Assert.assertTrue(extensionShouldBeUnpublished.isPending());
+    }
+
+    @Test(expected = InvalidStateException.class)
+    public void setPublishedState_whenGivenInvalidParameter_shouldThrow() {
+        // Arrange
+        Extension extension = new Extension();
+        extension.setIsFeatured(true);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        //Act
+        ExtensionDTO extensionShouldThrow = extensionService.setPublishedState(1, "wrong-string");
+
+        //Assert
+    }
+
+    @Test
     public void findPending_shouldReturnListOfPendingExtensionDTOs() {
         //Arrange
         Extension extensionPending1 = new Extension();
