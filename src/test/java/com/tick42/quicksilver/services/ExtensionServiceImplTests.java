@@ -1,8 +1,13 @@
 package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.exceptions.InvalidStateException;
+import com.tick42.quicksilver.exceptions.UserNotFoundException;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.Extension;
+import com.tick42.quicksilver.models.GitHubModel;
+import com.tick42.quicksilver.models.Spec.ExtensionSpec;
+import com.tick42.quicksilver.models.Tag;
+import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.ExtensionRepository;
 import com.tick42.quicksilver.repositories.base.UserRepository;
 import com.tick42.quicksilver.security.JwtValidator;
@@ -20,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -30,8 +36,72 @@ public class ExtensionServiceImplTests {
     @Mock
     private ExtensionRepository extensionRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private TagService tagService;
+
+    @Mock
+    private GitHubService gitHubService;
+
     @InjectMocks
     private ExtensionServiceImpl extensionService;
+
+    @Test(expected = UserNotFoundException.class)
+    public void create_whenUserIsNull_shouldThrow() {
+        //Arrange
+        User user = null;
+        when(userRepository.findById(1)).thenReturn(user);
+
+        //Act
+        extensionService.create(new ExtensionSpec(), 1);
+    }
+
+//    @Test
+//    public void create_whenUserExists_returnExtensionDTO() {
+//        //Arrange
+//        int userId = 1;
+//        Date date = new Date();
+//
+//        User user = new User();
+//        user.setId(userId);
+//
+//        ExtensionSpec extensionSpec = new ExtensionSpec();
+//        extensionSpec.setName("name");
+//        extensionSpec.setVersion("1.0");
+//        extensionSpec.setDescription("description");
+//        extensionSpec.setGithub("gitHubLink");
+//        extensionSpec.setTags("tag1, tag2");
+//
+//        List<Tag> tags = Arrays.asList(new Tag("tag1"), new Tag("tag2"));
+//
+//        GitHubModel github = new GitHubModel();
+//        github.setOpenIssues(10);
+//        github.setPullRequests(20);
+//        github.setLastCommit(date);
+//        github.setLink(extensionSpec.getGithub());
+//
+//        Extension extension = new Extension();
+//        extension.setId(1);
+//        extension.setOwner(user);
+//        extension.setGithub(github);
+//        extension.setTags(tags);
+//        extension.setName(extensionSpec.getName());
+//        extension.setVersion(extensionSpec.getVersion());
+//        extension.setDescription(extensionSpec.getDescription());
+//
+//        when(userRepository.findById(userId)).thenReturn(user);
+//        when(tagService.generateTags(extensionSpec.getTags())).thenReturn(tags);
+//        when(gitHubService.generateGitHub(extensionSpec.getGithub())).thenReturn(github);
+//        when(extensionRepository.create(extension)).thenReturn(extension);
+//
+//        //Act
+//        ExtensionDTO createdExtensionDTO = extensionService.create(extensionSpec, userId);
+//
+//        //Assert
+//        Assert.assertTrue(true);
+//    }
 
     @Test
     public void setFeaturedState_whenSetToFeatured_returnFeaturedExtensionDTO() {
@@ -72,7 +142,7 @@ public class ExtensionServiceImplTests {
         when(extensionRepository.findById(1)).thenReturn(extension);
 
         //Act
-        ExtensionDTO extensionShouldThrow = extensionService.setFeaturedState(1, "wrong-string");
+        ExtensionDTO extensionShouldThrow = extensionService.setFeaturedState(1, "wrongString");
 
         //Assert
     }
@@ -116,7 +186,7 @@ public class ExtensionServiceImplTests {
         when(extensionRepository.findById(1)).thenReturn(extension);
 
         //Act
-        ExtensionDTO extensionShouldThrow = extensionService.setPublishedState(1, "wrong-string");
+        ExtensionDTO extensionShouldThrow = extensionService.setPublishedState(1, "wrongString");
 
         //Assert
     }
