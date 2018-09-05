@@ -16,5 +16,7 @@ cache:
   - $HOME/.m2
   - $HOME/.gradle
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+test:
+    post:
+        - if [ -e ./gradlew ]; then ./gradlew jacocoTestReport;else gradle jacocoTestReport;fi
+        - bash <(curl -s https://codecov.io/bash)
