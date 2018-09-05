@@ -40,14 +40,16 @@ public class ExtensionDTO {
             this.setOpenIssues(extension.getGithub().getOpenIssues());
             this.setPullRequests(extension.getGithub().getPullRequests());
         }
-        if (extension.getImage() != null){
+        if (extension.getImage() != null) {
             this.setImageLocation(extension.getImage().getLocation());
         }
-        if (extension.getFile() != null){
+        if (extension.getFile() != null) {
             this.setFileLocation(extension.getFile().getLocation());
         }
-        this.setOwnerId(extension.getOwner().getId());
-        this.setOwnerName(extension.getOwner().getUsername());
+        if (extension.getOwner() != null) {
+            this.setOwnerId(extension.getOwner().getId());
+            this.setOwnerName(extension.getOwner().getUsername());
+        }
         this.setPending(extension.getIsPending());
         extension.getTags().forEach(tag -> this.tags.add(tag.getName()));
         this.setTimesDownloaded(extension.getTimesDownloaded());

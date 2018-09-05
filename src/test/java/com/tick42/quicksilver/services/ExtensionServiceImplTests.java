@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 public class ExtensionServiceImplTests {
     @Mock
-    ExtensionRepository extensionRepository;
+    private ExtensionRepository extensionRepository;
     @Mock
     TagService tagService;
     @Mock
@@ -37,21 +37,22 @@ public class ExtensionServiceImplTests {
     }
 
 
-//    @Test
-//    public void setFeaturedState_whenSetToFeatured_returnFeaturedExtensionDTO() {
-//        // Arrange
-//        Extension extensionBeforeUpdate = new Extension();
-//        extensionBeforeUpdate.setIsPending(false);
-//
-//        when(extensionRepository.findById(1)).thenReturn(extensionBeforeUpdate);
-//        when(extensionRepository.update(extensionBeforeUpdate)).thenReturn(extensionBeforeUpdate);
-//
-//        //Act
-//        ExtensionDTO extensionAfterUpdate = extensionService.setFeaturedState(1, "feature");
-//
-//        //Assert
-//        Assert.assertTrue(extensionAfterUpdate.isFeatured());
-//    }
+    @Test
+    public void setFeaturedState_whenSetToFeatured_returnFeaturedExtensionDTO() {
+        // Arrange
+        Extension extensionBeforeUpdate = new Extension();
+        extensionBeforeUpdate.setIsFeatured(false);
+
+        ExtensionDTO extensisonAfterUpdate = new ExtensionDTO(extensionBeforeUpdate);
+
+        when(extensionRepository.findById(1)).thenReturn(extensionBeforeUpdate);
+
+        //Act
+        ExtensionDTO extensionAfterUpdate = extensionService.setFeaturedState(1, "feature");
+
+        //Assert
+        Assert.assertTrue(extensionAfterUpdate.isFeatured());
+    }
 
     @Test
     public void test() {
