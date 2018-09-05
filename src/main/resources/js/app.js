@@ -475,13 +475,19 @@ let app = (() => {
                                         resImage => {
                                             getExtensionView(null, extensionId)
                                         }
-                                    )
+                                    ).catch(e => {
+                                        m.fadeOut()
+                                        handle(e);
+                                    })
                                 }
                                 else {
                                     getExtensionView(null, extensionId)
                                 }
                             }
-                        )
+                        ).catch(e => {
+                            m.fadeOut()
+                            handle(e);
+                        })
                     }
                     else if (image) {
                         m.find('div').html('uploading image...');
@@ -493,19 +499,26 @@ let app = (() => {
                                         resFile => {
                                             getExtensionView(null, extensionId)
                                         }
-                                    )
+                                    ).catch(e => {
+                                        m.fadeOut()
+                                        handle(e);
+                                    })
                                 }
                                 else {
                                     getExtensionView(null, extensionId)
                                 }
                             }
-                        )
+                        ).catch(e => {
+                            m.fadeOut()
+                            handle(e);
+                        })
                     }
                     else {
                         getExtensionView(null, extensionId)
                     }
                 }
             ).catch(e => {
+                m.fadeOut()
                 handle(e);
             })
         }
