@@ -25,11 +25,9 @@ repositories {
 
 
 dependencies {
-//	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-//	testCompile('org.springframework.security:spring-security-test')
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '1.2.5.RELEASE'
 	testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '4.0.0.RELEASE'
 	compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.2'
@@ -47,7 +45,6 @@ dependencies {
 	compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4:2.4.4"
 
 	compile "org.springframework.boot:spring-boot-configuration-processor"
-//	compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.3.RELEASE'
 
 	// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
@@ -57,8 +54,6 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.kohsuke/github-api
 	compile group: 'org.kohsuke', name: 'github-api', version: '1.93'
-//	compile group: 'org.springframework', name: 'spring-orm', version: '5.0.8.RELEASE'
-//	compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: '1.0.1.Final'
 
 
 
