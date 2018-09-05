@@ -43,10 +43,9 @@ public class ExtensionServiceImplTests {
     public void setFeaturedState_whenSetToFeatured_returnFeaturedExtensionDTO() {
         // Arrange
         Extension extensionBeforeUpdate = new Extension();
-//        extensionBeforeUpdate.setId(1);
         extensionBeforeUpdate.setIsFeatured(false);
 
-        when(extensionRepository.findById(100)).thenReturn(extensionBeforeUpdate);
+        when(extensionRepository.findById(1)).thenReturn(extensionBeforeUpdate);
 
         //Act
         ExtensionDTO extensionAfterUpdate = extensionService.setFeaturedState(1, "feature");
