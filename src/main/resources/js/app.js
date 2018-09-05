@@ -91,7 +91,10 @@ let app = (() => {
                 m.fadeOut();
                 getExtensionView(null, extensionId)
             }
-        ).catch(handle);
+        ).catch(e => {
+            m.fadeOut();
+            handle(e)
+        });
     }
 
     function search(e) {
