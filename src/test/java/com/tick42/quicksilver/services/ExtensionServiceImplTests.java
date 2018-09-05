@@ -37,21 +37,21 @@ public class ExtensionServiceImplTests {
     }
 
 
-    @Test
-    public void setFeaturedState_whenSetToFeatured_returnFeaturedExtensionDTO() {
-        // Arrange
-        Extension extensionBeforeUpdate = new Extension();
-        extensionBeforeUpdate.setIsPending(false);
-
-        when(extensionRepository.findById(1)).thenReturn(extensionBeforeUpdate);
-        when(extensionRepository.update(extensionBeforeUpdate)).thenReturn(extensionBeforeUpdate);
-
-        //Act
-        ExtensionDTO extensionAfterUpdate = extensionService.setFeaturedState(1, "feature");
-
-        //Assert
-        Assert.assertTrue(extensionAfterUpdate.isFeatured());
-    }
+//    @Test
+//    public void setFeaturedState_whenSetToFeatured_returnFeaturedExtensionDTO() {
+//        // Arrange
+//        Extension extensionBeforeUpdate = new Extension();
+//        extensionBeforeUpdate.setIsPending(false);
+//
+//        when(extensionRepository.findById(1)).thenReturn(extensionBeforeUpdate);
+//        when(extensionRepository.update(extensionBeforeUpdate)).thenReturn(extensionBeforeUpdate);
+//
+//        //Act
+//        ExtensionDTO extensionAfterUpdate = extensionService.setFeaturedState(1, "feature");
+//
+//        //Assert
+//        Assert.assertTrue(extensionAfterUpdate.isFeatured());
+//    }
 
     @Test
     public void test() {
