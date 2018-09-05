@@ -14,10 +14,12 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'jacoco'
 
 group = 'com.tick42'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
@@ -55,16 +57,13 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.kohsuke/github-api
 	compile group: 'org.kohsuke', name: 'github-api', version: '1.93'
 
-
-
-
-
-
-
-
-
-
-
-
-
 }
+
+jacocoTestReport {
+	reports {
+		xml.enabled = true
+		html.enabled = true
+	}
+}
+
+check.dependsOn jacocoTestReport
