@@ -23,7 +23,16 @@ let show = (() => {
                 $('.action-btn button').removeClass('current');
                 $('.action-btn #' + buttonId).addClass('current');
              }
-         })
+        })
+    }
+    let listUsersAfterStateChange = (users) => {
+        $.ajax({
+             url: './templates/all-users.html',
+             success: (tmpl) => {
+                let $html = Mustache.render(tmpl, users);
+                $('#all-users').html($html);
+             }
+        })
     }
 
     let adminView = (users) => {
@@ -256,6 +265,7 @@ let show = (() => {
         submit,
         user,
         users,
+        listUsersAfterStateChange,
         adminView,
         login,
         extension,

@@ -335,12 +335,13 @@ let app = (() => {
         preventDefault(e);
         let newState = $(this).attr('id');
         let userId = $(this).attr('userId');
-        let state = $('.current').attr('id')
+        let state = $('.action-btn .current').attr('id')
+        console.log(state);
         remote.setUserState(userId, newState).then(
             res =>{
                 remote.getUsers(state).then(
                     res => {
-                        show.users(res)
+                        show.listUsersAfterStateChange(res)
                     })
             }
         ).catch(e => console.log(e['responseText']));
