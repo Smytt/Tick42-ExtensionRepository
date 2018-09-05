@@ -18,6 +18,7 @@ public class Tag {
     private String name;
 
     @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
+    @OrderBy("uploadDate desc")
     private List<Extension> extensions = new ArrayList<>();
 
     public Tag() {

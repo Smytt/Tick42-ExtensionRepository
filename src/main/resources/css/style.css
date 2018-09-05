@@ -5,6 +5,7 @@
 a:hover {
     cursor: pointer;
 }
+
 html {
     min-height: 100%;
     background: url("../img/footerbg.png") bottom center;
@@ -284,6 +285,7 @@ footer * {
 .extension-details .image {
     width: 250px;
 }
+
 .extension-details .image div {
     width: 250px;
     height: 250px;
@@ -304,7 +306,7 @@ footer * {
 }
 
 .stats {
-    width:  170px;
+    width: 170px;
     margin-right: 10px !important;
 }
 
@@ -312,7 +314,6 @@ footer * {
     width: 170px;
     margin-right: 0 !important;
 }
-
 
 .info h2 {
     color: #0e9aa7;
@@ -323,8 +324,9 @@ footer * {
 .info span {
     margin-bottom: 25px;
     display: block;
-    text-indent: 20px;
+    padding-left: 20px;
     font-size: 18px;
+    line-height: 1.3em;
 }
 
 .info h2 i {
@@ -334,7 +336,7 @@ footer * {
 }
 
 .extension-details .image button, .extension-details .image a, .extension-details .image span {
-    width:  100%;
+    width: 100%;
     margin-top: 10px;
 }
 
@@ -345,16 +347,19 @@ footer * {
 .action-btn {
     margin-bottom: 20px;
 }
+
 .action-btn .menu-item {
     font-size: 16px;
     line-height: 35px;
     height: 35px;
     padding: 0 10px;
 }
+
 .action-btn .menu-item i {
     margin-right: 5px;
     font-size: 0.9em;
 }
+
 .action-btn .menu-item {
     background-color: #f6cd61;
     color: #4a4e4d;
@@ -382,9 +387,10 @@ footer * {
 .regular input, .regular textarea {
     border: 1px solid #3da4ab;
     padding: 20px;
-    box-sizing:  border-box;
+    box-sizing: border-box;
     margin-bottom: 20px;
 }
+
 .as-field {
     margin-bottom: 20px;
 }
@@ -413,18 +419,18 @@ label button:hover {
 }
 
 .middle h1 {
-    text-align:  center;
+    text-align: center;
 }
 
 .action-btn .menu-item.current {
     background: #fe8a71;
-    color: #fff ;
+    color: #fff;
 }
 
 .admin-view .one {
-    display:  inline-block;
-    margin-bottom:  10px;
-    margin-right:  20px;
+    display: inline-block;
+    margin-bottom: 10px;
+    margin-right: 20px;
 }
 
 .admin-view .one .name {
@@ -443,9 +449,8 @@ label button:hover {
 .admin-view .off:hover > * {
 }
 
-
-.admin-view .admin-view-container h1{
-float:left;
+.admin-view .admin-view-container h1 {
+    float: left;
 }
 
 .action-btn.heading-btn {
@@ -462,7 +467,7 @@ float:left;
     color: #4a4e4d;
 }
 
-.admin-buttons menu-item{
+.admin-buttons menu-item {
     display: inline-block;
     height: 50px;
     text-align: center;
@@ -476,9 +481,11 @@ float:left;
     transition: 0.2s;
     box-sizing: border-box;
 }
+
 .admin-buttons {
-float:right;
+    float: right;
 }
+
 .middle > h1 {
     float: none;
 }
@@ -486,7 +493,6 @@ float:right;
 .half > h1 {
     float: none;
 }
-
 
 .pages-control {
     margin-bottom: 20px;
@@ -498,11 +504,45 @@ float:right;
 }
 
 .tags a {
-    display:  inline-block;
+    display: inline-block;
     border: 1px solid #f6cd61;
     padding: 5px 10px;
 }
 
 .tags a:hover {
     border-color: #fe8a71;
+}
+
+.loading-block {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background: #00000080;
+    display: none;
+    text-align: center;
+    color: #fff;
+    padding-top: 400px;
+    font-size: 50px;
+}
+
+.loading-block i:after {
+    display: block;
+    content: '';
+}
+
+.loading-block div {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.errors p {
+    margin: 5px 0;
+    color: #fe8a71;
+}
+
+.errors p i {
+    margin-right:  5px;
 }

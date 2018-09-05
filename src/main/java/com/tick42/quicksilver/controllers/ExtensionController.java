@@ -117,7 +117,11 @@ public class ExtensionController {
         e.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(e.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage()).toArray());
+                .body(e.getBindingResult()
+                        .getFieldErrors()
+                        .stream()
+                        .map(x -> x.getDefaultMessage())
+                        .toArray());
     }
 
     @ExceptionHandler

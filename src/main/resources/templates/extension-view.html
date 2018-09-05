@@ -1,5 +1,6 @@
 <div>
     <div class="wrap extension-details">
+        <div class="loading-block"><i class="fas fa-circle-notch fa-spin"></i><div></div></div>
         <div class="image">
             {{#imageLocation}}
             <div style="background-image: url({{imageLocation}})"></div>
@@ -68,12 +69,12 @@
             </div>
         </div>
         <div class="info stats">
+            <h2><i class="fas fa-arrow-circle-up"></i> Upload date</h2>
+            <span>{{uploadDate}}</span>
             <h2><i class="fas fa-user"></i> Developer</h2>
             <span><a class="user-link" userId="{{ownerId}}">{{ownerName}}</a></span>
             <h2><i class="fas fa-check-circle"></i> Version </h2>
             <span>{{version}}</span>
-            <h2><i class="fas fa-arrow-circle-up"></i> Upload date</h2>
-            <span>{{uploadDate}}</span>
             <h2><i class="fas fa-arrow-circle-down"></i> Downloads</h2>
             <span>{{timesDownloaded}}</span>
         </div>

@@ -63,20 +63,26 @@ remote = (() => {
     let submitFile = (id, file) => {
         return $.ajax({
             type: 'POST',
-            url: base + '/api/upload/file/' + id,
+            url: base + '/api/auth/upload/file/' + id,
             data: file,
             contentType: false,
-            processData: false
+            processData: false,
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            },
         })
     }
 
     let submitImage = (id, image) => {
         return $.ajax({
             type: 'POST',
-            url: base + '/api/upload/image/' + id,
+            url: base + '/api/auth/upload/image/' + id,
             data: image,
             contentType: false,
-            processData: false
+            processData: false,
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            },
         })
     }
 
@@ -200,7 +206,7 @@ remote = (() => {
     let refreshGitHub = (id) => {
         return $.ajax({
             type: 'PATCH',
-            url: base + 'api/auth/extensions/' + id + '/github',
+            url: base + '/api/auth/extensions/' + id + '/github',
             headers: {
                 'Authorization': localStorage.getItem('Authorization')
             }

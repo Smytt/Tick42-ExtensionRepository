@@ -52,6 +52,7 @@ public class UserController {
     public User registerAdmin(@Valid @RequestBody UserSpec user){
         return userService.register(user, "ROLE_ADMIN");
     }
+
     @GetMapping(value = "/users/{id}")
     public UserDTO profile(@PathVariable(name = "id") int id, HttpServletRequest request) {
         User loggedUser = null;

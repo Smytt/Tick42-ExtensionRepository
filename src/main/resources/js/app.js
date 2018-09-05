@@ -80,8 +80,18 @@ let app = (() => {
     }
 
     function refreshGitHub(e) {
-        extensionId = $(this).attr('extensionId');
-        remote.refreshGitHub(extensionId);
+        let extensionId = $(this).attr('extensionId');
+
+        let m = $('.loading-block')
+
+        m.find('div').html('fetching github...');
+        m.fadeIn()
+        remote.refreshGitHub(extensionId).then(
+            res => {
+                m.fadeOut();
+                getExtensionView(null, extensionId)
+            }
+        ).catch(handle);
     }
 
     function search(e) {
@@ -384,56 +394,83 @@ let app = (() => {
             tags
         }
 
+        let m = $('.loading-block')
+        //new submit
         if ($(this).attr('id') === 'submit-btn') {
+            m.find('div').html('linking github...');
+            m.fadeIn();
             remote.submitExtension(extension).then(
                 res => {
                     let extensionId = res['id'];
                     if (file) {
+                        m.find('div').html('uploading file...');
                         remote.submitFile(extensionId, fileData).then(
                             resFile => {
                                 if (image) {
+                                    m.find('div').html('uploading image...');
                                     remote.submitImage(extensionId, imageData).then(
                                         resImage => {
                                             getExtensionView(null, extensionId)
                                         }
-                                    )
+                                    ).catch(e => {
+                                        m.fadeOut()
+                                        handle(e);
+                                    })
                                 }
                                 else {
                                     getExtensionView(null, extensionId)
                                 }
                             }
-                        )
+                        ).catch(e => {
+                            m.fadeOut()
+                            handle(e);
+                        })
                     }
                     else if (image) {
+                        m.find('div').html('uploading image...');
                         remote.submitImage(extensionId, fileData).then(
                             resFile => {
                                 if (file) {
+                                    m.find('div').html('uploading file...');
                                     remote.submitFile(extensionId, imageData).then(
                                         resImage => {
                                             getExtensionView(null, extensionId)
                                         }
-                                    )
+                                    ).catch(e => {
+                                        m.fadeOut()
+                                        handle(e);
+                                    })
                                 }
                                 else {
                                     getExtensionView(null, extensionId)
                                 }
-                            })
+                            }).catch(e => {
+                            m.fadeOut()
+                            handle(e);
+                        })
                     }
                     else {
                         getExtensionView(null, extensionId);
                     }
                 }
             ).catch(e => {
+                m.fadeOut()
                 handle(e);
             })
-        } else {
+        }
+        // edit existing
+        else {
+            m.find('div').html('linking github...');
+            m.fadeIn();
             remote.editExtension(extensionId, extension).then(
                 res => {
                     let extensionId = res['id'];
                     if (file) {
+                        m.find('div').html('uploading file...');
                         remote.submitFile(extensionId, fileData).then(
                             resFile => {
                                 if (image) {
+                                    m.find('div').html('uploading image...');
                                     remote.submitImage(extensionId, imageData).then(
                                         resImage => {
                                             getExtensionView(null, extensionId)
@@ -447,9 +484,11 @@ let app = (() => {
                         )
                     }
                     else if (image) {
+                        m.find('div').html('uploading image...');
                         remote.submitImage(extensionId, imageData).then(
                             resImage => {
                                 if (file) {
+                                    m.find('div').html('uploading file...');
                                     remote.submitFile(extensionId, fileData).then(
                                         resFile => {
                                             getExtensionView(null, extensionId)
@@ -498,10 +537,10 @@ let app = (() => {
         $('.errors').empty();
         if (e['responseJSON'] != null) {
             console.log(e['responseJSON'])
-            e['responseJSON'].forEach(error => $('.errors').append('<p>' + error + '</p>'));
+            e['responseJSON'].forEach(error => $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + error + '</p>'));
         } else {
             console.log(e['responseText'])
-            $('.errors').append('<p>' + e['responseText'] + '</p>');
+            $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseText'] + '</p>');
         }
     }
 

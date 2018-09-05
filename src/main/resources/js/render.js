@@ -11,8 +11,8 @@ let render = (() => {
     }
 
     let extension = (extension) => {
-        extension['uploadDate'] = moment(extension['uploadDate']).format('MMM, DD YYYY');
-        extension['lastCommit'] = moment(extension['lastCommit']).format('MMM, DD YYYY');
+        extension['uploadDate'] = moment(extension['uploadDate']).format('MMM, DD YYYY HH:mm:ss');
+        extension['lastCommit'] = moment(extension['lastCommit']).format('MMM, DD YYYY HH:mm:ss');
         extension['isOwn'] = localStorage.getItem('id') == extension['ownerId'];
         extension['isAdmin'] = localStorage.getItem('role') == 'ROLE_ADMIN';
         return extension;

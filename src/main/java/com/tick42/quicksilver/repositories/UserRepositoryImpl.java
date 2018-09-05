@@ -50,7 +50,7 @@ public class UserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             users = session
-                    .createQuery("from User")
+                    .createQuery("from User order by username asc")
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -96,7 +96,7 @@ public class UserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             users = session
-                    .createQuery("from User where enabled = :enabled")
+                    .createQuery("from User where isActive = :enabled order by username asc ")
                     .setParameter("enabled", state)
                     .list();
             session.getTransaction().commit();
