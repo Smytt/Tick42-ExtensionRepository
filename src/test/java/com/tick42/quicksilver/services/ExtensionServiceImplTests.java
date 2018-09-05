@@ -124,11 +124,11 @@ public class ExtensionServiceImplTests {
     @Test
     public void findPending_shouldReturnListOfPendingExtensionDTOs() {
         //Arrange
-        Extension extensionPending1 = new Extension();
-        Extension extensionPending2 = new Extension();
-        extensionPending1.setIsPending(true);
-        extensionPending2.setIsPending(true);
-        List<Extension> extensions = Arrays.asList(extensionPending1, extensionPending2);
+        Extension extension1 = new Extension();
+        Extension extension2 = new Extension();
+        extension1.setIsPending(true);
+        extension2.setIsPending(true);
+        List<Extension> extensions = Arrays.asList(extension1, extension2);
 
         when(extensionRepository.findPending()).thenReturn(extensions);
 
@@ -140,4 +140,26 @@ public class ExtensionServiceImplTests {
         Assert.assertTrue(pendingExtensionDTOs.get(0).isPending());
         Assert.assertTrue(pendingExtensionDTOs.get(1).isPending());
     }
+
+    @Test
+    public void findFeatured_shouldReturnListOfFeaturedExtensionDTOs() {
+        //Arrange
+        Extension extension1 = new Extension();
+        Extension extension2 = new Extension();
+        extension1.setIsFeatured(true);
+        extension2.setIsFeatured(true);
+        List<Extension> extensions = Arrays.asList(extension1, extension2);
+
+        when(extensionRepository.findFeatured()).thenReturn(extensions);
+
+        //Act
+        List<ExtensionDTO> featuredExtensionDTOs = extensionService.findFeatured();
+
+        //Assert
+        Assert.assertEquals(2, featuredExtensionDTOs.size());
+        Assert.assertTrue(featuredExtensionDTOs.get(0).isFeatured());
+        Assert.assertTrue(featuredExtensionDTOs.get(1).isFeatured());
+    }
+
+
 }

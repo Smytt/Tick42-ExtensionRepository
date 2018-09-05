@@ -92,7 +92,7 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             extensions = session
-                    .createQuery("from Extension where isFeatured = true")
+                    .createQuery("from Extension where isFeatured = true and isPending = false and owner.isActive = true order by uploadDate desc")
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
