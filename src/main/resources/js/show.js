@@ -16,34 +16,34 @@ let show = (() => {
 
     let users = (users, buttonId) => {
         $.ajax({
-             url: './templates/list-users.html',
-             success: (tmpl) => {
+            url: './templates/list-users.html',
+            success: (tmpl) => {
                 let $html = Mustache.render(tmpl, users);
                 $('#admin-view-container').html($html);
                 $('.action-btn button').removeClass('current');
                 $('.action-btn #' + buttonId).addClass('current');
-             }
+            }
         })
     }
     let listUsersAfterStateChange = (users) => {
         $.ajax({
-             url: './templates/all-users.html',
-             success: (tmpl) => {
+            url: './templates/all-users.html',
+            success: (tmpl) => {
                 let $html = Mustache.render(tmpl, users);
                 $('#all-users').html($html);
-             }
+            }
         })
     }
 
     let adminView = (users) => {
         $.ajax({
-             url: './templates/admin-view.html',
-             success: (tmpl) => {
-                 let $html = Mustache.render(tmpl);
-                 $content.html($html);
-                 show.users(users, "all")
-             }
-         })
+            url: './templates/admin-view.html',
+            success: (tmpl) => {
+                let $html = Mustache.render(tmpl);
+                $content.html($html);
+                show.users(users, "all")
+            }
+        })
     }
 
     let userNav = () => {

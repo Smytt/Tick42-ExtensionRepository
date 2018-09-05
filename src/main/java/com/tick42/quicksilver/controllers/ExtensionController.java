@@ -74,7 +74,7 @@ public class ExtensionController {
 
     @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
     @PatchMapping("/auth/extensions/{id}")
-    public ExtensionDTO update(@Valid @PathVariable int id, @RequestBody ExtensionSpec extension, HttpServletRequest request) {
+    public ExtensionDTO update(@PathVariable int id, @Valid @RequestBody ExtensionSpec extension, HttpServletRequest request) {
         int userId = validator.getUserIdFromToken(request);
         return extensionService.update(id, extension, userId);
     }
@@ -114,6 +114,7 @@ public class ExtensionController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ResponseEntity handleDMSRESTException(MethodArgumentNotValidException e) {
+        e.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage()).toArray());
@@ -121,6 +122,7 @@ public class ExtensionController {
 
     @ExceptionHandler
     ResponseEntity handleExtensionNotFoundException(ExtensionNotFoundException e) {
+        e.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());
@@ -128,6 +130,7 @@ public class ExtensionController {
 
     @ExceptionHandler
     ResponseEntity handleExtensionUnavailable(ExtensionUnavailableException e) {
+        e.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(e.getMessage());
@@ -135,6 +138,7 @@ public class ExtensionController {
 
     @ExceptionHandler
     ResponseEntity handleInvalidStateException(InvalidStateException e) {
+        e.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());
@@ -142,6 +146,7 @@ public class ExtensionController {
 
     @ExceptionHandler
     ResponseEntity handleInvalidParameterException(InvalidParameterException e) {
+        e.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());

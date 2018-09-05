@@ -31,7 +31,7 @@ let app = (() => {
         );
     }
 
-     let getUsers = function(e) {
+    let getUsers = function (e) {
         preventDefault(e);
         let buttonId = $(this).attr('id');
         remote.getUsers(buttonId).then(
@@ -39,23 +39,24 @@ let app = (() => {
                 show.users(res, buttonId)
             }
         )
-     }
-     function getAdminView(e){
+    }
+
+    function getAdminView(e) {
         preventDefault(e);
         let state = $(this).attr('id')
         remote.getUsers(state).then(
             show.adminView
         )
-     }
+    }
 
-     function getGithubSettingsView(e){
+    function getGithubSettingsView(e) {
         preventDefault(e);
         show.gitHubSettingsView('')
         $('.admin-buttons button').removeClass('current');
         $(this).addClass('current');
-     }
+    }
 
-     function submitGithubSettings(e){
+    function submitGithubSettings(e) {
         preventDefault(e);
 
         let username = $('#username').val();
@@ -71,12 +72,12 @@ let app = (() => {
         }
 
         remote.setGitHubSettings(gitHubSettings).then(
-            res =>{
-            getHomeView();
-        }).catch(e =>{
+            res => {
+                getHomeView();
+            }).catch(e => {
             handle(e);
         })
-     }
+    }
 
     function refreshGitHub(e) {
         extensionId = $(this).attr('extensionId');
@@ -131,16 +132,18 @@ let app = (() => {
         )
     }
 
-    let getExtensionView = function (e) {
+    let getExtensionView = function (e, id) {
         preventDefault(e);
 
-        let id = $(this).attr('extensionId');
+        if (e) {
+            id = $(this).attr('extensionId');
+        }
         remote.getExtension(id).then(
             res => {
                 res = render.extension(res)
                 show.extension(res)
             }
-        ).catch(e =>{
+        ).catch(e => {
             handle(e);
         });
     }
@@ -152,17 +155,18 @@ let app = (() => {
 
         remote.getTag(tagName).then(
             show.tag
-        ).catch(e =>{
+        ).catch(e => {
             handle(e);
         })
     }
 
-    function getRegisterAdminView(e){
+    function getRegisterAdminView(e) {
         preventDefault(e);
         $('.admin-buttons button').removeClass('current');
         $(this).addClass('current');
         show.registerAdminView();
     }
+
     let getProfileView = function (e) {
         preventDefault(e);
 
@@ -173,7 +177,7 @@ let app = (() => {
                 res = render.profile(res);
                 show.user(res);
             }
-        ).catch(e =>{
+        ).catch(e => {
             handle(e);
         })
     }
@@ -213,7 +217,7 @@ let app = (() => {
 
         remote.getExtension(extensionId).then(
             show.edit
-        ).catch(e =>{
+        ).catch(e => {
             handle(e);
         })
     }
@@ -240,20 +244,20 @@ let app = (() => {
             password,
             repeatPassword
         }
-        if($(this).attr('id') == 'register-btn'){
+        if ($(this).attr('id') == 'register-btn') {
             remote.register(registrationForm).then(
                 res => {
                     login();
                 }
-            ).catch(e =>{
+            ).catch(e => {
                 handle(e);
             })
-        }else{
+        } else {
             remote.registerAdmin(registrationForm).then(
-                res =>{
+                res => {
                     getHomeView();
                 }
-            ).catch(e =>{
+            ).catch(e => {
                 handle(e);
             })
         }
@@ -277,9 +281,10 @@ let app = (() => {
                 localStorage.setItem('role', res['role']);
                 getHomeView();
             }
-        ).catch(e=>{ handle(e);
+        ).catch(e => {
+            handle(e);
         })
-        }
+    }
     let logout = (e) => {
         preventDefault(e);
         localStorage.clear();
@@ -338,7 +343,7 @@ let app = (() => {
         let state = $('.action-btn .current').attr('id')
         console.log(state);
         remote.setUserState(userId, newState).then(
-            res =>{
+            res => {
                 remote.getUsers(state).then(
                     res => {
                         show.listUsersAfterStateChange(res)
@@ -350,7 +355,7 @@ let app = (() => {
 
     let submit = function (e) {
         preventDefault(e);
-        if (!hitEnter(e)){
+        if (!hitEnter(e)) {
             return;
         }
 
@@ -383,79 +388,83 @@ let app = (() => {
             remote.submitExtension(extension).then(
                 res => {
                     let extensionId = res['id'];
-                    if (file){
+                    if (file) {
                         remote.submitFile(extensionId, fileData).then(
                             resFile => {
-                                if (image){
+                                if (image) {
                                     remote.submitImage(extensionId, imageData).then(
                                         resImage => {
                                             getExtensionView(null, extensionId)
                                         }
                                     )
                                 }
-                                else{ getExtensionView(null, extensionId)
+                                else {
+                                    getExtensionView(null, extensionId)
                                 }
                             }
                         )
                     }
-                    else if (image){
+                    else if (image) {
                         remote.submitImage(extensionId, fileData).then(
                             resFile => {
-                                if (file){
+                                if (file) {
                                     remote.submitFile(extensionId, imageData).then(
                                         resImage => {
                                             getExtensionView(null, extensionId)
                                         }
                                     )
                                 }
-                                else{  getExtensionView(null, extensionId)
+                                else {
+                                    getExtensionView(null, extensionId)
                                 }
                             })
                     }
-                    else{
-                        getExtensionView();
+                    else {
+                        getExtensionView(null, extensionId);
                     }
                 }
             ).catch(e => {
                 handle(e);
             })
-        }else{
+        } else {
             remote.editExtension(extensionId, extension).then(
                 res => {
                     let extensionId = res['id'];
-                    if (file){
+                    if (file) {
                         remote.submitFile(extensionId, fileData).then(
                             resFile => {
-                                if (image){
+                                if (image) {
                                     remote.submitImage(extensionId, imageData).then(
                                         resImage => {
                                             getExtensionView(null, extensionId)
                                         }
                                     )
-                                 }
-                                else{getExtensionView(null, extensionId)
+                                }
+                                else {
+                                    getExtensionView(null, extensionId)
                                 }
                             }
                         )
                     }
-                    else if (image){
+                    else if (image) {
                         remote.submitImage(extensionId, imageData).then(
                             resImage => {
-                                if (file){
+                                if (file) {
                                     remote.submitFile(extensionId, fileData).then(
                                         resFile => {
                                             getExtensionView(null, extensionId)
                                         }
                                     )
                                 }
-                                else{getExtensionView(null, extensionId)
+                                else {
+                                    getExtensionView(null, extensionId)
                                 }
                             }
                         )
                     }
-                    else{
+                    else {
                         getExtensionView(null, extensionId)
-                        }
+                    }
                 }
             ).catch(e => {
                 handle(e);
@@ -484,16 +493,16 @@ let app = (() => {
         }
     }
 
-    function handle(e){
+    function handle(e) {
 
-            $('.errors').empty();
-            if(e['responseJSON'] != null){
+        $('.errors').empty();
+        if (e['responseJSON'] != null) {
             console.log(e['responseJSON'])
-            e['responseJSON'].forEach(error => $('.errors').append('<p>'+error+'</p>'));
-            }else{
+            e['responseJSON'].forEach(error => $('.errors').append('<p>' + error + '</p>'));
+        } else {
             console.log(e['responseText'])
-            $('.errors').append('<p>'+ e['responseText'] +'</p>');
-            }
+            $('.errors').append('<p>' + e['responseText'] + '</p>');
+        }
     }
 
     let loadNav = () => {
