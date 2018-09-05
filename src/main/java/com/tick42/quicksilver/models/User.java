@@ -32,7 +32,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    @OrderBy("uploadDate desc")
+//    @OrderBy("uploadDate desc")
     private List<Extension> extensions = new ArrayList<>();
 
     @Column(name = "enabled", nullable = false)
