@@ -129,12 +129,12 @@ public class ExtensionServiceImpl implements ExtensionService {
     @Override
     public PageDTO<ExtensionDTO> findAll(String name, String orderBy, Integer page, Integer perPage) {
 
-        if (page < 1) {
-            throw new InvalidParameterException("\"page\" should be a positive number.");
+        if (page == null) {
+            page = 1;
         }
 
-        if (perPage < 1) {
-            throw new InvalidParameterException("\"perPage\" should be a positive number.");
+        if (perPage == null || perPage < 1) {
+            perPage = 10;
         }
 
         if (name == null) {
@@ -145,12 +145,12 @@ public class ExtensionServiceImpl implements ExtensionService {
             orderBy = "date";
         }
 
-        if (page == null) {
-            page = 1;
+        if (page < 1) {
+            throw new InvalidParameterException("\"page\" should be a positive number.");
         }
 
-        if (perPage == null || perPage < 1) {
-            perPage = 10;
+        if (perPage < 1) {
+            throw new InvalidParameterException("\"perPage\" should be a positive number.");
         }
 
         Long totalResults = extensionRepository.getTotalResults(name);
