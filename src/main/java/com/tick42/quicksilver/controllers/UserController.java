@@ -138,7 +138,7 @@ public class UserController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseEntity handleDMSRESTException(MethodArgumentNotValidException e)
+    public ResponseEntity handleInvalidUserSpecException(MethodArgumentNotValidException e)
     {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)

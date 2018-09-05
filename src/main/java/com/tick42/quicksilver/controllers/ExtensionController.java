@@ -113,7 +113,7 @@ public class ExtensionController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseEntity handleDMSRESTException(MethodArgumentNotValidException e) {
+    public ResponseEntity handleInvalidExtensionSpecException(MethodArgumentNotValidException e) {
         e.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
