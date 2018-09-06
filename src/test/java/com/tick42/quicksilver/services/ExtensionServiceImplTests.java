@@ -1,5 +1,7 @@
 package com.tick42.quicksilver.services;
 
+import com.tick42.quicksilver.exceptions.ExtensionNotFoundException;
+import com.tick42.quicksilver.exceptions.ExtensionUnavailableException;
 import com.tick42.quicksilver.exceptions.InvalidStateException;
 import com.tick42.quicksilver.exceptions.UserNotFoundException;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
@@ -47,9 +49,6 @@ public class ExtensionServiceImplTests {
 
     @Mock
     private GitHubService gitHubService;
-
-    @Mock
-    private Extension mockExtension;
 
     @InjectMocks
     private ExtensionServiceImpl extensionService;
@@ -258,5 +257,161 @@ public class ExtensionServiceImplTests {
         Assert.assertTrue(featuredExtensionDTOs.get(1).isFeatured());
     }
 
+    @Test(expected = ExtensionNotFoundException.class)
+    public void findById_whenExtensionDoesntExist_shouldThrow() {
+        //Arrange
+        User user = new User();
+        when(extensionRepository.findById(1)).thenReturn(null);
 
+        //Act
+        extensionService.findById(1, user);
+    }
+
+    @Test(expected = ExtensionUnavailableException.class)
+    public void findById_whenOwnerIsInactiveaAndUserIsNull_shouldThrow() {
+        //Arrange
+        User user = null;
+
+        User owner = new User();
+        owner.setIsActive(false);
+
+        Extension extension = new Extension();
+        extension.setOwner(owner);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        //Act
+        extensionService.findById(1, user);
+    }
+
+    @Test(expected = ExtensionUnavailableException.class)
+    public void findById_whenOwnerIsInactiveaAndUserIsNotAdmin_shouldThrow() {
+        //Arrange
+        User user = new User();
+        user.setRole("ROLE_USER");
+
+        User owner = new User();
+        owner.setIsActive(false);
+
+        Extension extension = new Extension();
+        extension.setOwner(owner);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        //Act
+        extensionService.findById(1, user);
+    }
+
+    @Test(expected = ExtensionUnavailableException.class)
+    public void findById_whenExtensionIsPendingAndOwnerIsActiveAndUserIsNull_shouldThrow() {
+        //Arrange
+        User user = null;
+
+        User owner = new User();
+        owner.setIsActive(true);
+
+        Extension extension = new Extension();
+        extension.setIsPending(true);
+        extension.setOwner(owner);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        //Act
+        extensionService.findById(1, user);
+    }
+
+    @Test(expected = ExtensionUnavailableException.class)
+    public void findById_whenExtensionIsPendingAndOwnerIsActiveAndUserIsNotOwnerAndNotAdmin_shouldThrow() {
+        //Arrange
+        User user = new User();
+        user.setId(1);
+        user.setRole("ROLE_USER");
+
+        User owner = new User();
+        owner.setIsActive(true);
+        owner.setId(2);
+
+        Extension extension = new Extension();
+        extension.setIsPending(true);
+        extension.setOwner(owner);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        //Act
+        extensionService.findById(1, user);
+    }
+
+    @Test
+    public void findById_whenExtensionIsPendingAndOwnerIsInactiveAndUserIsAdmin_shouldReturnExtensionDTO() {
+        //Arrange
+        User user = new User();
+        user.setId(1);
+        user.setRole("ROLE_ADMIN");
+
+        User owner = new User();
+        owner.setIsActive(false);
+
+        Extension extension = new Extension();
+        extension.setId(1);
+        extension.setIsPending(true);
+        extension.setOwner(owner);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        //Act
+        ExtensionDTO expectedExtensionDTO = extensionService.findById(1, user);
+
+        //Assert
+        Assert.assertEquals(extension.getId(), expectedExtensionDTO.getId());
+    }
+
+    @Test
+    public void findById_whenExtensionIsPendingAndOwnerIsActiveAndUserIsNotAdmin_shouldReturnExtensionDTO() {
+        //Arrange
+        User user = new User();
+        user.setId(1);
+        user.setRole("ROLE_USER");
+
+        User owner = new User();
+        owner.setIsActive(true);
+        owner.setId(1);
+
+        Extension extension = new Extension();
+        extension.setId(1);
+        extension.setIsPending(true);
+        extension.setOwner(owner);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        //Act
+        ExtensionDTO expectedExtensionDTO = extensionService.findById(1, user);
+
+        //Assert
+        Assert.assertEquals(extension.getId(), expectedExtensionDTO.getId());
+    }
+
+    @Test
+    public void findById_whenExtensionIsNotPendingAndOwnerIsActiveAndUserIsNotOwnerAndNotAdmin_shouldReturnExtensionDTO() {
+        //Arrange
+        User user = new User();
+        user.setId(1);
+        user.setRole("ROLE_USER");
+
+        User owner = new User();
+        owner.setIsActive(true);
+        owner.setId(2);
+
+        Extension extension = new Extension();
+        extension.setId(1);
+        extension.setIsPending(false);
+        extension.setOwner(owner);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        //Act
+        ExtensionDTO expectedExtensionDTO = extensionService.findById(1, user);
+
+        //Assert
+        Assert.assertEquals(extension.getId(), expectedExtensionDTO.getId());
+    }
 }
