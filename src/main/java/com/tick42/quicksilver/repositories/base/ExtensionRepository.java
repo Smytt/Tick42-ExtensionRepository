@@ -34,4 +34,6 @@ public interface ExtensionRepository {
     void rate(Rating rate);
 
     void updateRating(Rating rate);
+
+    int findExtensionRatingByUser(int extensionId, int userId);
 }
