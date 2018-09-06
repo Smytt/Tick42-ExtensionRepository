@@ -34,4 +34,6 @@ public interface ExtensionService {
     ExtensionDTO fetchGitHub(int extensionId, int userId);
 
     ExtensionDTO increaseDownloadCount(int id, User user);
+
+    int rate(int extensionId, int rating, int userId);
 }
