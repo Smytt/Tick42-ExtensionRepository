@@ -10,7 +10,7 @@ public class PageDTO<T> {
     private Long totalResults;
     private List<T> extensions;
 
-    PageDTO() {
+    public PageDTO() {
 
     }
 

@@ -134,7 +134,7 @@ public class ExtensionServiceImpl implements ExtensionService {
             page = 1;
         }
 
-        if (perPage == null || perPage < 1) {
+        if (perPage == null) {
             perPage = 10;
         }
 
