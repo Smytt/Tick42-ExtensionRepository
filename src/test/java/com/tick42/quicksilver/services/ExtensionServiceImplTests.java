@@ -1,9 +1,6 @@
 package com.tick42.quicksilver.services;
 
-import com.tick42.quicksilver.exceptions.ExtensionNotFoundException;
-import com.tick42.quicksilver.exceptions.ExtensionUnavailableException;
-import com.tick42.quicksilver.exceptions.InvalidStateException;
-import com.tick42.quicksilver.exceptions.UserNotFoundException;
+import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.GitHubModel;
@@ -413,5 +410,140 @@ public class ExtensionServiceImplTests {
 
         //Assert
         Assert.assertEquals(extension.getId(), expectedExtensionDTO.getId());
+    }
+
+    @Test(expected = ExtensionNotFoundException.class)
+    public void update_whenExtensionDoesntExist_ShouldThrow() {
+        //Assert
+        when(extensionRepository.findById(1)).thenReturn(null);
+
+        //Act
+        extensionService.update(1, new ExtensionSpec(), 1);
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void update_whenUserDoesntExist_ShouldThrow() {
+        //Assert
+        Extension extension = new Extension();
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        when(userRepository.findById(1)).thenReturn(null);
+
+        //Act
+        extensionService.update(1, new ExtensionSpec(), 1);
+    }
+
+    @Test(expected = UnauthorizedExtensionModificationException.class)
+    public void update_whenUserIsNotOwnerAndNotAdmin_ShouldThrow() {
+        //Assert
+        User user = new User();
+        user.setId(1);
+        user.setRole("ROLE_USER");
+
+        User owner = new User();
+        owner.setId(2);
+
+        Extension extension = new Extension();
+        extension.setOwner(owner);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        when(userRepository.findById(1)).thenReturn(user);
+
+        //Act
+        extensionService.update(1, new ExtensionSpec(), 1);
+    }
+
+    @Test
+    public void update_whenUserIsOwner_returnUpdatedExtensionDTO() {
+        //Assert
+        Date commitTime = new Date();
+
+        User user = new User();
+        user.setId(1);
+        user.setRole("ROLE_USER");
+
+        User owner = new User();
+        owner.setId(1);
+
+        ExtensionSpec extensionSpec = new ExtensionSpec();
+        extensionSpec.setName("newName");
+        extensionSpec.setVersion("1.0");
+        extensionSpec.setDescription("description");
+        extensionSpec.setGithub("gitHubLink");
+        extensionSpec.setTags("tag1, tag2");
+
+        List<Tag> tags = Arrays.asList(new Tag("tag1"), new Tag("tag2"));
+        when(tagService.generateTags(extensionSpec.getTags())).thenReturn(tags);
+
+        GitHubModel github = new GitHubModel();
+        github.setLastCommit(commitTime);
+        github.setPullRequests(10);
+        github.setOpenIssues(20);
+        github.setLink("gitHubLink");
+        when(gitHubService.generateGitHub(extensionSpec.getGithub())).thenReturn(github);
+
+        Extension extension = new Extension();
+        extension.setOwner(owner);
+        extension.setName("oldName");
+        extension.setVersion("1.0");
+        extension.setDescription("description");
+        extension.setGithub(github);
+        extension.setTags(tags);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        when(userRepository.findById(1)).thenReturn(user);
+
+        //Act
+        ExtensionDTO expectedExtensionDTO = extensionService.update(1, extensionSpec, 1);
+
+        //Assert
+        Assert.assertEquals(expectedExtensionDTO.getName(), "newName");
+    }
+
+    @Test
+    public void update_whenUserIsAdmin_returnUpdatedExtensionDTO() {
+        //Assert
+        Date commitTime = new Date();
+
+        User user = new User();
+        user.setId(2);
+        user.setRole("ROLE_ADMIN");
+
+        User owner = new User();
+        owner.setId(1);
+
+        ExtensionSpec extensionSpec = new ExtensionSpec();
+        extensionSpec.setName("newName");
+        extensionSpec.setVersion("1.0");
+        extensionSpec.setDescription("description");
+        extensionSpec.setGithub("gitHubLink");
+        extensionSpec.setTags("tag1, tag2");
+
+        List<Tag> tags = Arrays.asList(new Tag("tag1"), new Tag("tag2"));
+        when(tagService.generateTags(extensionSpec.getTags())).thenReturn(tags);
+
+        GitHubModel github = new GitHubModel();
+        github.setLastCommit(commitTime);
+        github.setPullRequests(10);
+        github.setOpenIssues(20);
+        github.setLink("gitHubLink");
+        when(gitHubService.generateGitHub(extensionSpec.getGithub())).thenReturn(github);
+
+        Extension extension = new Extension();
+        extension.setOwner(owner);
+        extension.setName("oldName");
+        extension.setVersion("1.0");
+        extension.setDescription("description");
+        extension.setGithub(github);
+        extension.setTags(tags);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        when(userRepository.findById(1)).thenReturn(user);
+
+        //Act
+        ExtensionDTO expectedExtensionDTO = extensionService.update(1, extensionSpec, 1);
+
+        //Assert
+        Assert.assertEquals(expectedExtensionDTO.getName(), "newName");
     }
 }

@@ -90,7 +90,11 @@ public class ExtensionServiceImpl implements ExtensionService {
 
         User user = userRepository.findById(userId);
         if (user == null) {
-            throw new ExtensionNotFoundException("User not found.");
+            throw new UserNotFoundException("User not found.");
+        }
+
+        if (user.getId() != extension.getOwner().getId() && !user.getRole().equals("ROLE_ADMIN")) {
+            throw new UnauthorizedExtensionModificationException("You are not authorized to edit this extension.");
         }
 
         extension.setName(extensionSpec.getName());
@@ -98,10 +102,6 @@ public class ExtensionServiceImpl implements ExtensionService {
         extension.setDescription(extensionSpec.getDescription());
         extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
         extension.setTags(tagService.generateTags(extensionSpec.getTags()));
-
-        if (user.getId() != extension.getOwner().getId() && !user.getRole().equals("ROLE_ADMIN")) {
-            throw new UnauthorizedExtensionModificationException("You are not authorized to edit this extension.");
-        }
 
         extensionRepository.update(extension);
         return new ExtensionDTO(extension);
