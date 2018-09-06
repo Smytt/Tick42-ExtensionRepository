@@ -3,6 +3,7 @@ package com.tick42.quicksilver.services;
 import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.DTO.PageDTO;
+import com.tick42.quicksilver.models.Rating;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.User;

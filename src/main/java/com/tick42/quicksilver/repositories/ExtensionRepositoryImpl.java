@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.repositories;
 
 import com.tick42.quicksilver.models.Extension;
+import com.tick42.quicksilver.models.Rating;
 import com.tick42.quicksilver.repositories.base.ExtensionRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -200,6 +201,28 @@ public class ExtensionRepositoryImpl implements ExtensionRepository {
             return total;
         } catch (Exception e) {
             throw new RuntimeException("Couldn't get total results");
+        }
+    }
+
+    @Override
+    public void rate(Rating rate) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.save(rate);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public void updateRating(Rating rate) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(rate);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.repositories.base;
 
 import com.tick42.quicksilver.models.Extension;
+import com.tick42.quicksilver.models.Rating;
 
 import java.util.List;
 
@@ -29,4 +30,8 @@ public interface ExtensionRepository {
     List<Extension> findFeatured();
 
     List<Extension> findPending();
+
+    void rate(Rating rate);
+
+    void updateRating(Rating rate);
 }
