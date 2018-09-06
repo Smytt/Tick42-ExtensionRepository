@@ -59,6 +59,12 @@ public class Extension {
     @Column(name = "is_featured")
     private boolean isFeatured;
 
+    @Column(name = "rating")
+    private int rating;
+
+    @Column(name = "times_rated")
+    private int timesRated;
+
     public Extension() {
 
     }
@@ -171,5 +177,21 @@ public class Extension {
 
     public void setGithub(GitHubModel github) {
         this.github = github;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public int getTimesRated() {
+        return timesRated;
+    }
+
+    public void setTimesRated(int timesRated) {
+        this.timesRated = timesRated;
     }
 }

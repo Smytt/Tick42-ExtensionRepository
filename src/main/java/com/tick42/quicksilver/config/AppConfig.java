@@ -28,6 +28,7 @@ public class AppConfig {
                 .configure("hibernate.cfg.xml")
                 .addAnnotatedClass(Extension.class)
                 .addAnnotatedClass(User.class)
+                .addAnnotatedClass(Rating.class)
                 .addAnnotatedClass(Tag.class)
                 .addAnnotatedClass(File.class)
                 .addAnnotatedClass(GitHubModel.class)

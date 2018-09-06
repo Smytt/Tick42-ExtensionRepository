@@ -24,6 +24,9 @@ public class ExtensionDTO {
     private String fileLocation;
     private String imageLocation;
     private List<String> tags = new ArrayList<>();
+    private int rating;
+    private int timesRated;
+
 
     public ExtensionDTO() {
 
@@ -59,6 +62,8 @@ public class ExtensionDTO {
             this.setUploadDate(extension.getUploadDate());
         }
         this.setVersion(extension.getVersion());
+        this.setRating(extension.getRating());
+        this.setTimesRated(extension.getTimesRated());
     }
 
     public int getId() {
@@ -195,5 +200,21 @@ public class ExtensionDTO {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public int getTimesRated() {
+        return timesRated;
+    }
+
+    public void setTimesRated(int timesRated) {
+        this.timesRated = timesRated;
     }
 }
