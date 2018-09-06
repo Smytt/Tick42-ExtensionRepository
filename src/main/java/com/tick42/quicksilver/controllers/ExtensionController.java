@@ -125,6 +125,12 @@ public class ExtensionController {
         return extensionService.fetchGitHub(id, userId);
     }
 
+    @PatchMapping(value = "/auth/rating/{id}/{rating}")
+    public int rating(@PathVariable("id") int id,@PathVariable("rating") int rating, HttpServletRequest request) {
+        int userId = validator.getUserIdFromToken(request);
+        return extensionService.rate(id,rating, userId);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ResponseEntity handleInvalidExtensionSpecException(MethodArgumentNotValidException e) {
