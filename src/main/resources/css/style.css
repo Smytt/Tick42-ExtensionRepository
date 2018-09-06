@@ -174,9 +174,9 @@ h1 i {
 }
 
 .hw-extensions .one {
-    width: 600px;
+    width: 580px;
     float: left;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     transition: 0.2s;
 }
 
@@ -207,7 +207,7 @@ h1 i {
     vertical-align: middle;
     font-size: 40px;
     padding: 0 20px;
-    width: 330px;
+    width: 360px;
     box-sizing: border-box;
     text-indent: 0;
     transition: 0.2s;
@@ -243,7 +243,7 @@ h1 i {
 .hw-extensions .one:hover h3 {
     text-indent: 10px;
     margin: 0;
-    width: 330px;
+    width: 370px;
 }
 
 .hw-extensions .one:hover .image {
@@ -390,7 +390,7 @@ footer * {
 }
 
 .regular {
-    width: 600px;
+    width: 580px;
     margin: 0 auto;
 }
 
@@ -514,7 +514,7 @@ label button:hover {
 }
 
 .pages-control {
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 .pages-control .menu-item:nth-child(2) i {
@@ -564,4 +564,15 @@ label button:hover {
 
 .errors p i {
     margin-right:  5px;
+}
+
+.full-width .one {
+    width: 100%;
+}
+.full-width .one h3 {
+    width: calc(100% - 220px);
+}
+
+.full-width .one:hover h3 {
+    width: calc(100% - 210px);
 }
