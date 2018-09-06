@@ -51,6 +51,7 @@ public class ExtensionServiceImpl implements ExtensionService {
         Extension extension = new Extension(extensionSpec);
         extension.setIsPending(true);
         extension.setOwner(user);
+        extension.setTimesDownloaded(0);
         extension.setUploadDate(new Date());
         extension.setTags(tagService.generateTags(extensionSpec.getTags()));
         extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));

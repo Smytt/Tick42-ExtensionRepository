@@ -27,7 +27,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
@@ -45,6 +48,9 @@ public class ExtensionServiceImplTests {
     @Mock
     private GitHubService gitHubService;
 
+    @Mock
+    private Extension mockExtension;
+
     @InjectMocks
     private ExtensionServiceImpl extensionService;
 
@@ -58,50 +64,71 @@ public class ExtensionServiceImplTests {
         extensionService.create(new ExtensionSpec(), 1);
     }
 
-//    @Test
-//    public void create_whenUserExists_returnExtensionDTO() {
-//        //Arrange
-//        int userId = 1;
-//        Date date = new Date();
-//
-//        User user = new User();
-//        user.setId(userId);
-//
-//        ExtensionSpec extensionSpec = new ExtensionSpec();
-//        extensionSpec.setName("name");
-//        extensionSpec.setVersion("1.0");
-//        extensionSpec.setDescription("description");
-//        extensionSpec.setGithub("gitHubLink");
-//        extensionSpec.setTags("tag1, tag2");
-//
-//        List<Tag> tags = Arrays.asList(new Tag("tag1"), new Tag("tag2"));
-//
-//        GitHubModel github = new GitHubModel();
-//        github.setOpenIssues(10);
-//        github.setPullRequests(20);
-//        github.setLastCommit(date);
-//        github.setLink(extensionSpec.getGithub());
-//
-//        Extension extension = new Extension();
-//        extension.setId(1);
-//        extension.setOwner(user);
-//        extension.setGithub(github);
-//        extension.setTags(tags);
-//        extension.setName(extensionSpec.getName());
-//        extension.setVersion(extensionSpec.getVersion());
-//        extension.setDescription(extensionSpec.getDescription());
-//
-//        when(userRepository.findById(userId)).thenReturn(user);
-//        when(tagService.generateTags(extensionSpec.getTags())).thenReturn(tags);
-//        when(gitHubService.generateGitHub(extensionSpec.getGithub())).thenReturn(github);
-//        when(extensionRepository.create(extension)).thenReturn(extension);
-//
-//        //Act
-//        ExtensionDTO createdExtensionDTO = extensionService.create(extensionSpec, userId);
-//
-//        //Assert
-//        Assert.assertTrue(true);
-//    }
+    @Test
+    public void create_whenUserExists_returnExtensionDTO() {
+        //Arrange
+        int userId = 1;
+        Date uploadTime = new Date();
+        Date commitTime = new Date();
+
+        ExtensionSpec extensionSpec = new ExtensionSpec();
+        extensionSpec.setName("name");
+        extensionSpec.setVersion("1.0");
+        extensionSpec.setDescription("description");
+        extensionSpec.setGithub("gitHubLink");
+        extensionSpec.setTags("tag1, tag2");
+
+        User user = new User();
+        user.setUsername("username");
+        user.setId(userId);
+        when(userRepository.findById(userId)).thenReturn(user);
+
+        List<Tag> tags = Arrays.asList(new Tag("tag1"), new Tag("tag2"));
+        when(tagService.generateTags(extensionSpec.getTags())).thenReturn(tags);
+
+        GitHubModel github = new GitHubModel();
+        github.setLastCommit(commitTime);
+        github.setPullRequests(10);
+        github.setOpenIssues(20);
+        github.setLink("gitHubLink");
+        when(gitHubService.generateGitHub(extensionSpec.getGithub())).thenReturn(github);
+
+        Extension extension = new Extension();
+        extension.setName("name");
+        extension.setVersion("1.0");
+        extension.setDescription("description");
+        extension.setIsPending(true);
+        extension.setOwner(user);
+        extension.setUploadDate(uploadTime);
+        extension.setTags(tags);
+        extension.setGithub(github);
+
+        ExtensionDTO expectedExtensionDTO = new ExtensionDTO();
+        expectedExtensionDTO.setName("name");
+        expectedExtensionDTO.setVersion("1.0");
+        expectedExtensionDTO.setDescription("description");
+        expectedExtensionDTO.setPending(true);
+        expectedExtensionDTO.setUploadDate(uploadTime);
+        expectedExtensionDTO.setOwnerName("username");
+        expectedExtensionDTO.setOwnerId(1);
+        expectedExtensionDTO.setUploadDate(uploadTime);
+        expectedExtensionDTO.setTags(Arrays.asList("tag1", "tag2"));
+        expectedExtensionDTO.setGitHubLink("gitHubLink");
+        expectedExtensionDTO.setLastCommit(commitTime);
+        expectedExtensionDTO.setPullRequests(10);
+        expectedExtensionDTO.setOpenIssues(20);
+        expectedExtensionDTO.setFeatured(false);
+        expectedExtensionDTO.setTimesDownloaded(0);
+        expectedExtensionDTO.setVersion("1.0");
+
+        when(extensionRepository.create(any(Extension.class))).thenReturn(extension);
+
+        //Act
+        ExtensionDTO createdExtensionDTO = extensionService.create(extensionSpec, userId);
+
+        //Assert
+        Assert.assertThat(expectedExtensionDTO, samePropertyValuesAs(createdExtensionDTO));
+    }
 
     @Test
     public void setFeaturedState_whenSetToFeatured_returnFeaturedExtensionDTO() {

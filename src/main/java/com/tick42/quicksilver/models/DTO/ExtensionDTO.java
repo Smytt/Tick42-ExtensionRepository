@@ -36,7 +36,9 @@ public class ExtensionDTO {
         this.setFeatured(extension.getIsFeatured());
         if (extension.getGithub() != null) {
             this.setGitHubLink(extension.getGithub().getLink());
-            this.setLastCommit(extension.getGithub().getLastCommit());
+            if (extension.getGithub().getLastCommit() != null) {
+                this.setLastCommit(extension.getGithub().getLastCommit());
+            }
             this.setOpenIssues(extension.getGithub().getOpenIssues());
             this.setPullRequests(extension.getGithub().getPullRequests());
         }
