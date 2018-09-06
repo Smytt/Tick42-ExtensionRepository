@@ -258,7 +258,10 @@ let app = (() => {
         let extensionId = $(this).attr('extensionId');
 
         remote.getExtension(extensionId).then(
-            show.edit
+            res => {
+                res = render.edit(res);
+                show.edit(res);
+            }
         ).catch(e => {
             handle(e);
         })
@@ -361,11 +364,17 @@ let app = (() => {
         preventDefault(e);
 
         let extensionId = $(this).attr('extensionId');
-        remote.deleteExtension(extensionId).then(
-            res => {
-                getHomeView();
-            }
-        );
+        let m = $('.loading-block')
+        m.find('div').html('deleting extenson...');
+        m.fadeIn()
+        setTimeout(() => {
+            remote.deleteExtension(extensionId).then(
+                res => {
+                    getHomeView();
+                }
+            );
+        }, 1000)
+
     }
 
     function setUserState(e) {

@@ -24,9 +24,15 @@ let render = (() => {
         return profile;
     }
 
+    let edit = (extension) => {
+        extension['description'] = extension['description'].replace(/<br \/>/gi, '\n');
+        return extension;
+    }
+
     return {
         searchResults,
         extension,
-        profile
+        profile,
+        edit
     }
 })();
