@@ -535,6 +535,12 @@ let app = (() => {
         )
     }
 
+    let downloadFile = function (e) {
+        let extensionId = $(this).attr('extensionId');
+        $('#downloadTimes').html(+$('#downloadTimes').html() + 1);
+        remote.downloadFile(extensionId);
+    }
+
     let selectFile = function () {
         let filename = $(this).val().split(/(\\|\/)/g).pop();
         let id = $(this).attr('id');
@@ -615,6 +621,7 @@ let app = (() => {
         $body.on('click', '.action-btn #refresh-github', refreshGitHub)
         $body.on('click', '.action-btn #change-featured-state', setFeaturedState)
         $body.on('change', '.submit-file', selectFile)
+        $body.on('click', '#download-file', downloadFile)
 
 
         getHomeView();

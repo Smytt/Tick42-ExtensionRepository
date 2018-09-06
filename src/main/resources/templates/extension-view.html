@@ -9,7 +9,7 @@
             <div style="background-image: url(../img/icons/internet.png)"></div>
             {{/imageLocation}}
             {{#fileLocation}}
-            <a href="{{fileLocation}}" class="menu-item" target="_blank"><i class="fas fa-download"></i> download</a>
+            <a href="{{fileLocation}}" class="menu-item" extensionId="{{id}}" target="_blank" id="download-file"><i class="fas fa-download"></i> download</a>
             {{/fileLocation}}
             {{^fileLocation}}
             <span class="menu-item"><i class="fas fa-ban"></i> no file provided</span>
@@ -76,7 +76,7 @@
             <h2><i class="fas fa-check-circle"></i> Version </h2>
             <span>{{version}}</span>
             <h2><i class="fas fa-arrow-circle-down"></i> Downloads</h2>
-            <span>{{timesDownloaded}}</span>
+            <span id="downloadTimes">{{timesDownloaded}}</span>
         </div>
         <div class="info github">
             <h2><i class="fab fa-github"></i> Last commit</h2>

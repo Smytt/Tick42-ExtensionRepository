@@ -694,10 +694,11 @@ public class ExtensionServiceImplTests {
         extension1.setName("Contains SearchedName");
         extension2.setName("Contains SearchedName As Well");
         List<Extension> extensionResults = Arrays.asList(extension1, extension2);
+
         when(extensionRepository.findAllByDate(name, 1, 1)).thenReturn(extensionResults);
 
         //Act
-        PageDTO<ExtensionDTO> actualPageDTO = extensionService.findAll(name, null, null, null);
+        PageDTO<ExtensionDTO> actualPageDTO = extensionService.findAll(name, null, 1, 1);
 
         //Assert
         actualPageDTO.getExtensions().forEach(extension -> {

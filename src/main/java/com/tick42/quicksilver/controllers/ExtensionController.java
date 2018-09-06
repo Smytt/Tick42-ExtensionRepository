@@ -65,6 +65,20 @@ public class ExtensionController {
         return extensionService.findFeatured();
     }
 
+    @GetMapping("/auth/extensions/download/{id}")
+    public ExtensionDTO download(@PathVariable(name = "id") int id, HttpServletRequest request) {
+        User user = null;
+        if(request.getHeader("Authorization") != null) {
+            try {
+                user = validator.validate(request.getHeader("Authorization").substring(6));
+            }
+            catch (Exception e) {
+                user = null;
+            }
+        }
+        return extensionService.increaseDownloadCount(id, user);
+    }
+
     @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
     @PostMapping("/auth/extensions")
     public ExtensionDTO create(@Valid @RequestBody ExtensionSpec extension, HttpServletRequest request) {

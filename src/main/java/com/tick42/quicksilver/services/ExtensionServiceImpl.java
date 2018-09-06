@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,21 +61,9 @@ public class ExtensionServiceImpl implements ExtensionService {
     @Override
     public ExtensionDTO findById(int id, User user) {
         Extension extension = extensionRepository.findById(id);
-        if (extension == null) {
-            throw new ExtensionNotFoundException("Extension doesn't exist.");
-        }
 
-        if (!extension.getOwner().getIsActive() &&
-                ((user == null) || (!user.getRole().equals("ROLE_ADMIN")))) {
-            throw new ExtensionUnavailableException("Extension is unavailable.");
-        }
+        checkRequestingUserVsRequestedExtension(extension, user);
 
-        if (extension.getIsPending() &&
-                ((user == null) ||
-                        (extension.getOwner().getId() != user.getId()) &&
-                                (!user.getRole().equals("ROLE_ADMIN")))) {
-            throw new ExtensionUnavailableException("Extension is unavailable.");
-        }
         return new ExtensionDTO(extension);
     }
 
@@ -268,5 +255,34 @@ public class ExtensionServiceImpl implements ExtensionService {
         extensionRepository.update(extension);
 
         return new ExtensionDTO(extension);
+    }
+
+    @Override
+    public ExtensionDTO increaseDownloadCount(int id, User user) {
+        Extension extension = extensionRepository.findById(id);
+
+        checkRequestingUserVsRequestedExtension(extension, user);
+
+        extension.setTimesDownloaded(extension.getTimesDownloaded() + 1);
+
+        return new ExtensionDTO(extensionRepository.update(extension));
+    }
+
+    private void checkRequestingUserVsRequestedExtension(Extension extension, User user) {
+        if (extension == null) {
+            throw new ExtensionNotFoundException("Extension doesn't exist.");
+        }
+
+        if (!extension.getOwner().getIsActive() &&
+                ((user == null) || (!user.getRole().equals("ROLE_ADMIN")))) {
+            throw new ExtensionUnavailableException("Extension is unavailable.");
+        }
+
+        if (extension.getIsPending() &&
+                ((user == null) ||
+                        (extension.getOwner().getId() != user.getId()) &&
+                                (!user.getRole().equals("ROLE_ADMIN")))) {
+            throw new ExtensionUnavailableException("Extension is unavailable.");
+        }
     }
 }

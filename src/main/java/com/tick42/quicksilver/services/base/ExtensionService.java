@@ -32,4 +32,6 @@ public interface ExtensionService {
     List<ExtensionDTO> generateExtensionDTOList(List<Extension> extensions);
 
     ExtensionDTO fetchGitHub(int extensionId, int userId);
+
+    ExtensionDTO increaseDownloadCount(int id, User user);
 }
