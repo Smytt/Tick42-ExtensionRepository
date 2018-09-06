@@ -151,14 +151,43 @@ let app = (() => {
         if (e) {
             id = $(this).attr('extensionId');
         }
-        remote.getExtension(id).then(
-            res => {
-                res = render.extension(res)
-                show.extension(res)
-            }
-        ).catch(e => {
+        if (remote.isAuth()) {
+        remote.userExtensionRating(id).then(
+            res =>{
+            let userRating = res;
+            remote.getExtension(id).then(
+                res => {
+                    res = render.extension(res)
+                    show.extension(res, userRating)
+                }
+            )
+        }).catch(e => {
             handle(e);
         });
+        }else{
+            remote.getExtension(id).then(
+                res => {
+                    res = render.extension(res)
+                    show.extension(res, 0)
+                }
+            )
+        }
+    }
+
+    let rateExtension = function (e){
+        if(remote.isAuth()){
+            let rating = $(this).attr('id');
+            let extensionId = $(this).attr('extensionId');
+            let currentRatedStatus = $('.info .rating').attr('id');
+            if(rating == currentRatedStatus){
+                console.log('same rating')
+            }else{
+                remote.rateExtension(extensionId, rating);
+            }
+        }else{
+            $('.not-logged').empty();
+            $('.not-logged').append('You must be logged in to rate this extension')
+        }
     }
 
     let getTagView = function (e) {
@@ -622,7 +651,7 @@ let app = (() => {
         $body.on('click', '.action-btn #change-featured-state', setFeaturedState)
         $body.on('change', '.submit-file', selectFile)
         $body.on('click', '#download-file', downloadFile)
-
+        $body.on('click', '.rating h2', rateExtension)
 
         getHomeView();
     }

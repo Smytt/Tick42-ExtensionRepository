@@ -39,11 +39,10 @@ public class ExtensionController {
     @GetMapping("/extensions/{id}")
     public ExtensionDTO get(@PathVariable(name = "id") int id, HttpServletRequest request) {
         User user = null;
-        if(request.getHeader("Authorization") != null) {
+        if (request.getHeader("Authorization") != null) {
             try {
                 user = validator.validate(request.getHeader("Authorization").substring(6));
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 user = null;
             }
         }
@@ -68,11 +67,10 @@ public class ExtensionController {
     @GetMapping("/auth/extensions/download/{id}")
     public ExtensionDTO download(@PathVariable(name = "id") int id, HttpServletRequest request) {
         User user = null;
-        if(request.getHeader("Authorization") != null) {
+        if (request.getHeader("Authorization") != null) {
             try {
                 user = validator.validate(request.getHeader("Authorization").substring(6));
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 user = null;
             }
         }
@@ -126,9 +124,15 @@ public class ExtensionController {
     }
 
     @PatchMapping(value = "/auth/rating/{id}/{rating}")
-    public int rating(@PathVariable("id") int id,@PathVariable("rating") int rating, HttpServletRequest request) {
+    public int rating(@PathVariable("id") int id, @PathVariable("rating") int rating, HttpServletRequest request) {
         int userId = validator.getUserIdFromToken(request);
-        return extensionService.rate(id,rating, userId);
+        return extensionService.rate(id, rating, userId);
+    }
+
+    @GetMapping(value = "/auth/userRating/{id}")
+    public int userRatingForExtension(@PathVariable("id") int id,HttpServletRequest request) {
+        int userId = validator.getUserIdFromToken(request);
+        return extensionService.userRatingForExtension(id, userId);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

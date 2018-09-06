@@ -242,6 +242,25 @@ remote = (() => {
         })
     }
 
+    let userExtensionRating = (id) => {
+        return $.ajax({
+            type: 'GET',
+            url: base + '/api/auth/userRating/' + id,
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            }
+        })
+    }
+
+    let rateExtension = (id, rating) => {
+        return $.ajax({
+            type: 'PATCH',
+            url: base + '/api/auth/rating/' + id + "/" + rating,
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            }
+        })
+    }
     return {
         isAuth,
         getTag,
@@ -267,6 +286,8 @@ remote = (() => {
         setUserState,
         register,
         registerAdmin,
-        downloadFile
+        downloadFile,
+        userExtensionRating,
+        rateExtension
     }
 })()

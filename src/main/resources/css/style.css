@@ -320,20 +320,20 @@ footer * {
     font-size: 22px;
     margin-bottom: 5px;
 }
-.info div {
+.info .rating i{
     margin-bottom: 25px;
     display: block;
     padding-left: 20px;
     font-size: 18px;
     line-height: 1.3em;
 }
-.info .fa-star {
-    float: left;
+.info .rating i {
+    float:left;
     color: #0e9aa7;
     margin-left: -15px;
 }
 
-.info .current{
+.rating h2 .current{
     color: orange;
 }
 .info span {
@@ -342,6 +342,10 @@ footer * {
     padding-left: 20px;
     font-size: 18px;
     line-height: 1.3em;
+}
+
+.info .rating{
+    height:40px;
 }
 
 .info h2 i {

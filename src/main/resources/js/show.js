@@ -192,13 +192,18 @@ let show = (() => {
         })
     }
 
-    let extension = (extension) => {
+    let extension = (extension, userRating) => {
         $.ajax({
             url: './templates/extension-view.html',
             success: (tmpl) => {
                 let $html = Mustache.render(tmpl, extension);
                 $content.html($html);
+                $('.info .current').removeClass('current');
+                $('.info .rating').attr('id', userRating)
 
+                for(let i=1; i < userRating + 1; i++){
+                    $('.rating .star' +i).addClass('current');
+                }
             }
         })
     }
