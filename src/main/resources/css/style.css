@@ -174,7 +174,7 @@ h1 i {
 }
 
 .hw-extensions .one {
-    width: 580px;
+    width: 600px;
     float: left;
     margin-bottom: 10px;
     transition: 0.2s;
@@ -207,7 +207,7 @@ h1 i {
     vertical-align: middle;
     font-size: 40px;
     padding: 0 20px;
-    width: 430px;
+    width: 330px;
     box-sizing: border-box;
     text-indent: 0;
     transition: 0.2s;
@@ -243,7 +243,7 @@ h1 i {
 .hw-extensions .one:hover h3 {
     text-indent: 10px;
     margin: 0;
-    width: 440px;
+    width: 330px;
 }
 
 .hw-extensions .one:hover .image {
@@ -320,7 +320,22 @@ footer * {
     font-size: 22px;
     margin-bottom: 5px;
 }
+.info div {
+    margin-bottom: 25px;
+    display: block;
+    padding-left: 20px;
+    font-size: 18px;
+    line-height: 1.3em;
+}
+.info .fa-star {
+    float: left;
+    color: #0e9aa7;
+    margin-left: -15px;
+}
 
+.info .current{
+    color: orange;
+}
 .info span {
     margin-bottom: 25px;
     display: block;
