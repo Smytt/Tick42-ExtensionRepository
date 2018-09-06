@@ -68,6 +68,9 @@
             </div>
             {{/isOwn}}
             {{/isAdmin}}
+            <div class="current-rating">
+                <i class="fas fa-star star1"></i> {{rating}}
+            </div>
             <h1>{{name}}</h1>
             <p>{{{description}}}</p>
             <div class="tags">
@@ -87,11 +90,11 @@
             <span id="downloadTimes">{{timesDownloaded}}</span>
             <h2><i class="fab fa-github"></i> Rate extension</h2>
             <div class="rating">
-                <h2 id="1" extensionId="{{id}}"><i class="fas fa-star star1"></i></h2>
-                <h2 id="2" extensionId="{{id}}"><i class="fas fa-star star2"></i></h2>
-                <h2 id="3" extensionId="{{id}}"><i class="fas fa-star star3"></i></h2>
-                <h2 id="4" extensionId="{{id}}"><i class="fas fa-star star4"></i></h2>
-                <h2 id="5" extensionId="{{id}}"><i class="fas fa-star star5"></i></h2>
+                <a id="5" extensionId="{{id}}"><i class="fas fa-star star5"></i></a>
+                <a id="4" extensionId="{{id}}"><i class="fas fa-star star4"></i></a>
+                <a id="3" extensionId="{{id}}"><i class="fas fa-star star3"></i></a>
+                <a id="2" extensionId="{{id}}"><i class="fas fa-star star2"></i></a>
+                <a id="1" extensionId="{{id}}"><i class="fas fa-star star1"></i></a>
             </div>
             <div class="not-logged"></div>
         </div>

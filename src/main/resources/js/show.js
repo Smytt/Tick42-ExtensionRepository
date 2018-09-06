@@ -198,12 +198,8 @@ let show = (() => {
             success: (tmpl) => {
                 let $html = Mustache.render(tmpl, extension);
                 $content.html($html);
-                $('.info .current').removeClass('current');
                 $('.info .rating').attr('id', userRating)
-
-                for(let i=1; i < userRating + 1; i++){
-                    $('.rating .star' +i).addClass('current');
-                }
+                $('.rating .star' + userRating).parent().addClass('current');
             }
         })
     }

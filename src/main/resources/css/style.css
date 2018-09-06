@@ -286,7 +286,7 @@ footer * {
     width: 250px;
 }
 
-.extension-details .image div {
+.extension-details .image > div:first-child {
     width: 250px;
     height: 250px;
     border: 5px solid #f6cd61;
@@ -320,22 +320,33 @@ footer * {
     font-size: 22px;
     margin-bottom: 5px;
 }
-.info .rating i{
-    margin-bottom: 25px;
-    display: block;
-    padding-left: 20px;
-    font-size: 18px;
-    line-height: 1.3em;
-}
-.info .rating i {
-    float:left;
-    color: #0e9aa7;
-    margin-left: -15px;
+
+.rating {
+    margin-right: 40px;
 }
 
-.rating h2 .current{
-    color: orange;
+.rating a {
+    float: right;
+    font-size: 20px;
 }
+
+.rating a:hover {
+    color: #f6cd61;
+    cursor: pointer;
+}
+
+.rating a:hover + a, .rating a:hover + a + a, .rating a:hover + a + a + a, .rating a:hover + a + a + a + a {
+    color: #f6cd61 !important;
+}
+
+.rating a.current + a, .rating a.current + a + a, .rating a.current + a + a + a, .rating a.current + a + a + a + a {
+    color: #f6cd61 !important;
+}
+
+.rating a.current {
+    color: #f6cd61;
+}
+
 .info span {
     margin-bottom: 25px;
     display: block;
@@ -344,8 +355,8 @@ footer * {
     line-height: 1.3em;
 }
 
-.info .rating{
-    height:40px;
+.info .rating {
+    height: 40px;
 }
 
 .info h2 i {
@@ -563,16 +574,25 @@ label button:hover {
 }
 
 .errors p i {
-    margin-right:  5px;
+    margin-right: 5px;
 }
 
 .full-width .one {
     width: 100%;
 }
+
 .full-width .one h3 {
     width: calc(100% - 220px);
 }
 
 .full-width .one:hover h3 {
     width: calc(100% - 210px);
+}
+
+.current-rating {
+    height: auto;
+    text-align: left;
+    font-size: 30px;
+    color: #f6cd61;
+    margin-top: 20px;
 }
