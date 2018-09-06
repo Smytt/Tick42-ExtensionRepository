@@ -3,6 +3,7 @@ package com.tick42.quicksilver.controllers;
 
 import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.UserDTO;
+import com.tick42.quicksilver.models.Spec.ChangeUserPasswordSpec;
 import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.security.Exceptions.JwtTokenIsMissingException;
@@ -13,7 +14,6 @@ import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,6 +78,13 @@ public class UserController {
     @GetMapping(value = "/auth/users/all")
     public List<UserDTO> listAllUsers(@RequestParam(name = "state", required = false) String state) {
         return userService.findAll(state);
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
+    @PatchMapping(value = "/auth/changePassword")
+    public User changePassword(@Valid @RequestBody ChangeUserPasswordSpec changePasswordSpec, HttpServletRequest request){
+        int userId = validator.getUserIdFromToken(request);
+        return userService.changePassword(userId, changePasswordSpec);
     }
 
     @ExceptionHandler

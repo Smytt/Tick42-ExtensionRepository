@@ -1,17 +1,18 @@
 package com.tick42.quicksilver.services;
-
+import com.tick42.quicksilver.exceptions.InvalidCredentialsException;
 import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.UserDTO;
+import com.tick42.quicksilver.models.Spec.ChangeUserPasswordSpec;
 import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.UserRepository;
 import com.tick42.quicksilver.security.JwtGenerator;
 import com.tick42.quicksilver.services.base.UserService;
-import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,7 +68,6 @@ public class UserServiceImpl implements UserService {
                 users = userRepository.findUsersByState(false);
                 break;
             default:
-                //todo should not return all, but is already set in the JS part. fcuk.
                 users = userRepository.findAll();
         }
 
@@ -136,5 +136,21 @@ public class UserServiceImpl implements UserService {
         }
 
         return jwtGenerator.generate(user);
+    }
+
+    @Override
+    public User changePassword(int id, ChangeUserPasswordSpec changePasswordSpec){
+        User user = userRepository.findById(id);
+        if (!changePasswordSpec.getNewPassword().equals(changePasswordSpec.getRepeatNewPassword())){
+            throw new PasswordsMissMatchException("passwords don't match");
+        }
+
+        if (!user.getPassword().equals(changePasswordSpec.getCurrentPassword())){
+            throw new InvalidCredentialsException("Invalid current password.");
+        }
+        user.setPassword(changePasswordSpec.getNewPassword());
+        userRepository.update(user);
+        return user;
+
     }
 }

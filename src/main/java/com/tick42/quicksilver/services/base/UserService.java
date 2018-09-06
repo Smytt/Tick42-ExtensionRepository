@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.services.base;
 
 import com.tick42.quicksilver.models.DTO.UserDTO;
+import com.tick42.quicksilver.models.Spec.ChangeUserPasswordSpec;
 import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
 import org.apache.http.auth.InvalidCredentialsException;
@@ -21,4 +22,6 @@ public interface UserService {
     User register(UserSpec userSpec, String role);
 
     String generateToken(User user);
+
+    User changePassword(int id, ChangeUserPasswordSpec changePasswordSpec);
 }
