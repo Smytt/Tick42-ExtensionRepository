@@ -287,34 +287,4 @@ public class ExtensionServiceImpl implements ExtensionService {
         }
     }
 
-    @Override
-    public int rate(int extensionId, int rating, int userId) {
-        if (rating > 5) {
-            throw new InvalidRatingException("Rating must be between 1 and 5");
-        }
-        Rating newRating = new Rating(rating, extensionId, userId);
-        int currentRating = extensionRepository.findExtensionRatingByUser(extensionId, userId);
-        Extension extension = extensionRepository.findById(extensionId);
-        if (extension == null) {
-            throw new ExtensionNotFoundException("Extension not found");
-        }
-        if (currentRating == 0) {
-            extensionRepository.rate(newRating);
-            extension.setRating((extension.getRating() * extension.getTimesRated() + rating) / (extension.getTimesRated() + 1));
-            extension.setTimesRated(extension.getTimesRated() + 1);
-            extensionRepository.update(extension);
-        } else {
-            extension.setRating(((extension.getRating() * extension.getTimesRated() - currentRating) + rating) / (extension.getTimesRated()));
-            extensionRepository.update(extension);
-            extensionRepository.updateRating(newRating);
-            currentRating = rating;
-        }
-        return currentRating;
-    }
-
-    @Override
-    public int userRatingForExtension(int extensionId, int userId) {
-
-        return extensionRepository.findExtensionRatingByUser(extensionId, userId);
-    }
 }

@@ -122,19 +122,6 @@ public class ExtensionController {
         int userId = validator.getUserIdFromToken(request);
         return extensionService.fetchGitHub(id, userId);
     }
-
-    @PatchMapping(value = "/auth/rating/{id}/{rating}")
-    public int rating(@PathVariable("id") int id, @PathVariable("rating") int rating, HttpServletRequest request) {
-        int userId = validator.getUserIdFromToken(request);
-        return extensionService.rate(id, rating, userId);
-    }
-
-    @GetMapping(value = "/auth/userRating/{id}")
-    public int userRatingForExtension(@PathVariable("id") int id,HttpServletRequest request) {
-        int userId = validator.getUserIdFromToken(request);
-        return extensionService.userRatingForExtension(id, userId);
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ResponseEntity handleInvalidExtensionSpecException(MethodArgumentNotValidException e) {

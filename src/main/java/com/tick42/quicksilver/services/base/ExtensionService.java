@@ -35,7 +35,4 @@ public interface ExtensionService {
 
     ExtensionDTO increaseDownloadCount(int id, User user);
 
-    int rate(int extensionId, int rating, int userId);
-
-    int userRatingForExtension(int extensionId, int userId);
 }
