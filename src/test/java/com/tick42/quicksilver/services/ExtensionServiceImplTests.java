@@ -546,4 +546,75 @@ public class ExtensionServiceImplTests {
         //Assert
         Assert.assertEquals(expectedExtensionDTO.getName(), "newName");
     }
+
+    @Test(expected = ExtensionNotFoundException.class)
+    public void delete_whenExtensionDoesntExist_ShouldThrow() {
+        //Assert
+        when(extensionRepository.findById(1)).thenReturn(null);
+
+        //Act
+        extensionService.delete(1, 1);
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void delete_whenUserDoesntExist_ShouldThrow() {
+        //Assert
+        Extension extension = new Extension();
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        when(userRepository.findById(1)).thenReturn(null);
+
+        //Act
+        extensionService.delete(1, 1);
+    }
+
+    @Test
+    public void delete_whenUserIsOwner_ShouldNotThrow() {
+        //Assert
+        User user = new User();
+        user.setId(1);
+        user.setRole("ROLE_USER");
+
+        User owner = new User();
+        owner.setId(1);
+
+        Extension extension = new Extension();
+        extension.setOwner(owner);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        when(userRepository.findById(1)).thenReturn(user);
+
+        //Act
+        try {
+            extensionService.delete(1, 1);
+            Assert.assertTrue(Boolean.TRUE);
+        } catch (Exception ex) {
+            Assert.fail(ex.getMessage());
+        }
+    }
+
+    @Test
+    public void delete_whenUserIsAdmin_ShouldNotThrow() {
+        //Assert
+        User user = new User();
+        user.setId(1);
+        user.setRole("ROLE_ADMIN");
+
+        User owner = new User();
+        owner.setId(2);
+
+        Extension extension = new Extension();
+        extension.setOwner(owner);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        when(userRepository.findById(1)).thenReturn(user);
+
+        //Act
+        try {
+            extensionService.delete(1, 1);
+            Assert.assertTrue(Boolean.TRUE);
+        } catch (Exception ex) {
+            Assert.fail(ex.getMessage());
+        }
+    }
 }
