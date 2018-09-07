@@ -642,8 +642,8 @@ let app = (() => {
             e['responseJSON'].forEach(error => $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + error + '</p>'));
         }
         catch (err) {
-            console.log(e['responseJSON'].message)
-            $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseJSON'].message + '</p>');
+            console.log(e['responseJSON'])
+            $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseText'] + '</p>');
         }
     }
 

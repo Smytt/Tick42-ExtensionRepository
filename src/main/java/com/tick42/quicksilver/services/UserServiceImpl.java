@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("User doesn't exist.");
         }
 
-        if (!user.getIsActive() && !user.getRole().equals("ROLE_ADMIN")) {
+        if (!user.getIsActive() && !loggedUser.getRole().equals("ROLE_ADMIN")) {
             throw new UserProfileUnavailableException("User profile is disabled.");
         }
 

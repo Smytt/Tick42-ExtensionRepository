@@ -1,5 +1,8 @@
 package com.tick42.quicksilver.models.Spec;
 
+
+import com.tick42.quicksilver.validation.ValidPassword;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -14,6 +17,7 @@ public class UserSpec {
     private String password;
 
     @NotNull
+    @ValidPassword
     @Size(min=7, message="password should be be between 11 and 22 char.")
     private String repeatPassword;
 

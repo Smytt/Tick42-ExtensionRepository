@@ -226,6 +226,7 @@ remote = (() => {
         })
     }
     let getUsers = (state) => {
+    console.log(state);
         return $.ajax({
             type: 'GET',
             url: base + '/api/auth/users/all' + '?state=' + state,
