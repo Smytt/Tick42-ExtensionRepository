@@ -601,3 +601,15 @@ label button:hover {
     float:right;
     margin-top:-70px;
 }
+
+.warnings {
+    margin-top: 20px;
+}
+
+.success {
+    color: #1cd393;
+}
+
+.fail {
+    color: #f2836c;
+}

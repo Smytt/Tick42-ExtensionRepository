@@ -21,6 +21,9 @@ public class ExtensionDTO {
     private String lastCommit;
     private int openIssues;
     private int pullRequests;
+    private String lastSuccessfulPullOfData;
+    private String lastFailedAttemptToCollectData;
+    private String lastErrorMessage;
     private String fileLocation;
     private String imageLocation;
     private List<String> tags = new ArrayList<>();
@@ -44,6 +47,13 @@ public class ExtensionDTO {
             }
             this.setOpenIssues(extension.getGithub().getOpenIssues());
             this.setPullRequests(extension.getGithub().getPullRequests());
+            if (extension.getGithub().getLastSuccess() != null) {
+                this.setLastSuccessfulPullOfData(extension.getGithub().getLastSuccess());
+            }
+            if (extension.getGithub().getLastFail() != null) {
+                this.setLastFailedAttemptToCollectData(extension.getGithub().getLastFail());
+                this.setLastErrorMessage(extension.getGithub().getFailMessage());
+            }
         }
         if (extension.getImage() != null) {
             this.setImageLocation(extension.getImage().getLocation());
@@ -216,5 +226,29 @@ public class ExtensionDTO {
 
     public void setTimesRated(int timesRated) {
         this.timesRated = timesRated;
+    }
+
+    public String getLastSuccessfulPullOfData() {
+        return lastSuccessfulPullOfData;
+    }
+
+    public void setLastSuccessfulPullOfData(Date lastSuccessfulPullOfData) {
+        this.lastSuccessfulPullOfData = lastSuccessfulPullOfData.toString();
+    }
+
+    public String getLastFailedAttemptToCollectData() {
+        return lastFailedAttemptToCollectData;
+    }
+
+    public void setLastFailedAttemptToCollectData(Date lastFailedAttemptToCollectData) {
+        this.lastFailedAttemptToCollectData = lastFailedAttemptToCollectData.toString();
+    }
+
+    public String getLastErrorMessage() {
+        return lastErrorMessage;
+    }
+
+    public void setLastErrorMessage(String lastErrorMessage) {
+        this.lastErrorMessage = lastErrorMessage;
     }
 }

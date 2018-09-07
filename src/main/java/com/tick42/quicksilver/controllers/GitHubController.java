@@ -29,6 +29,12 @@ public class GitHubController {
         gitHubService.createScheduledTask(taskRegistrar, gitHubSettingSpec);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/auth/github")
+    public GitHubSettingSpec getGitHubSetting() {
+        return gitHubService.getSettings();
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ResponseEntity handleInvalidGitHubSettingSpecException(MethodArgumentNotValidException e) {

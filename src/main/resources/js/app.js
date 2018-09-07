@@ -53,9 +53,14 @@ let app = (() => {
 
     function getGithubSettingsView(e) {
         preventDefault(e);
-        show.gitHubSettingsView('')
-        $('.admin-buttons button').removeClass('current');
-        $(this).addClass('current');
+        remote.getCurrentGitHubSettings().then(
+            res => {
+                show.gitHubSettingsView(res);
+                $('.admin-buttons button').removeClass('current');
+                $(this).addClass('current');
+            }
+
+        )
     }
 
     function submitGithubSettings(e) {
@@ -63,8 +68,8 @@ let app = (() => {
 
         let username = $('#username').val();
         let token = $('#token').val();
-        let rate = $('#rate').val();
-        let wait = $('#wait').val();
+        let rate = +$('#rate').val();
+        let wait = +$('#wait').val();
 
         let gitHubSettings = {
             username,
@@ -154,19 +159,19 @@ let app = (() => {
             id = $(this).attr('extensionId');
         }
         if (remote.isAuth()) {
-        remote.userExtensionRating(id).then(
-            res =>{
-            let userRating = res;
-            remote.getExtension(id).then(
+            remote.userExtensionRating(id).then(
                 res => {
-                    res = render.extension(res)
-                    show.extension(res, userRating)
-                }
-            )
-        }).catch(e => {
-            handle(e);
-        });
-        }else{
+                    let userRating = res;
+                    remote.getExtension(id).then(
+                        res => {
+                            res = render.extension(res)
+                            show.extension(res, userRating)
+                        }
+                    )
+                }).catch(e => {
+                handle(e);
+            });
+        } else {
             remote.getExtension(id).then(
                 res => {
                     res = render.extension(res)
@@ -176,21 +181,21 @@ let app = (() => {
         }
     }
 
-    let rateExtension = function (e){
+    let rateExtension = function (e) {
         preventDefault(e)
 
-        if(remote.isAuth()){
+        if (remote.isAuth()) {
             $(this).closest('div').find('a').removeClass('current')
             $(this).addClass('current');
             let rating = $(this).attr('id');
             let extensionId = $(this).attr('extensionId');
             let currentRatedStatus = $('.info .rating').attr('id');
-            if(rating == currentRatedStatus){
+            if (rating == currentRatedStatus) {
                 console.log('same rating')
-            }else{
+            } else {
                 remote.rateExtension(extensionId, rating);
             }
-        }else{
+        } else {
             $('.not-logged').empty();
             $('.not-logged').append('You must be logged in to rate this extension')
         }
@@ -580,7 +585,7 @@ let app = (() => {
 
         remote.loadPending().then(
             res => {
-                res = render.shortenTitle(res);
+                res = render.shortenTitleWhenAllLoaded(res);
                 show.pending(res)
             }
         )
@@ -636,7 +641,7 @@ let app = (() => {
             console.log(e['responseJSON'])
             e['responseJSON'].forEach(error => $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + error + '</p>'));
         }
-        catch(err) {
+        catch (err) {
             console.log(e['responseJSON'].message)
             $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseJSON'].message + '</p>');
         }
@@ -701,7 +706,6 @@ let app = (() => {
         $body.on('click', '.rating a', rateExtension)
         $body.on('click', '.change-password-view', getChangePasswordView)
         $body.on('click', '#change-password-btn', changePassword)
-
 
 
         getHomeView();

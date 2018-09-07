@@ -274,6 +274,17 @@ remote = (() => {
             }
         })
     }
+
+    let getCurrentGitHubSettings = () => {
+        return $.ajax({
+            type: 'GET',
+            url: base + '/api/auth/github',
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            }
+        })
+    }
+
     return {
         isAuth,
         getTag,
@@ -302,6 +313,7 @@ remote = (() => {
         downloadFile,
         userExtensionRating,
         rateExtension,
-        changePassword
+        changePassword,
+        getCurrentGitHubSettings
     }
 })()

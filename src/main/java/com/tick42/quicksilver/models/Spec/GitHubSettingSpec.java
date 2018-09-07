@@ -1,5 +1,6 @@
 package com.tick42.quicksilver.models.Spec;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -14,12 +15,12 @@ public class GitHubSettingSpec {
     private String token;
 
     @NotNull(message = "Enter github data refresh rate in milliseconds.")
-    @Size(min = 1000, message = "The rate should be 1000 millisecond or more.")
-    private Integer rate;
+    @Min(value = 1000, message = "The rate should be 1000 millisecond or more.")
+    private int rate;
 
     @NotNull(message = "Enter waiting period in milliseconds before initial data fetch.")
-    @Size(min=1000, message="Initial wait should be 1000 millisecond or more.")
-    private Integer wait;
+    @Min(value = 1000, message = "Initial wait should be 1000 millisecond or more.")
+    private int wait;
 
     public GitHubSettingSpec() {
 

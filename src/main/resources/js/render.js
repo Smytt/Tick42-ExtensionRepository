@@ -35,11 +35,20 @@ let render = (() => {
         })
         return page;
     }
+
+    let shortenTitleWhenAllLoaded = (extensions) => {
+        extensions.forEach(extension => {
+            extension['name'] = extension['name'].length >= 20 ? extension['name'].substr(0, 17) + "..." : extension['name']
+        })
+        return extensions;
+    }
+
     return {
         searchResults,
         extension,
         profile,
         edit,
-        shortenTitle
+        shortenTitle,
+        shortenTitleWhenAllLoaded
     }
 })();

@@ -3,6 +3,7 @@ package com.tick42.quicksilver.services;
 import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.ExtensionDTO;
 import com.tick42.quicksilver.models.DTO.PageDTO;
+import com.tick42.quicksilver.models.GitHubModel;
 import com.tick42.quicksilver.models.Rating;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 import com.tick42.quicksilver.models.Extension;
@@ -16,6 +17,7 @@ import com.tick42.quicksilver.services.base.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -88,7 +90,14 @@ public class ExtensionServiceImpl implements ExtensionService {
         extension.setName(extensionSpec.getName());
         extension.setVersion(extensionSpec.getVersion());
         extension.setDescription(extensionSpec.getDescription());
-        extension.setGithub(gitHubService.generateGitHub(extensionSpec.getGithub()));
+
+        GitHubModel oldGitHub = extension.getGithub();
+        GitHubModel newGitHub = gitHubService.generateGitHub(extensionSpec.getGithub());
+        oldGitHub.setLink(newGitHub.getLink());
+        oldGitHub.setUser(newGitHub.getUser());
+        oldGitHub.setRepo(newGitHub.getRepo());
+        gitHubService.setRemoteDetails(oldGitHub);
+
         extension.setTags(tagService.generateTags(extensionSpec.getTags()));
 
         extensionRepository.update(extension);
@@ -253,6 +262,7 @@ public class ExtensionServiceImpl implements ExtensionService {
         }
 
         gitHubService.setRemoteDetails(extension.getGithub());
+
         extensionRepository.update(extension);
 
         return new ExtensionDTO(extension);

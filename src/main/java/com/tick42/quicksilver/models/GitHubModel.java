@@ -33,6 +33,15 @@ public class GitHubModel {
     @Column(name = "open_issues")
     private int openIssues;
 
+    @Column(name = "last_success")
+    private Date lastSuccess;
+
+    @Column(name = "last_fail")
+    private Date lastFail;
+
+    @Column(name = "fail_msg")
+    private String failMessage;
+
     public GitHubModel() {
 
     }
@@ -107,4 +116,27 @@ public class GitHubModel {
         this.openIssues = openIssues;
     }
 
+    public Date getLastSuccess() {
+        return lastSuccess;
+    }
+
+    public void setLastSuccess(Date lastSuccess) {
+        this.lastSuccess = lastSuccess;
+    }
+
+    public Date getLastFail() {
+        return lastFail;
+    }
+
+    public void setLastFail(Date lastFail) {
+        this.lastFail = lastFail;
+    }
+
+    public String getFailMessage() {
+        return failMessage;
+    }
+
+    public void setFailMessage(String failMessage) {
+        this.failMessage = failMessage;
+    }
 }

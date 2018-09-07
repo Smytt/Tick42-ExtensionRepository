@@ -78,6 +78,13 @@
                 <a tagName="{{.}}">{{.}}</a>
                 {{/tags}}
             </div>
+            {{#isAdmin}}
+            <div class="warnings">
+                <p class="success"><i class="fas fa-exclamation-circle"></i> Last successful GitHub data sync: {{lastSuccessfulPullOfData}}</p>
+                <p class="fail"><i class="fas fa-exclamation-circle"></i> Last failed attempt to make a GitHub data sync: {{lastFailedAttemptToCollectData}}</p>
+                <p class="fail"><i class="fas fa-exclamation-circle"></i> Last failed attempt's message: {{lastErrorMessage}}</p>
+            </div>
+            {{/isAdmin}}
         </div>
         <div class="info stats">
             <h2><i class="fas fa-arrow-circle-up"></i> Upload date</h2>

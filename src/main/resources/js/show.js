@@ -171,11 +171,11 @@ let show = (() => {
         })
     }
 
-    let gitHubSettingsView = () => {
+    let gitHubSettingsView = (res) => {
         $.ajax({
             url: './templates/github-settings.html',
             success: (tmpl) => {
-                let $html = Mustache.render(tmpl);
+                let $html = Mustache.render(tmpl, res);
                 $('#admin-view-container').empty();
                 $('#admin-view-container').html($html);
             }

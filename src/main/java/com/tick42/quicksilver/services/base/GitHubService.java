@@ -5,6 +5,8 @@ import com.tick42.quicksilver.models.Spec.GitHubSettingSpec;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
+import java.io.IOException;
+
 public interface GitHubService {
     void setRemoteDetails(GitHubModel gitHubModel);
 
@@ -13,4 +15,6 @@ public interface GitHubService {
     void updateExtensionDetails();
 
     void createScheduledTask(ScheduledTaskRegistrar taskRegistrar, GitHubSettingSpec gitHubSettingSpec);
+
+    GitHubSettingSpec getSettings();
 }

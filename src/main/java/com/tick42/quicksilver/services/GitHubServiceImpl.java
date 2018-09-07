@@ -44,22 +44,31 @@ public class GitHubServiceImpl implements GitHubService {
             try {
                 repo = gitHub.getRepository(gitHubModel.getUser() + "/" + gitHubModel.getRepo());
             } catch (Exception e) {
-                System.out.println(e.getMessage());
-                throw new GitHubRepositoryException("Couldn't connect to " + gitHubModel.getUser() + "/" + gitHubModel.getRepo() + ". Check URL.");
+                e.printStackTrace();
+                throw new GitHubRepositoryException("Couldn't connect to " + gitHubModel.getLink() +". Check URL.");
             }
-            int pulls = repo.getPullRequests(GHIssueState.OPEN).size();
-            int issues = repo.getIssues(GHIssueState.OPEN).size() - pulls;
-            Date lastCommit = null;
-            List<GHCommit> commits = repo.listCommits().asList();
-            if (commits.size() > 0) {
-                lastCommit = commits.get(0).getCommitDate();
+            try {
+                int pulls = repo.getPullRequests(GHIssueState.OPEN).size();
+                int issues = repo.getIssues(GHIssueState.OPEN).size() - pulls;
+                Date lastCommit = null;
+                List<GHCommit> commits = repo.listCommits().asList();
+                if (commits.size() > 0) {
+                    lastCommit = commits.get(0).getCommitDate();
+                }
+                gitHubModel.setPullRequests(pulls);
+                gitHubModel.setOpenIssues(issues);
+                gitHubModel.setLastCommit(lastCommit);
+                gitHubModel.setLastSuccess(new Date());
             }
-            gitHubModel.setPullRequests(pulls);
-            gitHubModel.setOpenIssues(issues);
-            gitHubModel.setLastCommit(lastCommit);
-        } catch (IOException e) {
+            catch (Exception e) {
+                e.printStackTrace();
+                throw new GitHubRepositoryException("Connected to " + gitHubModel.getLink() + " but couldn't fetch data.");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new GitHubRepositoryException("A problem occurred while fetching GitHub data for " + gitHubModel.getUser() + "/" + gitHubModel.getRepo());
+            System.out.println(e.getMessage());
+            gitHubModel.setFailMessage(e.getMessage());
+            gitHubModel.setLastFail(new Date());
         }
     }
 
@@ -86,17 +95,17 @@ public class GitHubServiceImpl implements GitHubService {
     @Override
     public void createScheduledTask(ScheduledTaskRegistrar taskRegistrar, GitHubSettingSpec gitHubSettingSpec) {
 
-        if (gitHubSettingSpec != null) {
-            Integer rate = gitHubSettingSpec.getRate();
-            Integer wait = gitHubSettingSpec.getWait();
-            String token = gitHubSettingSpec.getToken();
-            String username = gitHubSettingSpec.getUsername();
+        if (gitHubSettingSpec == null) return;
 
-            prefs.putInt("updateRate", rate);
-            prefs.putInt("updateWait", wait);
-            prefs.put("token", token);
-            prefs.put("username", username);
-        }
+        Integer rate = gitHubSettingSpec.getRate();
+        Integer wait = gitHubSettingSpec.getWait();
+        String token = gitHubSettingSpec.getToken();
+        String username = gitHubSettingSpec.getUsername();
+
+        prefs.putInt("updateRate", rate);
+        prefs.putInt("updateWait", wait);
+        prefs.put("token", token);
+        prefs.put("username", username);
 
         if (scheduler.getTask() != null) {
             scheduler.getTask().cancel();
@@ -111,5 +120,15 @@ public class GitHubServiceImpl implements GitHubService {
 
         taskRegistrar.setTaskScheduler(threadPoolTaskScheduler);
         scheduler.setTask(taskRegistrar.scheduleFixedRateTask(updateGitHubData));
+    }
+
+    @Override
+    public GitHubSettingSpec getSettings() {
+        GitHubSettingSpec currentSettings = new GitHubSettingSpec();
+        currentSettings.setToken(prefs.get("token", "-"));
+        currentSettings.setUsername(prefs.get("username", "-"));
+        currentSettings.setRate(prefs.getInt("updateRate", 60000 * 60));
+        currentSettings.setWait(prefs.getInt("updateWait", 60000 * 60));
+        return currentSettings;
     }
 }
