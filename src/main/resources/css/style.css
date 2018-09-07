@@ -596,3 +596,8 @@ label button:hover {
     color: #f6cd61;
     margin-top: 20px;
 }
+
+.profile-settings{
+    float:right;
+    margin-top:-70px;
+}

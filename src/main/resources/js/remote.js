@@ -20,6 +20,19 @@ remote = (() => {
         })
     }
 
+    let changePassword = (changePassword) => {
+    console.log(changePassword)
+        return $.ajax({
+            type: 'PATCH',
+            url: base + "/api/auth/changePassword",
+            data: JSON.stringify(changePassword),
+            contentType: 'application/json',
+            headers: {
+                'Authorization': localStorage.getItem('Authorization')
+            },
+        })
+    }
+
     let loadByName = (name, page, perPage) => {
         return $.ajax({
             type: 'GET',
@@ -288,6 +301,7 @@ remote = (() => {
         registerAdmin,
         downloadFile,
         userExtensionRating,
-        rateExtension
+        rateExtension,
+        changePassword
     }
 })()

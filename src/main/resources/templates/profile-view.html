@@ -12,7 +12,8 @@
             {{/isActive}}
             {{^isActive}}
             <div class="action-btn heading-btn">
-                <button class="menu-item" newState="enable" userId="{{id}}"><i class="fas fa-user-check"></i> Enable user
+                <button class="menu-item" newState="enable" userId="{{id}}"><i class="fas fa-user-check"></i> Enable
+                    user
                 </button>
             </div>
             {{/isActive}}
@@ -28,6 +29,9 @@
             You have
             {{/isOwn}} {{totalExtensions}} extension
         </h1>
+        <div class="profile-settings">
+            <a class="change-password-view menu-item"><i class="fas fa-key"> Change password</i></a>
+        </div>
 
         <div>
             {{#extensions}}

@@ -586,6 +586,31 @@ let app = (() => {
         )
     }
 
+    let getChangePasswordView = function (e) {
+        show.changePasswordView();
+    }
+
+    let changePassword = function (e) {
+        preventDefault(e);
+        let currentPassword = $('#current-password').val();
+        let newPassword = $('#new-password').val();
+        let repeatNewPassword = $('#repeat-new-password').val();
+
+        let changePassword = {
+            currentPassword,
+            newPassword,
+            repeatNewPassword
+        }
+
+        remote.changePassword(changePassword).then(
+            res => {
+                getHomeView();
+            }
+        ).catch(e => {
+            handle(e);
+        });
+    }
+
     let downloadFile = function (e) {
         let extensionId = $(this).attr('extensionId');
         $('#downloadTimes').html(+$('#downloadTimes').html() + 1);
@@ -606,14 +631,14 @@ let app = (() => {
     }
 
     function handle(e) {
-
         $('.errors').empty();
-        if (e['responseJSON'] != null) {
+        try {
             console.log(e['responseJSON'])
             e['responseJSON'].forEach(error => $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + error + '</p>'));
-        } else {
-            console.log(e['responseText'])
-            $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseText'] + '</p>');
+        }
+        catch(err) {
+            console.log(e['responseJSON'].message)
+            $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseJSON'].message + '</p>');
         }
     }
 
@@ -674,6 +699,10 @@ let app = (() => {
         $body.on('change', '.submit-file', selectFile)
         $body.on('click', '#download-file', downloadFile)
         $body.on('click', '.rating a', rateExtension)
+        $body.on('click', '.change-password-view', getChangePasswordView)
+        $body.on('click', '#change-password-btn', changePassword)
+
+
 
         getHomeView();
     }

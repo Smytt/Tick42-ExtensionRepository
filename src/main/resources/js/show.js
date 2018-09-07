@@ -253,6 +253,15 @@ let show = (() => {
             }
         })
     }
+    let changePasswordView = () => {
+        $.ajax({
+            url: './templates/change-password-view.html',
+            success: (tmpl) => {
+                let $html = Mustache.render(tmpl);
+                $(content).html($html);
+            }
+        })
+    }
 
     return {
         home,
@@ -278,6 +287,7 @@ let show = (() => {
         state,
         pending,
         pendingState,
-        featuredState
+        featuredState,
+        changePasswordView
     }
 })()
