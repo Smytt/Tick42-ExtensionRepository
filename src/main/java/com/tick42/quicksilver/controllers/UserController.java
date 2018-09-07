@@ -82,7 +82,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
     @PatchMapping(value = "/auth/changePassword")
-    public User changePassword(@Valid @RequestBody ChangeUserPasswordSpec changePasswordSpec, HttpServletRequest request){
+    public UserDTO changePassword(@Valid @RequestBody ChangeUserPasswordSpec changePasswordSpec, HttpServletRequest request){
         int userId = validator.getUserIdFromToken(request);
         return userService.changePassword(userId, changePasswordSpec);
     }

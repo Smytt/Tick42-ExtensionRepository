@@ -9,11 +9,11 @@ public class ChangeUserPasswordSpec {
     private String currentPassword;
 
     @NotNull
-    @Size(min=7, message="password should be be between 11 and 22 char.")
+
     private String newPassword;
 
     @NotNull
-    @Size(min=7, message="password should be be between 11 and 22 char.")
+
     private String repeatNewPassword;
 
     public String getCurrentPassword() {

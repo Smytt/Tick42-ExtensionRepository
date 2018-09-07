@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User changePassword(int id, ChangeUserPasswordSpec changePasswordSpec){
+    public UserDTO changePassword(int id, ChangeUserPasswordSpec changePasswordSpec){
         User user = userRepository.findById(id);
         if (!changePasswordSpec.getNewPassword().equals(changePasswordSpec.getRepeatNewPassword())){
             throw new PasswordsMissMatchException("passwords don't match");
@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setPassword(changePasswordSpec.getNewPassword());
         userRepository.update(user);
-        return user;
+        return new UserDTO(user);
 
     }
 }

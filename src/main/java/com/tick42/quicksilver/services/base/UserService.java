@@ -23,5 +23,5 @@ public interface UserService {
 
     String generateToken(User user);
 
-    User changePassword(int id, ChangeUserPasswordSpec changePasswordSpec);
+    UserDTO changePassword(int id, ChangeUserPasswordSpec changePasswordSpec);
 }
