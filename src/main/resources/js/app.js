@@ -21,11 +21,13 @@ let app = (() => {
         );
         remote.loadByUploadDate('', 1, NEW_HOME_PAGE_COUNT).then(
             res => {
+                res = render.shortenTitle(res);
                 show.homeNew(res)
             }
         );
         remote.loadByTimesDownloaded('', 1, POPULAR_HOME_PAGE_COUNT).then(
             res => {
+                res = render.shortenTitle(res);
                 show.homePopular(res)
             }
         );
@@ -175,7 +177,11 @@ let app = (() => {
     }
 
     let rateExtension = function (e){
+        preventDefault(e)
+
         if(remote.isAuth()){
+            $(this).closest('div').find('a').removeClass('current')
+            $(this).addClass('current');
             let rating = $(this).attr('id');
             let extensionId = $(this).attr('extensionId');
             let currentRatedStatus = $('.info .rating').attr('id');
@@ -196,7 +202,10 @@ let app = (() => {
         let tagName = $(this).attr('tagName');
 
         remote.getTag(tagName).then(
-            show.tag
+            res => {
+                res = render.shortenTitle(res);
+                show.tag(res)
+            }
         ).catch(e => {
             handle(e);
         })
@@ -216,6 +225,7 @@ let app = (() => {
 
         remote.getUserProfile(id).then(
             res => {
+                res = render.shortenTitle(res);
                 res = render.profile(res);
                 show.user(res);
             }
@@ -258,7 +268,10 @@ let app = (() => {
         let extensionId = $(this).attr('extensionId');
 
         remote.getExtension(extensionId).then(
-            show.edit
+            res => {
+                res = render.edit(res);
+                show.edit(res);
+            }
         ).catch(e => {
             handle(e);
         })
@@ -361,11 +374,17 @@ let app = (() => {
         preventDefault(e);
 
         let extensionId = $(this).attr('extensionId');
-        remote.deleteExtension(extensionId).then(
-            res => {
-                getHomeView();
-            }
-        );
+        let m = $('.loading-block')
+        m.find('div').html('deleting extenson...');
+        m.fadeIn()
+        setTimeout(() => {
+            remote.deleteExtension(extensionId).then(
+                res => {
+                    getHomeView();
+                }
+            );
+        }, 1000)
+
     }
 
     function setUserState(e) {
@@ -560,7 +579,10 @@ let app = (() => {
         preventDefault(e);
 
         remote.loadPending().then(
-            show.pending
+            res => {
+                res = render.shortenTitle(res);
+                show.pending(res)
+            }
         )
     }
 
@@ -651,7 +673,7 @@ let app = (() => {
         $body.on('click', '.action-btn #change-featured-state', setFeaturedState)
         $body.on('change', '.submit-file', selectFile)
         $body.on('click', '#download-file', downloadFile)
-        $body.on('click', '.rating h2', rateExtension)
+        $body.on('click', '.rating a', rateExtension)
 
         getHomeView();
     }

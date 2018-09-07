@@ -24,9 +24,22 @@ let render = (() => {
         return profile;
     }
 
+    let edit = (extension) => {
+        extension['description'] = extension['description'].replace(/<br \/>/gi, '\n');
+        return extension;
+    }
+
+    let shortenTitle = (page) => {
+        page['extensions'].forEach(extension => {
+            extension['name'] = extension['name'].length >= 20 ? extension['name'].substr(0, 17) + "..." : extension['name']
+        })
+        return page;
+    }
     return {
         searchResults,
         extension,
-        profile
+        profile,
+        edit,
+        shortenTitle
     }
 })();
