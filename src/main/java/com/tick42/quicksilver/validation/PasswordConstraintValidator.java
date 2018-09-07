@@ -24,7 +24,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
             dictionaryRule = new DictionaryRule(
                     new WordListDictionary(WordLists.createFromReader(
                             // Reader around the word list file
-                            new FileReader[] {
+                            new FileReader[]{
                                     new FileReader(invalidPasswordList)
                             },
                             false,
@@ -39,14 +39,13 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
     public boolean isValid(String password, ConstraintValidatorContext context) {
         PasswordValidator validator = new PasswordValidator(Arrays.asList(
 
-                new LengthRule(8, 30),
+                new LengthRule(12, 30),
 
                 new CharacterRule(EnglishCharacterData.UpperCase, 1),
 
                 new CharacterRule(EnglishCharacterData.LowerCase, 1),
 
                 new CharacterRule(EnglishCharacterData.Digit, 1),
-
 
                 new WhitespaceRule(),
 

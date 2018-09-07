@@ -21,6 +21,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.floatThat;
 import static org.mockito.Mockito.when;
 
@@ -157,7 +158,7 @@ public class UserServiceImplTests {
     @Test(expected = UsernameExistsException.class)
     public void RegisterUser_WithAlreadyTakenUsername_shouldThrow() {
 
-        //Assert
+        //Arrange
         User registeredUser = new User();
         registeredUser.setUsername("Test");
 
@@ -172,10 +173,12 @@ public class UserServiceImplTests {
     @Test()
     public void SuccessfulRegistration_withAvailable() {
 
-        //Assert
+        //Arrange
 
         UserSpec newRegistration = new UserSpec();
         newRegistration.setUsername("Test");
+        newRegistration.setPassword("testPassword");
+        newRegistration.setRepeatPassword("testPassword");
         when(userRepository.findByUsername("Test")).thenReturn(null);
 
         //Act
@@ -183,15 +186,46 @@ public class UserServiceImplTests {
     }
 
     @Test()
-    public void SuccessfulRegistration_Role_Admin() {
-
-        //Assert
-
+    public void SuccessfulRegistration_Role_User() {
+        //Arrange
         UserSpec newRegistration = new UserSpec();
         newRegistration.setUsername("Test");
-        when(userRepository.findByUsername("Test")).thenReturn(null);
+        newRegistration.setPassword("testPassword");
+        newRegistration.setRepeatPassword("testPassword");
 
+        User newUser = new User();
+        newUser.setUsername("Test");
+        newUser.setPassword("testPassword");
+        newUser.setRole("USER_ROLE");
+
+        when(userRepository.findByUsername("Test")).thenReturn(null);
+        when(userRepository.create(any(User.class))).thenReturn(newUser);
         //Act
-        userService.register(newRegistration, "ROLE_USER");
+        User user = userService.register(newRegistration, "ROLE_USER");
+
+        //Assert
+        Assert.assertEquals(user.getRole(),"USER_ROLE");
+    }
+
+    @Test()
+    public void SuccessfulRegistration_Role_Admin() {
+        //Arrange
+        UserSpec newRegistration = new UserSpec();
+        newRegistration.setUsername("Test");
+        newRegistration.setPassword("testPassword");
+        newRegistration.setRepeatPassword("testPassword");
+
+        User newUser = new User();
+        newUser.setUsername("Test");
+        newUser.setPassword("testPassword");
+        newUser.setRole("ADMIN_ROLE");
+
+        when(userRepository.findByUsername("Test")).thenReturn(null);
+        when(userRepository.create(any(User.class))).thenReturn(newUser);
+        //Act
+        User user = userService.register(newRegistration, "ADMIN_ROLE");
+
+        //Assert
+        Assert.assertEquals(user.getRole(),"ADMIN_ROLE");
     }
 }
