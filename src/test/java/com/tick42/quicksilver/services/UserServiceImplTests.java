@@ -3,6 +3,7 @@ package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.UserDTO;
+import com.tick42.quicksilver.models.Spec.ChangeUserPasswordSpec;
 import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
 import com.tick42.quicksilver.repositories.base.UserRepository;
@@ -170,7 +171,7 @@ public class UserServiceImplTests {
         userDTO = userService.setState(1,"block");
 
         //Assert
-        Assert.assertEquals(userDTO.getIsActive(),false);
+        Assert.assertFalse(userDTO.getIsActive());
     }
 
     @Test(expected = InvalidStateException.class)
@@ -311,7 +312,7 @@ public class UserServiceImplTests {
     }
 
     @Test()
-    public void SuccessfulRegistration_Role_Admin() {
+    public void SuccessfulRegistration_Role_Admin_ShouldReturnAdminUser() {
         //Arrange
         UserSpec newRegistration = new UserSpec();
         newRegistration.setUsername("Test");
@@ -331,4 +332,59 @@ public class UserServiceImplTests {
         //Assert
         Assert.assertEquals(user.getRole(),"ADMIN_ROLE");
     }
+
+    @Test
+    public void ChangePasswordState(){
+
+        ChangeUserPasswordSpec passwordSpec = new ChangeUserPasswordSpec();
+        passwordSpec.setCurrentPassword("currentPassword");
+        passwordSpec.setNewPassword("newTestPassword1");
+        passwordSpec.setRepeatNewPassword("newTestPassword1");
+
+        User user = new User();
+        user.setPassword("currentPassword");
+
+        when(userRepository.findById(1)).thenReturn(user);
+
+        userService.changePassword(1,passwordSpec);
+
+
+            //Assert
+            Assert.assertEquals(user.getPassword(),"newTestPassword1");
+
+    }
+
+    @Test(expected = InvalidCredentialsException.class)
+    public void ChangePasswordState_WithWrongPassword_ShouldThrow(){
+
+        ChangeUserPasswordSpec passwordSpec = new ChangeUserPasswordSpec();
+        passwordSpec.setCurrentPassword("InvalidPassword");
+        passwordSpec.setNewPassword("newTestPassword1");
+        passwordSpec.setRepeatNewPassword("newTestPassword1");
+
+        User user = new User();
+        user.setPassword("currentPassword");
+
+        when(userRepository.findById(1)).thenReturn(user);
+
+        userService.changePassword(1,passwordSpec);
+    }
+
+    @Test(expected = PasswordsMissMatchException.class)
+    public void ChangePasswordState_WithNotMatchingPasswords_ShouldThrow(){
+
+        ChangeUserPasswordSpec passwordSpec = new ChangeUserPasswordSpec();
+        passwordSpec.setCurrentPassword("Current");
+        passwordSpec.setNewPassword("newTestPassword1");
+        passwordSpec.setRepeatNewPassword("InvalidPassword");
+
+        User user = new User();
+        user.setPassword("current");
+
+        when(userRepository.findById(1)).thenReturn(user);
+
+        userService.changePassword(1,passwordSpec);
+    }
+
 }
+
