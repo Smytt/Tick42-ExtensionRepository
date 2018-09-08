@@ -67,8 +67,11 @@ public class UserServiceImpl implements UserService {
             case "blocked":
                 users = userRepository.findUsersByState(false);
                 break;
-            default:
+            case "all":
                 users = userRepository.findAll();
+                break;
+            default:
+                throw new InvalidStateException("\"" + state + "\" is not a valid user state. Use \"active\" , \"blocked\" or \"all\".");
         }
 
         List<UserDTO> usersDto = users

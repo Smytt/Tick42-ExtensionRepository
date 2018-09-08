@@ -164,7 +164,25 @@ public class UserServiceImplTests {
 
         UserSpec newRegistration = new UserSpec();
         newRegistration.setUsername("Test");
+        newRegistration.setPassword("TestPassword");
+        newRegistration.setRepeatPassword("TestPassword");
+
         when(userRepository.findByUsername("Test")).thenReturn(registeredUser);
+
+        //Act
+        userService.register(newRegistration, "ROLE_USER");
+    }
+
+    @Test(expected = PasswordsMissMatchException.class)
+    public void RegisterUser_WithNotMatchingPasswords_shouldThrow() {
+
+        //Arrange
+        UserSpec newRegistration = new UserSpec();
+        newRegistration.setUsername("Test");
+        newRegistration.setPassword("TestPassword");
+        newRegistration.setRepeatPassword("TestPasswordMissMatch");
+
+        when(userRepository.findByUsername("Test")).thenReturn(null);
 
         //Act
         userService.register(newRegistration, "ROLE_USER");
