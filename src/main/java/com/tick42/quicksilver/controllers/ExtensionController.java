@@ -65,16 +65,8 @@ public class ExtensionController {
     }
 
     @GetMapping("/auth/extensions/download/{id}")
-    public ExtensionDTO download(@PathVariable(name = "id") int id, HttpServletRequest request) {
-        User user = null;
-        if (request.getHeader("Authorization") != null) {
-            try {
-                user = validator.validate(request.getHeader("Authorization").substring(6));
-            } catch (Exception e) {
-                user = null;
-            }
-        }
-        return extensionService.increaseDownloadCount(id, user);
+    public ExtensionDTO download(@PathVariable(name = "id") int id) {
+        return extensionService.increaseDownloadCount(id);
     }
 
     @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
@@ -122,6 +114,7 @@ public class ExtensionController {
         int userId = validator.getUserIdFromToken(request);
         return extensionService.fetchGitHub(id, userId);
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ResponseEntity handleInvalidExtensionSpecException(MethodArgumentNotValidException e) {

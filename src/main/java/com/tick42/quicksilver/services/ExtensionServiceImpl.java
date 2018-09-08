@@ -254,7 +254,7 @@ public class ExtensionServiceImpl implements ExtensionService {
 
         User user = userRepository.findById(userId);
         if (user == null) {
-            throw new ExtensionNotFoundException("User not found.");
+            throw new UserNotFoundException("User not found.");
         }
 
         if (!user.getRole().equals("ROLE_ADMIN")) {
@@ -269,10 +269,12 @@ public class ExtensionServiceImpl implements ExtensionService {
     }
 
     @Override
-    public ExtensionDTO increaseDownloadCount(int id, User user) {
+    public ExtensionDTO increaseDownloadCount(int id) {
         Extension extension = extensionRepository.findById(id);
 
-        checkRequestingUserVsRequestedExtension(extension, user);
+        if(extension == null || extension.getIsPending() || !extension.getOwner().getIsActive()) {
+            throw new ExtensionUnavailableException("Download count won't increase - the extension is unavailable");
+        }
 
         extension.setTimesDownloaded(extension.getTimesDownloaded() + 1);
 

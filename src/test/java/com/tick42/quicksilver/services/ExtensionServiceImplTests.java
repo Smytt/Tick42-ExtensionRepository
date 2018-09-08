@@ -870,4 +870,114 @@ public class ExtensionServiceImplTests {
         extensionService.delete(1, 1);
         verify(extensionRepository, times(1)).delete(extension);
     }
+
+    @Test(expected = ExtensionNotFoundException.class)
+    public void increaseDownloadCount_whenExtensionDoesntEist_shouldThrow() {
+        when(extensionRepository.findById(1)).thenReturn(null);
+
+        //Act
+        extensionService.increaseDownloadCount(1);
+    }
+
+    @Test(expected = ExtensionUnavailableException.class)
+    public void increaseDownloadCount_whenExtensionIsPending_shouldThrow() {
+        Extension extension = new Extension();
+        extension.setIsPending(true);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        //Act
+        extensionService.increaseDownloadCount(1);
+    }
+
+    @Test(expected = ExtensionUnavailableException.class)
+    public void increaseDownloadCount_whenOwnerIsDeactivated_shouldThrow() {
+        User owner = new User();
+        owner.setIsActive(false);
+        Extension extension = new Extension();
+        extension.setOwner(owner);
+        extension.setIsPending(false);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        //Act
+        extensionService.increaseDownloadCount(1);
+    }
+
+    @Test
+    public void increaseDownloadCount_whenExtensionAvailable_shouldIncreasseTimesDownlaoded() {
+        int times = 1;
+        User owner = new User();
+        owner.setIsActive(true);
+        Extension extension = new Extension();
+        extension.setOwner(owner);
+        extension.setIsPending(false);
+        extension.setTimesDownloaded(times);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+
+        when(extensionRepository.update(extension)).thenReturn(extension);
+
+        //Act
+        ExtensionDTO result = extensionService.increaseDownloadCount(1);
+
+        //Assert
+        Assert.assertEquals(result.getTimesDownloaded(), times + 1);
+    }
+
+    @Test(expected = ExtensionNotFoundException.class)
+    public void fetchGitHub_whenExtensionDoesntExist_ShouldThrow() {
+        //Arrange
+        when(extensionRepository.findById(1)).thenReturn(null);
+
+        //Act
+        extensionService.fetchGitHub(1, 1);
+
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void fetchGitHub_whenUserDoesntExist_ShouldThrow() {
+        //Arrange
+        Extension extension = new Extension();
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        when(userRepository.findById(1)).thenReturn(null);
+
+        //Act
+        extensionService.fetchGitHub(1, 1);
+
+    }
+
+    @Test(expected = UnauthorizedExtensionModificationException.class)
+    public void fetchGitHub_whenUserIsNotAdmin_ShouldThrow() {
+        //Arrange
+        Extension extension = new Extension();
+        User user = new User();
+        user.setRole("USER");
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        when(userRepository.findById(1)).thenReturn(user);
+
+        //Act
+        extensionService.fetchGitHub(1, 1);
+
+    }
+
+    @Test
+    public void fetchGitHub_whenEtensionIsAvailableAndUserIsAdmin_ShouldNotThrow() {
+        //Arrange
+        Extension extension = new Extension();
+        User user = new User();
+        user.setRole("ROLE_ADMIN");
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        when(userRepository.findById(1)).thenReturn(user);
+
+       try {
+           extensionService.fetchGitHub(1, 1);
+           Assert.assertTrue(Boolean.TRUE);
+       } catch (Error e) {
+           Assert.fail(e.getMessage());
+       }
+
+    }
 }
