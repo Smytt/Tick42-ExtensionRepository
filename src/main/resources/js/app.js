@@ -186,12 +186,34 @@ let app = (() => {
             $(this).closest('div').find('a').removeClass('current')
             $(this).addClass('current');
             let rating = $(this).attr('id');
+            let timesRated = $('.info .rating').attr('timesRated');
             let extensionId = $(this).attr('extensionId');
             let currentRatedStatus = $('.info .rating').attr('id');
+            let displayRating = {
+                rating,
+                timesRated
+            }
             if (rating == currentRatedStatus) {
                 console.log('same rating')
             } else {
-                remote.rateExtension(extensionId, rating);
+                remote.rateExtension(extensionId, rating).then(
+                    res => {
+                        if(currentRatedStatus == 0){
+                            timesRated = parseInt(timesRated) + 1;
+                            console.log(timesRated)
+                            displayRating = {
+                                rating,
+                                timesRated
+                            }
+                            $('.info .rating').attr('id', rating);
+                            $('.info .rating').attr('timesRated', timesRated);
+                          show.currentUserRating(displayRating)
+                        }else{
+                            show.currentUserRating(displayRating)
+                            $('.info .rating').attr('id', rating);
+                        }
+                    }
+                )
             }
         } else {
             $('.not-logged').empty();

@@ -335,11 +335,11 @@ footer * {
     cursor: pointer;
 }
 
-.rating a:hover + a, .rating a:hover + a + a, .rating a:hover + a + a + a, .rating a:hover + a + a + a + a {
+.rating a:hover + a, .rating a:hover + a + a  , .rating a:hover + a + a + a, .rating a:hover + a + a + a + a {
     color: #f6cd61 !important;
 }
 
-.rating a.current + a, .rating a.current + a + a, .rating a.current + a + a + a, .rating a.current + a + a + a + a {
+.rating a.current + a, .rating a.current + a + a , .rating a.current + a + a + a, .rating a.current + a + a + a + a {
     color: #f6cd61 !important;
 }
 

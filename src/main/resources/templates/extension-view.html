@@ -80,9 +80,12 @@
             </div>
             {{#isAdmin}}
             <div class="warnings">
-                <p class="success"><i class="fas fa-exclamation-circle"></i> Last successful GitHub data sync: {{lastSuccessfulPullOfData}}</p>
-                <p class="fail"><i class="fas fa-exclamation-circle"></i> Last failed attempt to make a GitHub data sync: {{lastFailedAttemptToCollectData}}</p>
-                <p class="fail"><i class="fas fa-exclamation-circle"></i> Last failed attempt's message: {{lastErrorMessage}}</p>
+                <p class="success"><i class="fas fa-exclamation-circle"></i> Last successful GitHub data sync:
+                    {{lastSuccessfulPullOfData}}</p>
+                <p class="fail"><i class="fas fa-exclamation-circle"></i> Last failed attempt to make a GitHub data
+                    sync: {{lastFailedAttemptToCollectData}}</p>
+                <p class="fail"><i class="fas fa-exclamation-circle"></i> Last failed attempt's message:
+                    {{lastErrorMessage}}</p>
             </div>
             {{/isAdmin}}
         </div>
@@ -93,15 +96,11 @@
             <span><a class="user-link" userId="{{ownerId}}">{{ownerName}}</a></span>
             <h2><i class="fas fa-check-circle"></i> Version </h2>
             <span>{{version}}</span>
-            <h2><i class="fas fa-arrow-circle-down"></i> Downloads</h2>
-            <span id="downloadTimes">{{timesDownloaded}}</span>
-            <h2><i class="fab fa-github"></i> Rate extension</h2>
-            <div class="rating">
-                <a id="5" extensionId="{{id}}"><i class="fas fa-star star5"></i></a>
-                <a id="4" extensionId="{{id}}"><i class="fas fa-star star4"></i></a>
-                <a id="3" extensionId="{{id}}"><i class="fas fa-star star3"></i></a>
-                <a id="2" extensionId="{{id}}"><i class="fas fa-star star2"></i></a>
-                <a id="1" extensionId="{{id}}"><i class="fas fa-star star1"></i></a>
+            <div id="your-rating">
+                <h2><i class="fab fa-github"></i> Rating</h2>
+                <span>{{rating}}</span>
+                <h2><i class="fab fa-github"></i> Times rated</h2>
+                <span>{{timesRated}}</span>
             </div>
             <div class="not-logged"></div>
         </div>
@@ -112,10 +111,17 @@
             <span>{{openIssues}}</span>
             <h2><i class="fab fa-github"></i> Pull requests</h2>
             <span>{{pullRequests}}</span>
-            <h2><i class="fab fa-github"></i> Rating</h2>
-            <span>{{rating}}</span>
-            <h2><i class="fab fa-github"></i> Times rated</h2>
-            <span>{{timesRated}}</span>
+            <h2><i class="fas fa-arrow-circle-down"></i> Downloads</h2>
+            <span id="downloadTimes">{{timesDownloaded}}</span>
+
+            <h2><i class="fab fa-github"></i> Rate extension</h2>
+            <div class="rating" timesRated="{{timesRated}}">
+                <a id="5" extensionId="{{id}}"><i class="fas fa-star star5"></i></a>
+                <a id="4" extensionId="{{id}}"><i class="fas fa-star star4"></i></a>
+                <a id="3" extensionId="{{id}}"><i class="fas fa-star star3"></i></a>
+                <a id="2" extensionId="{{id}}"><i class="fas fa-star star2"></i></a>
+                <a id="1" extensionId="{{id}}"><i class="fas fa-star star1"></i></a>
+            </div>
         </div>
     </div>
 </div>

@@ -255,16 +255,6 @@ remote = (() => {
         })
     }
 
-    let userExtensionRating = (id) => {
-        return $.ajax({
-            type: 'GET',
-            url: base + '/api/auth/userRating/' + id,
-            headers: {
-                'Authorization': localStorage.getItem('Authorization')
-            }
-        })
-    }
-
     let rateExtension = (id, rating) => {
         return $.ajax({
             type: 'PATCH',
@@ -311,7 +301,6 @@ remote = (() => {
         register,
         registerAdmin,
         downloadFile,
-        userExtensionRating,
         rateExtension,
         changePassword,
         getCurrentGitHubSettings
