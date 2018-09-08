@@ -3,14 +3,9 @@ package com.tick42.quicksilver.services;
 
 import com.tick42.quicksilver.exceptions.*;
 import com.tick42.quicksilver.models.DTO.UserDTO;
-import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
-import com.tick42.quicksilver.repositories.base.ExtensionRepository;
 import com.tick42.quicksilver.repositories.base.UserRepository;
-import com.tick42.quicksilver.services.base.GitHubService;
-import com.tick42.quicksilver.services.base.TagService;
-import com.tick42.quicksilver.services.base.UserService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.floatThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -35,7 +29,7 @@ public class UserServiceImplTests {
     private UserServiceImpl userService;
 
     @Test(expected = UserNotFoundException.class)
-    public void findById_whenUserDoesNotExist_shouldThrow() {
+    public void findById_withNonExistingUser_shouldThrow() {
         //Arrange
         User user = new User();
         when(userRepository.findById(1)).thenReturn(null);
@@ -61,7 +55,7 @@ public class UserServiceImplTests {
         userService.findById(1,loggedUser);
     }
     @Test()
-    public void findById_whenUserProfileIsNotActive_andCurrentUserIsAdmin(){
+    public void findById_whenUserProfileIsNotActive_andCurrentUserIsAdmin_ShouldReturnUser(){
         //Arrange
         User loggedUser = new User();
         loggedUser.setUsername("test");
@@ -126,15 +120,78 @@ public class UserServiceImplTests {
         user1.setIsActive(true);
         List<User> users = Arrays.asList(user, user1);
 
-        when(userRepository.findUsersByState(true)).thenReturn(users);
+        when(userRepository.findAll()).thenReturn(users);
 
         //Act
-        List<UserDTO> usersDTO = userService.findAll("active");
+        List<UserDTO> usersDTO = userService.findAll("all");
 
         //Assert
         Assert.assertEquals(2, usersDTO.size());
         Assert.assertTrue(usersDTO.get(0).getIsActive());
         Assert.assertTrue(usersDTO.get(1).getIsActive());
+    }
+
+    @Test(expected = InvalidStateException.class)
+    public void findAllUsers_WithWrongState_ShouldThrow(){
+        //Act
+        List<UserDTO> usersDTO = userService.findAll("ActiveUsersInvalidInput");
+    }
+
+    @Test()
+    public void setUserState_Enable_ShouldReturnEnable(){
+        //Arrange
+        User user = new User();
+        user.setIsActive(false);
+        user.setId(1);
+
+        UserDTO userDTO = new UserDTO(user);
+
+        when(userRepository.findById(1)).thenReturn(user);
+        when(userRepository.update(any(User.class))).thenReturn(user);
+        //act
+        userDTO = userService.setState(1,"enable");
+
+        //Assert
+        Assert.assertEquals(userDTO.getIsActive(),true);
+    }
+
+    @Test()
+    public void setUserState_block_ShouldReturnBlocked(){
+        //Arrange
+        User user = new User();
+        user.setIsActive(true);
+        user.setId(1);
+
+        UserDTO userDTO = new UserDTO(user);
+
+        when(userRepository.findById(1)).thenReturn(user);
+        when(userRepository.update(any(User.class))).thenReturn(user);
+        //act
+        userDTO = userService.setState(1,"block");
+
+        //Assert
+        Assert.assertEquals(userDTO.getIsActive(),false);
+    }
+
+    @Test(expected = InvalidStateException.class)
+    public void setUserState_WithWrongState_ShouldThrow(){
+
+        //Arrange
+        User user = new User();
+
+        when(userRepository.findById(1)).thenReturn(user);
+
+        //Act
+        UserDTO usersDTO = userService.setState(1,"InvalidState");
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void setUserState_WithNonExistingUser_ShouldThrow(){
+
+        when(userRepository.findById(1)).thenReturn(null);
+
+        //Act
+        UserDTO usersDTO = userService.setState(1,"Active");
     }
 
     @Test(expected = InvalidCredentialsException.class)
@@ -155,6 +212,34 @@ public class UserServiceImplTests {
         userService.login(userInvalid);
     }
 
+    @Test(expected = InvalidCredentialsException.class)
+    public void LoginUserWithWrongUsername_InvalidCredentialsException_shouldThrow() {
+
+        //Arrange
+        User userInvalid = new User();
+        userInvalid.setUsername("test");
+
+        when(userRepository.findByUsername("test")).thenReturn(null);
+
+        //Act
+        userService.login(userInvalid);
+    }
+
+    @Test(expected = BlockedUserException.class)
+    public void LoginUserWithBlockedUser_InvalidCredentialsException_shouldThrow() {
+
+        //Arrange
+        User userBlocked = new User();
+        userBlocked.setUsername("test");
+        userBlocked.setPassword("password");
+        userBlocked.setIsActive(false);
+
+        when(userRepository.findByUsername("test")).thenReturn(userBlocked);
+
+        //Act
+        userService.login(userBlocked);
+    }
+
     @Test(expected = UsernameExistsException.class)
     public void RegisterUser_WithAlreadyTakenUsername_shouldThrow() {
 
@@ -164,7 +249,25 @@ public class UserServiceImplTests {
 
         UserSpec newRegistration = new UserSpec();
         newRegistration.setUsername("Test");
+        newRegistration.setPassword("TestPassword");
+        newRegistration.setRepeatPassword("TestPassword");
+
         when(userRepository.findByUsername("Test")).thenReturn(registeredUser);
+
+        //Act
+        userService.register(newRegistration, "ROLE_USER");
+    }
+
+    @Test(expected = PasswordsMissMatchException.class)
+    public void RegisterUser_WithNotMatchingPasswords_shouldThrow() {
+
+        //Arrange
+        UserSpec newRegistration = new UserSpec();
+        newRegistration.setUsername("Test");
+        newRegistration.setPassword("TestPassword");
+        newRegistration.setRepeatPassword("TestPasswordMissMatch");
+
+        when(userRepository.findByUsername("Test")).thenReturn(null);
 
         //Act
         userService.register(newRegistration, "ROLE_USER");

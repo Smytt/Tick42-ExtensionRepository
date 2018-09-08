@@ -35,17 +35,17 @@ let app = (() => {
 
     let getUsers = function (e) {
         preventDefault(e);
-        let buttonId = $(this).attr('id');
-        remote.getUsers(buttonId).then(
+        let state = $(this).attr('id');
+        remote.getUsers(state).then(
             res => {
-                show.users(res, buttonId)
+                show.users(res, state)
             }
         )
     }
 
     function getAdminView(e) {
         preventDefault(e);
-        let state = $(this).attr('id')
+        let state = "all"
         remote.getUsers(state).then(
             show.adminView
         )
@@ -673,6 +673,7 @@ let app = (() => {
         $body.on('click', '#active', getUsers)
         $body.on('click', '#blocked', getUsers)
         $body.on('click', '#all', getUsers)
+        $body.on('click', '#users', getAdminView)
         $body.on('click', '#users', getAdminView)
         $body.on('click', '#logout', logout)
         $body.on('click', '#register', getRegisterView)
