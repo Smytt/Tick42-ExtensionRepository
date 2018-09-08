@@ -28,6 +28,8 @@ public class GitHubServiceImplTests {
         try {
             gitHubService.setRemoteDetails(gitHubModel);
             //Assert
+            Assert.assertNotNull(gitHubModel.getLastSuccess());
+            Assert.assertNotNull(gitHubModel.getLastCommit());
             Assert.assertTrue(Boolean.TRUE);
         } catch (Exception e) {
             Assert.fail(e.getMessage());
@@ -50,18 +52,4 @@ public class GitHubServiceImplTests {
         Assert.assertNotNull(gitHubModel.getLastFail());
     }
 
-    @Test
-    public void setRemoteDetails_whenGitHubModelIsValid_shouldSetDetails() {
-        //Arrange
-        GitHubModel gitHubModel = new GitHubModel();
-        gitHubModel.setUser("Smytt");
-        gitHubModel.setRepo("Tick42-ExtensionRepository");
-
-        //Act
-        gitHubService.setRemoteDetails(gitHubModel);
-
-        //Asser
-        Assert.assertNotNull(gitHubModel.getLastSuccess());
-        Assert.assertNotNull(gitHubModel.getLastCommit());
-    }
 }
