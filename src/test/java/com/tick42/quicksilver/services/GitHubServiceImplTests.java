@@ -63,7 +63,5 @@ public class GitHubServiceImplTests {
         //Asser
         Assert.assertNotNull(gitHubModel.getLastSuccess());
         Assert.assertNotNull(gitHubModel.getLastCommit());
-        Assert.assertNotNull(gitHubModel.getPullRequests());
-        Assert.assertNotNull(gitHubModel.getOpenIssues());
     }
 }

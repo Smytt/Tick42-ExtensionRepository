@@ -13,7 +13,7 @@ public interface ExtensionRepository {
 
     Extension update(Extension extension);
 
-    void delete(int id);
+    void delete(Extension extension);
 
     List<Extension> findAll();
 
