@@ -871,8 +871,8 @@ public class ExtensionServiceImplTests {
         verify(extensionRepository, times(1)).delete(extension);
     }
 
-    @Test(expected = ExtensionNotFoundException.class)
-    public void increaseDownloadCount_whenExtensionDoesntEist_shouldThrow() {
+    @Test(expected = ExtensionUnavailableException.class)
+    public void increaseDownloadCount_whenExtensionDoesntExist_shouldThrow() {
         when(extensionRepository.findById(1)).thenReturn(null);
 
         //Act
