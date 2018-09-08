@@ -13,7 +13,7 @@ let show = (() => {
             }
         })
     }
-    let currentUserRating = (rating) => {
+    let extensionRating = (rating) => {
         $.ajax({
             url: './templates/extension-rating.html',
             success: (tmpl) => {
@@ -27,6 +27,19 @@ let show = (() => {
             })
         }
 
+    let extensionRatingStar = (rating) => {
+        $.ajax({
+            url: './templates/extension-rating-star.html',
+            success: (tmpl) => {
+                let $html = Mustache.render(tmpl,rating)
+                $('.current-rating').fadeOut(300, () => {
+                $('.current-rating').empty();
+                $('.current-rating').html($html);
+                $('.current-rating').fadeIn($html);
+                })
+            }
+        })
+    }
 
     let users = (users, buttonId) => {
         $.ajax({
@@ -303,6 +316,7 @@ let show = (() => {
         pendingState,
         featuredState,
         changePasswordView,
-        currentUserRating
+        extensionRating,
+        extensionRatingStar
     }
 })()

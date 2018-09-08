@@ -207,9 +207,11 @@ let app = (() => {
                             }
                             $('.info .rating').attr('id', rating);
                             $('.info .rating').attr('timesRated', timesRated);
-                          show.currentUserRating(displayRating)
+                          show.extensionRating(displayRating)
+                          show.extensionRatingStar(rating)
                         }else{
-                            show.currentUserRating(displayRating)
+                            show.extensionRating(displayRating)
+                            show.extensionRatingStar(displayRating)
                             $('.info .rating').attr('id', rating);
                         }
                     }
