@@ -126,16 +126,23 @@ public class UserServiceImplTests {
         user1.setIsActive(true);
         List<User> users = Arrays.asList(user, user1);
 
-        when(userRepository.findUsersByState(true)).thenReturn(users);
+        when(userRepository.findAll()).thenReturn(users);
 
         //Act
-        List<UserDTO> usersDTO = userService.findAll("active");
+        List<UserDTO> usersDTO = userService.findAll("all");
 
         //Assert
         Assert.assertEquals(2, usersDTO.size());
         Assert.assertTrue(usersDTO.get(0).getIsActive());
         Assert.assertTrue(usersDTO.get(1).getIsActive());
     }
+
+    @Test(expected = InvalidStateException.class)
+    public void findAllUsers_WithWrongState_ShouldThrow(){
+        //Act
+        List<UserDTO> usersDTO = userService.findAll("ActiveUsersInvalidInput");
+    }
+
 
     @Test(expected = InvalidCredentialsException.class)
     public void LoginUserWithWrongPassword_InvalidCredentialsException_shouldThrow() {
