@@ -118,7 +118,7 @@ public class UserServiceImplTests {
         User user = new User();
         User user1 = new User();
         user.setIsActive(true);
-        user1.setIsActive(true);
+        user1.setIsActive(false);
         List<User> users = Arrays.asList(user, user1);
 
         when(userRepository.findAll()).thenReturn(users);
@@ -129,7 +129,13 @@ public class UserServiceImplTests {
         //Assert
         Assert.assertEquals(2, usersDTO.size());
         Assert.assertTrue(usersDTO.get(0).getIsActive());
-        Assert.assertTrue(usersDTO.get(1).getIsActive());
+        Assert.assertFalse(usersDTO.get(1).getIsActive());
+    }
+
+    @Test(expected = InvalidStateException.class)
+    public void findAll_whenStateNull_ShouldThrow() {
+        //Act
+        List<UserDTO> usersDTO = userService.findAll(null);
     }
 
     @Test(expected = InvalidStateException.class)
@@ -227,7 +233,7 @@ public class UserServiceImplTests {
     }
 
     @Test(expected = BlockedUserException.class)
-    public void LoginUserWithBlockedUser_InvalidCredentialsException_shouldThrow() {
+    public void LoginUserWithBlockedUser_shouldThrow() {
 
         //Arrange
         User userBlocked = new User();
@@ -239,6 +245,23 @@ public class UserServiceImplTests {
 
         //Act
         userService.login(userBlocked);
+    }
+
+    @Test
+    public void LoginUser_ShouldReturnLoggedUser(){
+        //Arrange
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("password");
+        user.setIsActive(true);
+
+        when(userRepository.findByUsername("test")).thenReturn(user);
+
+        //Act
+        User loggedUser = userService.login(user);
+
+        //Assert
+        Assert.assertEquals(user,loggedUser);
     }
 
     @Test(expected = UsernameExistsException.class)
@@ -385,6 +408,7 @@ public class UserServiceImplTests {
 
         userService.changePassword(1,passwordSpec);
     }
+    
 
 }
 
