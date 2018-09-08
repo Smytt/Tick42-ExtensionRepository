@@ -972,12 +972,26 @@ public class ExtensionServiceImplTests {
         when(extensionRepository.findById(1)).thenReturn(extension);
         when(userRepository.findById(1)).thenReturn(user);
 
-       try {
-           extensionService.fetchGitHub(1, 1);
-           Assert.assertTrue(Boolean.TRUE);
-       } catch (Error e) {
-           Assert.fail(e.getMessage());
-       }
+        try {
+            extensionService.fetchGitHub(1, 1);
+            Assert.assertTrue(Boolean.TRUE);
+        } catch (Error e) {
+            Assert.fail(e.getMessage());
+        }
+    }
 
+    @Test
+    public void generateExtensionDTOList_whenGivenListOfExtension_returnListOfExtensionDTO() {
+        //Arrange
+        Extension extension1 = new Extension();
+        Extension extension2 = new Extension();
+        List<Extension> extensions = Arrays.asList(extension1, extension2);
+
+        //Act
+        List<ExtensionDTO> extensionDTOs = extensionService.generateExtensionDTOList(extensions);
+
+        //Assert
+        Assert.assertEquals(extensions.size(), extensionDTOs.size());
+        Assert.assertTrue(extensionDTOs.get(1) instanceof ExtensionDTO);
     }
 }
