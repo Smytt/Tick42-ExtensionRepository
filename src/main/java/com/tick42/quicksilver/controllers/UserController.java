@@ -129,7 +129,7 @@ public class UserController {
     }
 
     @ExceptionHandler
-    ResponseEntity handleDisabledUserException(DisabledUserException e){
+    ResponseEntity handleDisabledUserException(BlockedUserException e){
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());

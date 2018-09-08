@@ -32,7 +32,7 @@ public class PasswordConstraintValidatorTest {
 
         Set<ConstraintViolation<UserSpec>> constraintViolations = validator.validate(userSpec);
 
-        Assert.assertEquals(constraintViolations.size(), 2);
+        Assert.assertEquals(constraintViolations.size(), 1);
     }
 
     @Test
