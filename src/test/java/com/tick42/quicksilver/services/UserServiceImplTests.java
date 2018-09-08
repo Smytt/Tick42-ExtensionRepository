@@ -372,8 +372,8 @@ public class UserServiceImplTests {
         userService.changePassword(1,passwordSpec);
 
 
-            //Assert
-            Assert.assertEquals(user.getPassword(),"newTestPassword1");
+        //Assert
+        Assert.assertEquals(user.getPassword(),"newTestPassword1");
 
     }
 
@@ -408,7 +408,7 @@ public class UserServiceImplTests {
 
         userService.changePassword(1,passwordSpec);
     }
-    
+
 
 }
 

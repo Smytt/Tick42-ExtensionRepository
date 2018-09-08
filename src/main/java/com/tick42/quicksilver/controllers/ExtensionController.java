@@ -11,12 +11,10 @@ import com.tick42.quicksilver.services.base.ExtensionService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.tick42.quicksilver.services.base.GitHubService;
+import com.tick42.quicksilver.services.base.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.config.ScheduledTaskRegistrar;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -29,24 +27,30 @@ public class ExtensionController {
 
     private final ExtensionService extensionService;
     private JwtValidator validator;
+    private RatingService ratingService;
 
     @Autowired
-    public ExtensionController(ExtensionService extensionService, JwtValidator validator) {
+    public ExtensionController(ExtensionService extensionService, JwtValidator validator, RatingService ratingService) {
         this.extensionService = extensionService;
         this.validator = validator;
+        this.ratingService = ratingService;
     }
 
     @GetMapping("/extensions/{id}")
     public ExtensionDTO get(@PathVariable(name = "id") int id, HttpServletRequest request) {
         User user = null;
+        int rating = 0;
         if (request.getHeader("Authorization") != null) {
             try {
                 user = validator.validate(request.getHeader("Authorization").substring(6));
+                rating = ratingService.userRatingForExtension(id, user.getId());
             } catch (Exception e) {
                 user = null;
             }
         }
-        return extensionService.findById(id, user);
+        ExtensionDTO extensionDTO = extensionService.findById(id, user);
+        extensionDTO.setCurrentUserRatingValue(rating);
+        return extensionDTO;
     }
 
     @GetMapping("/extensions/filter")

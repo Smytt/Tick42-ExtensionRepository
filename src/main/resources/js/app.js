@@ -159,16 +159,14 @@ let app = (() => {
             id = $(this).attr('extensionId');
         }
         if (remote.isAuth()) {
-            remote.userExtensionRating(id).then(
+            remote.getExtension(id).then(
                 res => {
-                    let userRating = res;
-                    remote.getExtension(id).then(
-                        res => {
-                            res = render.extension(res)
-                            show.extension(res, userRating)
-                        }
-                    )
-                }).catch(e => {
+                    res = render.extension(res)
+                    let userRating = res['currentUserRatingValue']
+                    show.extension(res, userRating)
+                }
+
+                ).catch(e => {
                 handle(e);
             });
         } else {

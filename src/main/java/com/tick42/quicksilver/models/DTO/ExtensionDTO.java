@@ -29,6 +29,7 @@ public class ExtensionDTO {
     private List<String> tags = new ArrayList<>();
     private int rating;
     private int timesRated;
+    private int currentUserRatingValue;
 
 
     public ExtensionDTO() {
@@ -250,5 +251,13 @@ public class ExtensionDTO {
 
     public void setLastErrorMessage(String lastErrorMessage) {
         this.lastErrorMessage = lastErrorMessage;
+    }
+
+    public int getCurrentUserRatingValue() {
+        return currentUserRatingValue;
+    }
+
+    public void setCurrentUserRatingValue(int currentUserRatingValue) {
+        this.currentUserRatingValue = currentUserRatingValue;
     }
 }
