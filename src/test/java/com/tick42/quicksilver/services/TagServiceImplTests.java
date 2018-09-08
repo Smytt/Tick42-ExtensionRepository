@@ -39,7 +39,7 @@ public class TagServiceImplTests {
     }
 
     @Test
-    public void tags(){
+    public void generateTags_WhenTagsExist_ShouldReturnTags(){
 
         //Arrange
         Tag test = new Tag("test");
@@ -57,5 +57,34 @@ public class TagServiceImplTests {
 
         //Assert
         Assert.assertEquals(tags.size(), 3);
+    }
+
+    @Test
+    public void generateTags_WhenTagsAreNonexistent_ShouldReturnTags(){
+        //Arrange
+        Tag test = new Tag("test");
+        Tag string = new Tag("string");
+        Tag tag = new Tag("tags");
+        String tagsString = "test,string,tags";
+
+        //Act
+        List<Tag> tags = tagService.generateTags(tagsString);
+
+        //Assert
+        Assert.assertEquals(tags.size(), 3);
+
+    }
+
+    @Test
+    public void generateTagsWhenTagIsEmptyString(){
+
+        //Arrange
+        String tagString = "";
+
+        //Act
+        List<Tag> tags = tagService.generateTags(tagString);
+
+        //Assert
+        Assert.assertEquals(tags.size(), 0);
     }
 }
