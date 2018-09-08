@@ -58,7 +58,7 @@ public class FileServiceImpl implements FileService {
 
         User user = userRepository.findById(userId);
         if (user == null) {
-            throw new ExtensionNotFoundException("User not found.");
+            throw new UserNotFoundException("User not found.");
         }
 
         if (user.getId() != extension.getOwner().getId() && !user.getRole().equals("ROLE_ADMIN")) {
@@ -90,7 +90,7 @@ public class FileServiceImpl implements FileService {
 
         User user = userRepository.findById(userId);
         if (user == null) {
-            throw new ExtensionNotFoundException("User not found.");
+            throw new UserNotFoundException("User not found.");
         }
 
         if (user.getId() != extension.getOwner().getId() && !user.getRole().equals("ROLE_ADMIN")) {
