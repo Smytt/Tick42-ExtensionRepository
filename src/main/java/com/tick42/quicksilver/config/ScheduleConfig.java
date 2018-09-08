@@ -18,7 +18,6 @@ import java.util.prefs.Preferences;
 public class ScheduleConfig implements SchedulingConfigurer {
 
     private String threadPrefix;
-    private Preferences prefs;
 
     @Autowired
     private ThreadPoolTaskScheduler threadPoolTaskScheduler;

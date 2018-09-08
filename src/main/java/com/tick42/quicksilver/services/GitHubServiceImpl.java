@@ -45,7 +45,7 @@ public class GitHubServiceImpl implements GitHubService {
                 repo = gitHub.getRepository(gitHubModel.getUser() + "/" + gitHubModel.getRepo());
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new GitHubRepositoryException("Couldn't connect to " + gitHubModel.getLink() +". Check URL.");
+                throw new GitHubRepositoryException("Couldn't connect to " + gitHubModel.getLink() + ". Check URL.");
             }
             try {
                 int pulls = repo.getPullRequests(GHIssueState.OPEN).size();
@@ -59,8 +59,7 @@ public class GitHubServiceImpl implements GitHubService {
                 gitHubModel.setOpenIssues(issues);
                 gitHubModel.setLastCommit(lastCommit);
                 gitHubModel.setLastSuccess(new Date());
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 throw new GitHubRepositoryException("Connected to " + gitHubModel.getLink() + " but couldn't fetch data.");
             }
@@ -95,17 +94,19 @@ public class GitHubServiceImpl implements GitHubService {
     @Override
     public void createScheduledTask(ScheduledTaskRegistrar taskRegistrar, GitHubSettingSpec gitHubSettingSpec) {
 
-        if (gitHubSettingSpec == null) return;
+        if (gitHubSettingSpec != null) {
+            Integer rate = gitHubSettingSpec.getRate();
+            Integer wait = gitHubSettingSpec.getWait();
+            String token = gitHubSettingSpec.getToken();
+            String username = gitHubSettingSpec.getUsername();
 
-        Integer rate = gitHubSettingSpec.getRate();
-        Integer wait = gitHubSettingSpec.getWait();
-        String token = gitHubSettingSpec.getToken();
-        String username = gitHubSettingSpec.getUsername();
+            prefs.putInt("updateRate", rate);
+            prefs.putInt("updateWait", wait);
+            prefs.put("token", token);
+            prefs.put("username", username);
+        }
 
-        prefs.putInt("updateRate", rate);
-        prefs.putInt("updateWait", wait);
-        prefs.put("token", token);
-        prefs.put("username", username);
+        if (prefs.get("token", "-").equals("-") || prefs.get("username", "-").equals("-")) return;
 
         if (scheduler.getTask() != null) {
             scheduler.getTask().cancel();
@@ -127,8 +128,8 @@ public class GitHubServiceImpl implements GitHubService {
         GitHubSettingSpec currentSettings = new GitHubSettingSpec();
         currentSettings.setToken(prefs.get("token", "-"));
         currentSettings.setUsername(prefs.get("username", "-"));
-        currentSettings.setRate(prefs.getInt("updateRate", 60000 * 60));
-        currentSettings.setWait(prefs.getInt("updateWait", 60000 * 60));
+        currentSettings.setRate(prefs.getInt("updateRate", 0));
+        currentSettings.setWait(prefs.getInt("updateWait", 0));
         return currentSettings;
     }
 }

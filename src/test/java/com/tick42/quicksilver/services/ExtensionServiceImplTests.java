@@ -29,9 +29,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExtensionServiceImplTests {
@@ -855,5 +854,20 @@ public class ExtensionServiceImplTests {
             Assert.assertEquals(expectededPageDTO.getExtensions().get(i).getTimesDownloaded(),
                     actualPageDTO.getExtensions().get(i).getTimesDownloaded());
         }
+    }
+
+    @Test
+    public void delete_whenExtensionsFound_shouldInvokeDeleteInRepository() {
+        //Arrange
+        User user = new User();
+        Extension extension = new Extension();
+        extension.setOwner(user);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        when(userRepository.findById(1)).thenReturn(user);
+        doNothing().when(extensionRepository).delete(isA(Extension.class));
+
+        extensionService.delete(1, 1);
+        verify(extensionRepository, times(1)).delete(extension);
     }
 }

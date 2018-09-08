@@ -301,7 +301,7 @@ footer * {
 }
 
 .extension-details .details p {
-    font-size: 16px;
+    font-size: 20px;
     margin: 10px 0;
 }
 
@@ -594,7 +594,7 @@ label button:hover {
     text-align: left;
     font-size: 30px;
     color: #f6cd61;
-    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .profile-settings{

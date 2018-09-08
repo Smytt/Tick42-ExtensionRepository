@@ -120,7 +120,7 @@ public class ExtensionServiceImpl implements ExtensionService {
             throw new UnauthorizedExtensionModificationException("You are not authorized to delete this extension.");
         }
 
-        extensionRepository.delete(extensionsId);
+        extensionRepository.delete(extension);
     }
 
 
