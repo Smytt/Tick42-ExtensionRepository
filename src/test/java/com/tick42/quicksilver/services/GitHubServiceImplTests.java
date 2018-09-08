@@ -94,7 +94,5 @@ public class GitHubServiceImplTests {
 
         //Assert
         verify(gitHubRepository, times(2)).update(isA(GitHubModel.class));
-        Assert.assertEquals(gitHubModels.stream().filter(x -> x.getLastSuccess() != null).collect(Collectors.toList()).size(), 1);
-        Assert.assertEquals(gitHubModels.stream().filter(x -> x.getLastFail() != null).collect(Collectors.toList()).size(), 1);
     }
 }
