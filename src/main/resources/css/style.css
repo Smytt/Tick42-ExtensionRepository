@@ -533,6 +533,10 @@ label button:hover {
     margin-left: 10px;
 }
 
+.tags {
+    margin-top: 20px;
+}
+
 .tags a {
     display: inline-block;
     border: 1px solid #f6cd61;

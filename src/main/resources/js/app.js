@@ -450,7 +450,7 @@ let app = (() => {
 
         let name = $('#name').val();
         let version = $('#version').val();
-        let description = $('#description').val().replace(/\n\r?/g, '<br />');
+        let description = $('#description').val().replace(/\n+/g, '<br />');
         let github = $('#github').val();
         let tags = $('#tags').val();
 
