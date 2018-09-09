@@ -29,25 +29,28 @@ public class RatingServiceImpl implements RatingService {
         if (rating > 5) {
             throw new InvalidRatingException("Rating must be between 1 and 5");
         }
-        Rating newRating = new Rating(rating, extensionId, userId);
-        double currentRating = ratingRepository.findExtensionRatingByUser(extensionId, userId);
-        Extension extension = extensionRepository.findById(extensionId);
-        double currentExtensionRating = extension.getRating();
 
+        Extension extension = extensionRepository.findById(extensionId);
         if (extension == null) {
             throw new ExtensionNotFoundException("Extension not found");
         }
-        if (currentRating == 0) {
-            ratingRepository.rate(newRating);
-            extension.setRating((currentExtensionRating * extension.getTimesRated() + rating) / (extension.getTimesRated() + 1));
-            extension.setTimesRated(extension.getTimesRated() + 1);
-            extensionRepository.update(extension);
-        } else {
-            extension.setRating(((currentExtensionRating * extension.getTimesRated() - currentRating) + rating) / (extension.getTimesRated()));
-            extensionRepository.update(extension);
-            ratingRepository.updateRating(newRating);
-        }
 
+        Rating newRating = new Rating(rating, extensionId, userId);
+        double currentExtensionRating = extension.getRating();
+        double userRatingForExtension = ratingRepository.findExtensionRatingByUser(extensionId, userId);
+
+        newExtensionRating(userRatingForExtension, currentExtensionRating, newRating, extension);
+        newUserRating(currentExtensionRating, extension, rating);
+
+        return extension.getRating();
+    }
+
+    @Override
+    public int userRatingForExtension(int extensionId, int userId) {
+        return ratingRepository.findExtensionRatingByUser(extensionId, userId);
+    }
+
+    private void newUserRating(double currentExtensionRating, Extension extension, int rating) {
         User user = extension.getOwner();
         double userRating = user.getRating();
         int extensionsRated = user.getExtensionsRated();
@@ -60,13 +63,36 @@ public class RatingServiceImpl implements RatingService {
             user.setRating(((userRating * extensionsRated - currentExtensionRating) + extension.getRating()) / extensionsRated);
             userRepository.update(user);
         }
-        return extension.getRating();
+    }
+    @Override
+    public Extension newExtensionRating(double userRatingForExtension, double currentExtensionRating, Rating newRating, Extension extension){
+
+        if (userRatingForExtension == 0) {
+            ratingRepository.rate(newRating);
+            extension.setRating((currentExtensionRating * extension.getTimesRated() + newRating.getRating()) / (extension.getTimesRated() + 1));
+            extension.setTimesRated(extension.getTimesRated() + 1);
+            extensionRepository.update(extension);
+        } else {
+            extension.setRating(((currentExtensionRating * extension.getTimesRated() - userRatingForExtension) + newRating.getRating()) / (extension.getTimesRated()));
+            extensionRepository.update(extension);
+            ratingRepository.updateRating(newRating);
+        }
+
+        return extension;
     }
 
     @Override
-    public int userRatingForExtension(int extensionId, int userId) {
-        return ratingRepository.findExtensionRatingByUser(extensionId, userId);
+    public void userRatingOnExtensionDelete(int userExtension){
+        Extension extension = extensionRepository.findById(userExtension);
+        double extensionRating = extension.getRating();
+        User user = extension.getOwner();
+        if (extensionRating > 0){
+            double userRating = user.getRating();
+            int userRatedExtensions = user.getExtensionsRated();
+            user.setRating((userRating * userRatedExtensions - extensionRating)/(userRatedExtensions -1));
+            user.setExtensionsRated(userRatedExtensions -1);
+            userRepository.update(user);
+        }
+
     }
-
-
 }
