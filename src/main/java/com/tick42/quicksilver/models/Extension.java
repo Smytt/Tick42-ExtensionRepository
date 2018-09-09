@@ -3,9 +3,7 @@ package com.tick42.quicksilver.models;
 import com.tick42.quicksilver.models.Spec.ExtensionSpec;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "extensions")
@@ -44,7 +42,7 @@ public class Extension {
             name = "extension_tags",
             joinColumns = @JoinColumn(name = "extension_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private List<Tag> tags = new ArrayList<>();
+    private Set<Tag> tags = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner")
@@ -115,11 +113,11 @@ public class Extension {
         this.version = version;
     }
 
-    public List<Tag> getTags() {
+    public Set<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
 

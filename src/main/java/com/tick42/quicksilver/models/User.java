@@ -12,7 +12,9 @@ import com.tick42.quicksilver.models.Spec.UserSpec;
 import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -33,7 +35,7 @@ public class User {
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
 //    @OrderBy("uploadDate desc")
-    private List<Extension> extensions = new ArrayList<>();
+    private Set<Extension> extensions = new HashSet<>();
 
     @Column(name = "enabled", nullable = false)
     @Type(type = "org.hibernate.type.NumericBooleanType")
@@ -71,11 +73,11 @@ public class User {
         this.username = username;
     }
 
-    public List<Extension> getExtensions() {
+    public Set<Extension> getExtensions() {
         return extensions;
     }
 
-    public void setExtensions(List<Extension> extensions) {
+    public void setExtensions(Set<Extension> extensions) {
         this.extensions = extensions;
     }
 

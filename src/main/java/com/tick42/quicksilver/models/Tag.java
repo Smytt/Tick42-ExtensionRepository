@@ -4,7 +4,9 @@ import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tags")
@@ -19,7 +21,7 @@ public class Tag {
 
     @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
 //    @OrderBy("uploadDate desc")
-    private List<Extension> extensions = new ArrayList<>();
+    private Set<Extension> extensions = new HashSet<>();
 
     public Tag() {
 
@@ -45,11 +47,11 @@ public class Tag {
         this.name = name;
     }
 
-    public List<Extension> getExtensions() {
+    public Set<Extension> getExtensions() {
         return extensions;
     }
 
-    public void setExtensions(List<Extension> extensions) {
+    public void setExtensions(Set<Extension> extensions) {
         this.extensions = extensions;
     }
 

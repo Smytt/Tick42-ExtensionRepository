@@ -5,6 +5,7 @@ import com.tick42.quicksilver.models.Extension;
 import com.tick42.quicksilver.models.Tag;
 
 import java.util.List;
+import java.util.Set;
 
 
 public interface TagService {
@@ -15,5 +16,5 @@ public interface TagService {
 
     List<Tag> prepareTags(List<Tag> tags);
 
-    List<Tag> generateTags(String tags);
+    Set<Tag> generateTags(String tags);
 }

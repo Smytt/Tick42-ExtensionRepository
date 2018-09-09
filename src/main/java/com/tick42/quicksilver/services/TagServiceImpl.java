@@ -10,9 +10,7 @@ import com.tick42.quicksilver.services.base.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,9 +48,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> generateTags(String tagString) {
+    public Set<Tag> generateTags(String tagString) {
         tagString = tagString.trim();
-        List<Tag> tags = new ArrayList<>();
+        Set<Tag> tags = new HashSet<>();
 
         if (tagString == null || tagString.equals("")) {
             return tags;
