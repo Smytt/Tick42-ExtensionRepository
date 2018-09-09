@@ -205,13 +205,13 @@ let app = (() => {
                                 timesRated
                             }
                             $('.info .rating').attr('id', rating);
-                            $('.info .rating').attr('timesRated', timesRated);
+                            $('.info .rating').attr('timesRated', userRating);
                           show.extensionRating(displayRating)
                           show.extensionRatingStar(displayRating)
                         }else{
                             show.extensionRating(displayRating)
                             show.extensionRatingStar(displayRating)
-                            $('.info .rating').attr('id', rating);
+                            $('.info .rating').attr('id', userRating);
                         }
                     }
                 )
