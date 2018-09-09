@@ -28,6 +28,8 @@ public class RatingServiceImplTests {
     @Mock
     private UserRepository userRepository;
 
+    @Mock RatingRepository ratingRepository;
+
     @InjectMocks
     private RatingServiceImpl ratingService;
 
@@ -58,13 +60,15 @@ public class RatingServiceImplTests {
     public void rateExtension_WhenUserHasCurrentRattingForExtension_ShouldReturnChanged() {
         //Arrange
         Extension extension = new Extension();
+        extension.setId(1);
         extension.setRating(2);
         extension.setTimesRated(2);
         int currentUserRatingForExtension = 2;
         Rating newRating = new Rating(3, 1, 1);
 
         //Act
-        extension =ratingService.newExtensionRating( currentUserRatingForExtension, newRating, extension);
+        extension = ratingService.newExtensionRating( currentUserRatingForExtension, newRating, extension);
+
         //Assert
         Assert.assertEquals(2.50, extension.getRating(), 0);
     }
@@ -79,7 +83,7 @@ public class RatingServiceImplTests {
         Rating newRating = new Rating(5, 1, 1);
 
         //Act
-        extension = ratingService.newExtensionRating( currentUserRatingForExtension, newRating, extension);
+        extension = ratingService.newExtensionRating(currentUserRatingForExtension, newRating, extension);
 
         //Assert
         Assert.assertEquals(3, extension.getRating(), 0);
@@ -115,7 +119,6 @@ public class RatingServiceImplTests {
         ratingService.userRatingOnExtensionDelete(extension.getId());
         //Assert
 
-        System.out.println(user.getRating());
         Assert.assertEquals(4,user.getRating(),0);
 
     }
