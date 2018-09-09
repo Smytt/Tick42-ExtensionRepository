@@ -205,7 +205,7 @@ let app = (() => {
                                 timesRated
                             }
                             $('.info .rating').attr('id', rating);
-                            $('.info .rating').attr('timesRated', userRating);
+                            $('.info .rating').attr('timesRated', timesRated);
                           show.extensionRating(displayRating)
                           show.extensionRatingStar(displayRating)
                         }else{
@@ -664,6 +664,7 @@ let app = (() => {
             e['responseJSON'].forEach(error => $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + error + '</p>'));
         }
         catch (err) {
+        console.
             console.log(e['responseJSON'])
             $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseText'] + '</p>');
         }
