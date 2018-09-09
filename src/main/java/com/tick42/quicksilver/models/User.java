@@ -34,7 +34,6 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-//    @OrderBy("uploadDate desc")
     private Set<Extension> extensions = new HashSet<>();
 
     @Column(name = "enabled", nullable = false)

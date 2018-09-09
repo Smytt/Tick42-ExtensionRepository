@@ -20,7 +20,6 @@ public class Tag {
     private String name;
 
     @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
-//    @OrderBy("uploadDate desc")
     private Set<Extension> extensions = new HashSet<>();
 
     public Tag() {
