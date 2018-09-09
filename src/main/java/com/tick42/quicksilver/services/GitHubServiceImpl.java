@@ -40,9 +40,11 @@ public class GitHubServiceImpl implements GitHubService {
     @Override
     public void setRemoteDetails(GitHubModel gitHubModel) {
         try {
+            settings = settingsRepository.get();
+            GitHub gitHub = GitHub.connect(settings.getUsername(), settings.getToken());
+
             GHRepository repo = null;
             try {
-                GitHub gitHub = GitHub.connect(settings.getUsername(), settings.getToken());
                 repo = gitHub.getRepository(gitHubModel.getUser() + "/" + gitHubModel.getRepo());
             } catch (Exception e) {
                 e.printStackTrace();

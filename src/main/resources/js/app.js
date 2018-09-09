@@ -251,8 +251,8 @@ let app = (() => {
 
         remote.getUserProfile(id).then(
             res => {
-                res = render.shortenTitle(res);
                 res = render.profile(res);
+                res = render.shortenTitle(res);
                 show.user(res);
             }
         ).catch(e => {
@@ -268,6 +268,7 @@ let app = (() => {
         remote.getUserProfile(id).then(
             res => {
                 res = render.profile(res);
+                res = render.shortenTitle(res);
                 show.user(res);
             }
         )
@@ -450,7 +451,7 @@ let app = (() => {
 
         let name = $('#name').val();
         let version = $('#version').val();
-        let description = $('#description').val().replace(/\n+/g, '<br />');
+        let description = $('#description').val().replace(/\n+/g, '<br /><br />');
         let github = $('#github').val();
         let tags = $('#tags').val();
 

@@ -63,8 +63,9 @@
             {{^isAdmin}}
             {{#isOwn}}
             <div class="action-btn">
-                <button class="menu-item"><i class="fas fa-pencil-alt"></i> Edit</button>
-                <button class="menu-item"><i class="fas fa-trash-alt"></i> Delete</button>
+                <button class="menu-item" id="edit" extensionId="{{id}}"><i class="fas fa-pencil-alt"></i> Edit</button>
+                <button class="menu-item" id="delete" extensionId="{{id}}"><i class="fas fa-trash-alt"></i> Delete
+                </button>
             </div>
             {{/isOwn}}
             {{/isAdmin}}

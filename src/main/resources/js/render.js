@@ -33,7 +33,7 @@ let render = (() => {
 
     let shortenTitle = (page) => {
         page['extensions'].forEach(extension => {
-            extension['name'] = extension['name'].length >= 20 ? extension['name'].substr(0, 17) + "..." : extension['name']
+            extension['name'] = extension['name'].length >= 17 ? extension['name'].substr(0, 14) + "..." : extension['name']
             extension['rating'] = +extension['rating'].toFixed(2);
         })
         return page;
@@ -41,7 +41,7 @@ let render = (() => {
 
     let shortenTitleWhenAllLoaded = (extensions) => {
         extensions.forEach(extension => {
-            extension['name'] = extension['name'].length >= 20 ? extension['name'].substr(0, 17) + "..." : extension['name']
+            extension['name'] = extension['name'].length >= 17 ? extension['name'].substr(0, 14) + "..." : extension['name']
             extension['rating'] = +extension['rating'].toFixed(2);
         })
         return extensions;
