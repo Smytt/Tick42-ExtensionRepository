@@ -1,6 +1,7 @@
 package com.tick42.quicksilver.security;
 
 import com.tick42.quicksilver.models.User;
+import com.tick42.quicksilver.security.Exceptions.JwtExpiredTokenException;
 import com.tick42.quicksilver.security.Exceptions.JwtTokenIsIncorrectException;
 import com.tick42.quicksilver.security.Exceptions.JwtTokenIsMissingException;
 import io.jsonwebtoken.Claims;
@@ -32,7 +33,7 @@ public class JwtValidator {
             jwtUser.setId(Integer.parseInt((String) body.get("userId")));
             jwtUser.setRole((String) body.get("role"));
         } catch (ExpiredJwtException e) {
-            throw e;
+            throw new JwtExpiredTokenException("Jwt token has expired.");
         } catch (Exception e) {
             System.out.println(e);
         }

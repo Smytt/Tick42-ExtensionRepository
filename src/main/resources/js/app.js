@@ -49,7 +49,9 @@ let app = (() => {
         let state = "all"
         remote.getUsers(state).then(
             show.adminView
-        )
+        ).catch(e => {
+                     handle(e);
+                 })
     }
 
     function getGithubSettingsView(e) {
@@ -214,7 +216,9 @@ let app = (() => {
                             $('.info .rating').attr('id', userRating);
                         }
                     }
-                )
+                ).catch(e => {
+                    handle(e);
+                })
             }
         } else {
             $('.not-logged').empty();
@@ -610,7 +614,9 @@ let app = (() => {
                 res = render.shortenTitleWhenAllLoaded(res);
                 show.pending(res)
             }
-        )
+        ).catch(e => {
+                     handle(e);
+        })
     }
 
     let getChangePasswordView = function (e) {
@@ -667,6 +673,11 @@ let app = (() => {
             try{
                 $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseJSON'].message + '</p>');
                 console.log(e['responseJSON'].message)
+                if(e['responseJSON'].message == "Jwt token has expired."){
+                    logout();
+                    getLoginView();
+                    $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseJSON'].message + '</p>');
+                }
             }catch{
                 $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseText'] + '</p>');
                 console.log(e['responseText'])

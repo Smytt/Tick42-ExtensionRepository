@@ -6,6 +6,7 @@ import com.tick42.quicksilver.models.DTO.UserDTO;
 import com.tick42.quicksilver.models.Spec.ChangeUserPasswordSpec;
 import com.tick42.quicksilver.models.Spec.UserSpec;
 import com.tick42.quicksilver.models.User;
+import com.tick42.quicksilver.security.Exceptions.JwtExpiredTokenException;
 import com.tick42.quicksilver.security.Exceptions.JwtTokenIsMissingException;
 import com.tick42.quicksilver.security.JwtValidator;
 import com.tick42.quicksilver.security.models.JwtUser;
@@ -89,6 +90,13 @@ public class UserController {
 
     @ExceptionHandler
     ResponseEntity handleInvalidCredentialsException(InvalidCredentialsException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler
+    ResponseEntity handleJwtExpiredTokenException(JwtExpiredTokenException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());
