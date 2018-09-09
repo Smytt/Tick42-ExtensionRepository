@@ -1,25 +1,31 @@
 <div>
     <div class="wrap hw-extensions">
+        <div class="profile-settings">
+            <span class="menu-item no-hover"><i class="fas fa-star"></i> {{rating}}</span>
+            {{#isOwn}}
+            <a class="change-password-view menu-item"><i class="fas fa-key"></i> Change password</a>
+            {{/isOwn}}
 
-        {{#isAdmin}}
-        {{^isOwn}}
-        <div class="user-state-controls">
-            {{#isActive}}
-            <div class="action-btn heading-btn">
-                <button class="menu-item" newState="block" userId="{{id}}"><i class="fas fa-user-lock"></i> Disable user
-                </button>
+            {{#isAdmin}}
+            {{^isOwn}}
+            <div class="user-state-controls">
+                {{#isActive}}
+                <div class="action-btn heading-btn">
+                    <button class="menu-item" newState="block" userId="{{id}}"><i class="fas fa-user-lock"></i> Disable user
+                    </button>
+                </div>
+                {{/isActive}}
+                {{^isActive}}
+                <div class="action-btn heading-btn">
+                    <button class="menu-item" newState="enable" userId="{{id}}"><i class="fas fa-user-check"></i> Enable
+                        user
+                    </button>
+                </div>
+                {{/isActive}}
             </div>
-            {{/isActive}}
-            {{^isActive}}
-            <div class="action-btn heading-btn">
-                <button class="menu-item" newState="enable" userId="{{id}}"><i class="fas fa-user-check"></i> Enable
-                    user
-                </button>
-            </div>
-            {{/isActive}}
+            {{/isOwn}}
+            {{/isAdmin}}
         </div>
-        {{/isOwn}}
-        {{/isAdmin}}
 
         <h1><i class="fas fa-user"></i>
             {{^isOwn}}
@@ -29,14 +35,7 @@
             You have
             {{/isOwn}} {{totalExtensions}} extension
         </h1>
-        <div class="profile-settings">
-            <a class="menu-item"><i class="fas fa-star"></i> {{rating}}</a>
-            {{^isOwn}}
-            {{/isOwn}}
-            {{#isOwn}}
-            <a class="change-password-view menu-item"><i class="fas fa-key"></i> Change password</a>
-            {{/isOwn}}
-        </div>
+
 
         <div>
             {{#extensions}}

@@ -599,7 +599,8 @@ label button:hover {
 
 .profile-settings{
     float:right;
-    margin-top:-70px;
+    height:  50px;
+    /*margin-top:-70px;*/
 }
 
 .warnings {
@@ -612,4 +613,17 @@ label button:hover {
 
 .fail {
     color: #f2836c;
+}
+
+.user-state-controls {
+    display: inline-block;
+    float: none;
+    height: 50px;
+    line-height:50px;
+}
+
+span.no-hover {
+    vertical-align: top;
+    background-color: #3da4ab !important;
+    cursor: default;
 }

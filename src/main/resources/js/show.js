@@ -225,7 +225,6 @@ let show = (() => {
             success: (tmpl) => {
                 let $html = Mustache.render(tmpl, extension);
                 $content.html($html);
-                $('.info .rating').attr('id', userRating)
                 $('.rating .star' + userRating).parent().addClass('current');
             }
         })

@@ -16,6 +16,7 @@ let app = (() => {
     let getHome = () => {
         remote.loadFeatured().then(
             res => {
+                res = render.shortenTitleWhenAllLoaded(res);
                 show.homeFeatured(res);
             }
         );
@@ -162,8 +163,7 @@ let app = (() => {
             remote.getExtension(id).then(
                 res => {
                     res = render.extension(res)
-                    let userRating = res['currentUserRatingValue']
-                    show.extension(res, userRating)
+                    show.extension(res)
                 }
 
                 ).catch(e => {
