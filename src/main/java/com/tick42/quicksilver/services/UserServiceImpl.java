@@ -9,6 +9,7 @@ import com.tick42.quicksilver.repositories.base.UserRepository;
 import com.tick42.quicksilver.security.JwtGenerator;
 import com.tick42.quicksilver.services.base.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -105,7 +106,7 @@ public class UserServiceImpl implements UserService {
             throw new InvalidCredentialsException("Invalid credentials.");
         }
 
-        if (!password.equals(foundUser.getPassword())) {
+        if (!BCrypt.checkpw(password,foundUser.getPassword())) {
             throw new InvalidCredentialsException("Invalid credentials.");
         }
 
@@ -129,6 +130,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user = new User(userSpec, role);
+        user.setPassword(BCrypt.hashpw(user.getPassword(),BCrypt.gensalt(4)));
         return userRepository.create(user);
     }
     @Override

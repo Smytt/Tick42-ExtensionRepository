@@ -26,7 +26,9 @@ public class RatingServiceImplTests {
     private ExtensionRepository extensionRepository;
 
     @Mock
-    private RatingRepository ratingRepository;
+    private UserRepository userRepository;
+
+    @Mock RatingRepository ratingRepository;
 
     @InjectMocks
     private RatingServiceImpl ratingService;
@@ -42,7 +44,8 @@ public class RatingServiceImplTests {
         ratingService.rate(extensionId, rating, userId);
     }
 
-    public void rateExtension__ShouldThrow() {
+    @Test(expected = ExtensionNotFoundException.class)
+    public void rateExtension_WhitNonExistingExtension_ShouldThrow() {
         //Arrange
         int extensionId = 1;
         int rating = 4;
@@ -54,19 +57,69 @@ public class RatingServiceImplTests {
     }
 
     @Test()
-    public void rateExtension() {
+    public void rateExtension_WhenUserHasCurrentRattingForExtension_ShouldReturnChanged() {
         //Arrange
         Extension extension = new Extension();
-        extension.setRating(4);
+        extension.setId(1);
+        extension.setRating(2);
         extension.setTimesRated(2);
         int currentUserRatingForExtension = 2;
         Rating newRating = new Rating(3, 1, 1);
 
         //Act
-        extension =ratingService.newExtensionRating( 2,  2,  newRating, extension);
-        System.out.println(extension.getRating());
+        extension = ratingService.newExtensionRating( currentUserRatingForExtension, newRating, extension);
 
         //Assert
         Assert.assertEquals(2.50, extension.getRating(), 0);
+    }
+
+    @Test
+    public void rateExtension_WhenUserNoRatingForExtension_ShouldReturnChanged() {
+        //Arrange
+        Extension extension = new Extension();
+        extension.setRating(2);
+        extension.setTimesRated(2);
+        int currentUserRatingForExtension = 0;
+        Rating newRating = new Rating(5, 1, 1);
+
+        //Act
+        extension = ratingService.newExtensionRating(currentUserRatingForExtension, newRating, extension);
+
+        //Assert
+        Assert.assertEquals(3, extension.getRating(), 0);
+    }
+
+    @Test(expected = ExtensionNotFoundException.class)
+    public void userRatingOnExtensionDelete_whitNonexistentExtension_ShouldThrow(){
+
+        //Arrange
+
+        when(extensionRepository.findById(2)).thenReturn(null);
+        //Act
+        ratingService.userRatingOnExtensionDelete(2);
+
+    }
+
+    @Test
+    public void userRatingOnExtensionDelete(){
+
+        //Arrange
+        User user = new User();
+        user.setRating(4);
+        user.setExtensionsRated(2);
+
+        Extension extension = new Extension();
+        extension.setId(1);
+        extension.setRating(4);
+        extension.setTimesRated(2);
+        extension.setOwner(user);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        //Act
+        ratingService.userRatingOnExtensionDelete(extension.getId());
+        //Assert
+
+        Assert.assertEquals(4,user.getRating(),0);
+
     }
 }
