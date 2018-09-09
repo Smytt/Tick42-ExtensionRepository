@@ -6,4 +6,5 @@ public interface RatingService {
 
     int userRatingForExtension(int extensionId, int userId);
 
+    void userRatingOnExtensionExtensionDelete(int userExtension);
 }

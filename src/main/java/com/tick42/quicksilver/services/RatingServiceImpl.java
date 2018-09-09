@@ -37,17 +37,19 @@ public class RatingServiceImpl implements RatingService {
         if (extension == null) {
             throw new ExtensionNotFoundException("Extension not found");
         }
-        if (currentRating == 0) {
-            ratingRepository.rate(newRating);
-            extension.setRating((currentExtensionRating * extension.getTimesRated() + rating) / (extension.getTimesRated() + 1));
-            extension.setTimesRated(extension.getTimesRated() + 1);
-            extensionRepository.update(extension);
-        } else {
-            extension.setRating(((currentExtensionRating * extension.getTimesRated() - currentRating) + rating) / (extension.getTimesRated()));
-            extensionRepository.update(extension);
-            ratingRepository.updateRating(newRating);
-        }
 
+        newExtensionRating(currentRating, currentExtensionRating, newRating, extension, rating);
+        newUserRating(currentExtensionRating, extension, rating);
+
+        return extension.getRating();
+    }
+
+    @Override
+    public int userRatingForExtension(int extensionId, int userId) {
+        return ratingRepository.findExtensionRatingByUser(extensionId, userId);
+    }
+
+    private void newUserRating(double currentExtensionRating, Extension extension, int rating) {
         User user = extension.getOwner();
         double userRating = user.getRating();
         int extensionsRated = user.getExtensionsRated();
@@ -60,13 +62,33 @@ public class RatingServiceImpl implements RatingService {
             user.setRating(((userRating * extensionsRated - currentExtensionRating) + extension.getRating()) / extensionsRated);
             userRepository.update(user);
         }
-        return extension.getRating();
     }
 
+    private void newExtensionRating(double currentRating, double currentExtensionRating, Rating newRating, Extension extension, int rating){
+        if (currentRating == 0) {
+            ratingRepository.rate(newRating);
+            extension.setRating((currentExtensionRating * extension.getTimesRated() + rating) / (extension.getTimesRated() + 1));
+            extension.setTimesRated(extension.getTimesRated() + 1);
+            extensionRepository.update(extension);
+        } else {
+            extension.setRating(((currentExtensionRating * extension.getTimesRated() - currentRating) + rating) / (extension.getTimesRated()));
+            extensionRepository.update(extension);
+            ratingRepository.updateRating(newRating);
+        }
+
+    }
     @Override
-    public int userRatingForExtension(int extensionId, int userId) {
-        return ratingRepository.findExtensionRatingByUser(extensionId, userId);
+    public void userRatingOnExtensionExtensionDelete(int userExtension){
+        Extension extension = extensionRepository.findById(userExtension);
+        double extensionRating = extension.getRating();
+        User user = extension.getOwner();
+        if (extensionRating > 0){
+            double userRating = user.getRating();
+            int userRatedExtensions = user.getExtensionsRated();
+            user.setRating((userRating * userRatedExtensions - extensionRating)/(userRatedExtensions -1));
+            user.setExtensionsRated(userRatedExtensions -1);
+            userRepository.update(user);
+        }
+
     }
-
-
 }
