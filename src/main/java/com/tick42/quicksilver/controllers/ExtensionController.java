@@ -91,7 +91,7 @@ public class ExtensionController {
     @DeleteMapping("/auth/extensions/{id}")
     public void delete(@PathVariable(name = "id") int id, HttpServletRequest request) {
         int userId = validator.getUserIdFromToken(request);
-        ratingService.userRatingOnExtensionExtensionDelete(id);
+        ratingService.userRatingOnExtensionDelete(id);
         extensionService.delete(id, userId);
     }
 
