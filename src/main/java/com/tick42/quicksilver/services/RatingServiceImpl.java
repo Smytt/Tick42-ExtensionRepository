@@ -64,8 +64,9 @@ public class RatingServiceImpl implements RatingService {
             userRepository.update(user);
         }
     }
+
     @Override
-    public Extension newExtensionRating(double userRatingForExtension, Rating newRating, Extension extension){
+    public Extension newExtensionRating(double userRatingForExtension, Rating newRating, Extension extension) {
 
         if (userRatingForExtension == 0) {
             ratingRepository.rate(newRating);
@@ -82,17 +83,22 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public void userRatingOnExtensionDelete(int userExtension){
+    public User userRatingOnExtensionDelete(int userExtension) {
         Extension extension = extensionRepository.findById(userExtension);
-        double extensionRating = extension.getRating();
-        User user = extension.getOwner();
-        if (extensionRating > 0){
-            double userRating = user.getRating();
-            int userRatedExtensions = user.getExtensionsRated();
-            user.setRating((userRating * userRatedExtensions - extensionRating)/(userRatedExtensions -1));
-            user.setExtensionsRated(userRatedExtensions -1);
-            userRepository.update(user);
+        if (extension == null) {
+            throw new ExtensionNotFoundException("Extension Not Found");
         }
 
+        double extensionRating = extension.getRating();
+        User user = extension.getOwner();
+
+        if (extensionRating > 0) {
+            double userRating = user.getRating();
+            int userRatedExtensions = user.getExtensionsRated();
+            user.setRating((userRating * userRatedExtensions - extensionRating) / (userRatedExtensions - 1));
+            user.setExtensionsRated(userRatedExtensions - 1);
+            userRepository.update(user);
+        }
+        return user;
     }
 }
