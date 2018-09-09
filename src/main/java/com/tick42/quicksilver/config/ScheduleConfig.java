@@ -11,8 +11,6 @@ import org.springframework.scheduling.config.FixedRateTask;
 import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
-import java.util.prefs.Preferences;
-
 @Configuration
 @ConfigurationProperties(prefix = "app.schedule")
 public class ScheduleConfig implements SchedulingConfigurer {

@@ -25,4 +25,14 @@ public class SettingsRepository {
         return settings;
     }
 
+    public Settings set(Settings settings) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(settings);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return settings;
+    }
 }

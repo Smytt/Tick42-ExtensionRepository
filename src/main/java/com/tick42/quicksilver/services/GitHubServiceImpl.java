@@ -27,8 +27,8 @@ public class GitHubServiceImpl implements GitHubService {
     private final GitHub gitHub;
     private final Scheduler scheduler;
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
-    private Preferences prefs;
     private SettingsRepository settingsRepository;
+    private Settings settings;
 
 
     @Autowired
@@ -37,13 +37,8 @@ public class GitHubServiceImpl implements GitHubService {
         this.scheduler = scheduler;
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;
         this.settingsRepository = settingsRepository;
-        try {
-            prefs = Preferences.userRoot().node(this.getClass().getName());
-        }
-        catch (Exception e) {
-
-        }
-        this.gitHub = GitHub.connect(prefs.get("username", "-"), prefs.get("token", "-"));
+        this.settings = settingsRepository.get();
+        this.gitHub = GitHub.connect(settings.getUsername(), settings.getToken());
     }
 
     @Override
@@ -103,21 +98,20 @@ public class GitHubServiceImpl implements GitHubService {
     @Override
     public void createScheduledTask(ScheduledTaskRegistrar taskRegistrar, GitHubSettingSpec gitHubSettingSpec) {
 
-        Settings settings = settingsRepository.get();
-
         if (gitHubSettingSpec != null) {
             Integer rate = gitHubSettingSpec.getRate();
             Integer wait = gitHubSettingSpec.getWait();
             String token = gitHubSettingSpec.getToken();
             String username = gitHubSettingSpec.getUsername();
 
-            prefs.putInt("updateRate", rate);
-            prefs.putInt("updateWait", wait);
-            prefs.put("token", token);
-            prefs.put("username", username);
+            settings.setRate(rate);
+            settings.setWait(wait);
+            settings.setToken(token);
+            settings.setUsername(username);
+            settingsRepository.set(settings);
         }
 
-        if (prefs.get("token", "-").equals("-") || prefs.get("username", "-").equals("-")) return;
+        if (settings.getToken() == null || settings.getUsername() == null) return;
 
         if (scheduler.getTask() != null) {
             scheduler.getTask().cancel();
@@ -137,10 +131,10 @@ public class GitHubServiceImpl implements GitHubService {
     @Override
     public GitHubSettingSpec getSettings() {
         GitHubSettingSpec currentSettings = new GitHubSettingSpec();
-        currentSettings.setToken(prefs.get("token", "-"));
-        currentSettings.setUsername(prefs.get("username", "-"));
-        currentSettings.setRate(prefs.getInt("updateRate", 0));
-        currentSettings.setWait(prefs.getInt("updateWait", 0));
+        currentSettings.setToken(settings.getToken());
+        currentSettings.setUsername(settings.getUsername());
+        currentSettings.setRate(settings.getRate());
+        currentSettings.setWait(settings.getWait());
         return currentSettings;
     }
 }
