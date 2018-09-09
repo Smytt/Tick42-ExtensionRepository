@@ -120,6 +120,7 @@ public class ExtensionServiceImplTests {
 
         //Act
         ExtensionDTO createdExtensionDTO = extensionService.create(extensionSpec, userId);
+        createdExtensionDTO.getTags().sort(String::compareTo);
 
         //Assert
         Assert.assertThat(expectedExtensionDTO, samePropertyValuesAs(createdExtensionDTO));
