@@ -32,6 +32,7 @@ public class AppConfig {
                 .addAnnotatedClass(Tag.class)
                 .addAnnotatedClass(File.class)
                 .addAnnotatedClass(GitHubModel.class)
+                .addAnnotatedClass(Settings.class)
                 .buildSessionFactory();
     }
 }

@@ -3,7 +3,9 @@ package com.tick42.quicksilver.services;
 import com.tick42.quicksilver.config.Scheduler;
 import com.tick42.quicksilver.exceptions.GitHubRepositoryException;
 import com.tick42.quicksilver.models.GitHubModel;
+import com.tick42.quicksilver.models.Settings;
 import com.tick42.quicksilver.models.Spec.GitHubSettingSpec;
+import com.tick42.quicksilver.repositories.SettingsRepository;
 import com.tick42.quicksilver.repositories.base.GitHubRepository;
 import com.tick42.quicksilver.services.base.GitHubService;
 import org.kohsuke.github.*;
@@ -26,13 +28,15 @@ public class GitHubServiceImpl implements GitHubService {
     private final Scheduler scheduler;
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
     private Preferences prefs;
+    private SettingsRepository settingsRepository;
 
 
     @Autowired
-    public GitHubServiceImpl(GitHubRepository gitHubRepository, Scheduler scheduler, ThreadPoolTaskScheduler threadPoolTaskScheduler) throws IOException {
+    public GitHubServiceImpl(GitHubRepository gitHubRepository, Scheduler scheduler, ThreadPoolTaskScheduler threadPoolTaskScheduler, SettingsRepository settingsRepository) throws IOException {
         this.gitHubRepository = gitHubRepository;
         this.scheduler = scheduler;
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;
+        this.settingsRepository = settingsRepository;
         try {
             prefs = Preferences.userRoot().node(this.getClass().getName());
         }
@@ -99,6 +103,8 @@ public class GitHubServiceImpl implements GitHubService {
     @Override
     public void createScheduledTask(ScheduledTaskRegistrar taskRegistrar, GitHubSettingSpec gitHubSettingSpec) {
 
+        Settings settings = settingsRepository.get();
+
         if (gitHubSettingSpec != null) {
             Integer rate = gitHubSettingSpec.getRate();
             Integer wait = gitHubSettingSpec.getWait();
@@ -122,7 +128,7 @@ public class GitHubServiceImpl implements GitHubService {
             public void run() {
                 updateExtensionDetails();
             }
-        }, prefs.getInt("updateRate", 1), prefs.getInt("updateWait", 1));
+        }, settings.getRate(), settings.getWait());
 
         taskRegistrar.setTaskScheduler(threadPoolTaskScheduler);
         scheduler.setTask(taskRegistrar.scheduleFixedRateTask(updateGitHubData));

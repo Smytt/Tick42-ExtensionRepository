@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 @SpringBootApplication
-//@EnableScheduling
+@EnableScheduling
 @EnableConfigurationProperties
 public class QuicksilverApplication {
     public static void main(String[] args) {
