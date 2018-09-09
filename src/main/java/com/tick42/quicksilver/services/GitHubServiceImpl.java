@@ -5,7 +5,7 @@ import com.tick42.quicksilver.exceptions.GitHubRepositoryException;
 import com.tick42.quicksilver.models.GitHubModel;
 import com.tick42.quicksilver.models.Settings;
 import com.tick42.quicksilver.models.Spec.GitHubSettingSpec;
-import com.tick42.quicksilver.repositories.SettingsRepository;
+import com.tick42.quicksilver.repositories.SettingsRepositoryImpl;
 import com.tick42.quicksilver.repositories.base.GitHubRepository;
 import com.tick42.quicksilver.services.base.GitHubService;
 import org.kohsuke.github.*;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 @Service
 public class GitHubServiceImpl implements GitHubService {
@@ -27,12 +26,12 @@ public class GitHubServiceImpl implements GitHubService {
     private final GitHub gitHub;
     private final Scheduler scheduler;
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
-    private SettingsRepository settingsRepository;
+    private SettingsRepositoryImpl settingsRepository;
     private Settings settings;
 
 
     @Autowired
-    public GitHubServiceImpl(GitHubRepository gitHubRepository, Scheduler scheduler, ThreadPoolTaskScheduler threadPoolTaskScheduler, SettingsRepository settingsRepository) throws IOException {
+    public GitHubServiceImpl(GitHubRepository gitHubRepository, Scheduler scheduler, ThreadPoolTaskScheduler threadPoolTaskScheduler, SettingsRepositoryImpl settingsRepository) throws IOException {
         this.gitHubRepository = gitHubRepository;
         this.scheduler = scheduler;
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;
