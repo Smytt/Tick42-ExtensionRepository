@@ -49,21 +49,6 @@ public class GitHubServiceImplTests {
     }
 
     @Test
-    public void setRemoteDetails_whenGitHubModelIsInvalid_shouldSetFailMsgAndDate() {
-        //Arrange
-        GitHubModel gitHubModel = new GitHubModel();
-        gitHubModel.setUser("some");
-        gitHubModel.setRepo("other");
-
-        //Act
-        gitHubService.setRemoteDetails(gitHubModel);
-
-        //Asser
-        Assert.assertNotNull(gitHubModel.getFailMessage());
-        Assert.assertNotNull(gitHubModel.getLastFail());
-    }
-
-    @Test
     public void generateGitHub_whenLinkCorrect_returnGitHubModel() {
         //Arrange
         String link = "https://github.com/Smytt/Tick42-ExtensionRepository";
