@@ -33,7 +33,12 @@ public class GitHubServiceImpl implements GitHubService {
         this.gitHubRepository = gitHubRepository;
         this.scheduler = scheduler;
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;
-        prefs = Preferences.userRoot().node(this.getClass().getName());
+        try {
+            prefs = Preferences.userRoot().node(this.getClass().getName());
+        }
+        catch (Exception e) {
+
+        }
         this.gitHub = GitHub.connect(prefs.get("username", "-"), prefs.get("token", "-"));
     }
 
