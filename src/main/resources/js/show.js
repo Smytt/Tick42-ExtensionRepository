@@ -219,12 +219,13 @@ let show = (() => {
         })
     }
 
-    let extension = (extension, userRating) => {
+    let extension = (extension) => {
         $.ajax({
             url: './templates/extension-view.html',
             success: (tmpl) => {
                 let $html = Mustache.render(tmpl, extension);
                 $content.html($html);
+                let userRating = extension['currentUserRatingValue']
                 $('.rating .star' + userRating).parent().addClass('current');
             }
         })
