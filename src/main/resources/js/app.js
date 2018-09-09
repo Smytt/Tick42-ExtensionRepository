@@ -201,13 +201,13 @@ let app = (() => {
                         if(currentRatedStatus == 0){
                             timesRated = parseInt(timesRated) + 1;
                             displayRating = {
-                                res,
+                                rating,
                                 timesRated
                             }
                             $('.info .rating').attr('id', rating);
                             $('.info .rating').attr('timesRated', timesRated);
                           show.extensionRating(displayRating)
-                          show.extensionRatingStar(rating)
+                          show.extensionRatingStar(displayRating)
                         }else{
                             show.extensionRating(displayRating)
                             show.extensionRatingStar(displayRating)
