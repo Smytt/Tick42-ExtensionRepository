@@ -39,7 +39,7 @@ public class RatingServiceImpl implements RatingService {
         double currentExtensionRating = extension.getRating();
         double userRatingForExtension = ratingRepository.findExtensionRatingByUser(extensionId, userId);
 
-        newExtensionRating(userRatingForExtension, currentExtensionRating, newRating, extension);
+        newExtensionRating(userRatingForExtension, newRating, extension);
         newUserRating(currentExtensionRating, extension, rating);
 
         return extension.getRating();
@@ -65,15 +65,15 @@ public class RatingServiceImpl implements RatingService {
         }
     }
     @Override
-    public Extension newExtensionRating(double userRatingForExtension, double currentExtensionRating, Rating newRating, Extension extension){
+    public Extension newExtensionRating(double userRatingForExtension, Rating newRating, Extension extension){
 
         if (userRatingForExtension == 0) {
             ratingRepository.rate(newRating);
-            extension.setRating((currentExtensionRating * extension.getTimesRated() + newRating.getRating()) / (extension.getTimesRated() + 1));
+            extension.setRating((extension.getRating() * extension.getTimesRated() + newRating.getRating()) / (extension.getTimesRated() + 1));
             extension.setTimesRated(extension.getTimesRated() + 1);
             extensionRepository.update(extension);
         } else {
-            extension.setRating(((currentExtensionRating * extension.getTimesRated() - userRatingForExtension) + newRating.getRating()) / (extension.getTimesRated()));
+            extension.setRating(((extension.getRating() * extension.getTimesRated() - userRatingForExtension) + newRating.getRating()) / (extension.getTimesRated()));
             extensionRepository.update(extension);
             ratingRepository.updateRating(newRating);
         }

@@ -54,19 +54,33 @@ public class RatingServiceImplTests {
     }
 
     @Test()
-    public void rateExtension() {
+    public void rateExtension_WhenUserHasCurrentRattingForExtension_ShouldReturnChanged() {
         //Arrange
         Extension extension = new Extension();
-        extension.setRating(4);
+        extension.setRating(2);
         extension.setTimesRated(2);
         int currentUserRatingForExtension = 2;
         Rating newRating = new Rating(3, 1, 1);
 
         //Act
-        extension =ratingService.newExtensionRating( 2,  2,  newRating, extension);
-        System.out.println(extension.getRating());
-
+        extension =ratingService.newExtensionRating( currentUserRatingForExtension, newRating, extension);
         //Assert
         Assert.assertEquals(2.50, extension.getRating(), 0);
+    }
+
+    @Test
+    public void rateExtension_WhenUserDoesntHaveCurrentRattingForExtension_ShouldReturnChanged() {
+        //Arrange
+        Extension extension = new Extension();
+        extension.setRating(2);
+        extension.setTimesRated(2);
+        int currentUserRatingForExtension = 0;
+        Rating newRating = new Rating(5, 1, 1);
+
+        //Act
+        extension =ratingService.newExtensionRating( currentUserRatingForExtension, newRating, extension);
+
+        //Assert
+        Assert.assertEquals(3, extension.getRating(), 0);
     }
 }
