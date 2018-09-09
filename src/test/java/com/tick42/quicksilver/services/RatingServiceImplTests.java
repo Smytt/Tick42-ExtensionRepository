@@ -41,8 +41,9 @@ public class RatingServiceImplTests {
         //Act
         ratingService.rate(extensionId, rating, userId);
     }
-
-    public void rateExtension__ShouldThrow() {
+    
+    @Test(expected = ExtensionNotFoundException.class)
+    public void rateExtension_WhitNonExistingExtension_ShouldThrow() {
         //Arrange
         int extensionId = 1;
         int rating = 4;
