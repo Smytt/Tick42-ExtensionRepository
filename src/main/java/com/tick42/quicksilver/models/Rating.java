@@ -27,7 +27,7 @@ public class Rating implements Serializable {
         this.user = user;
     }
 
-    public int getRating() {
+    public long getRating() {
         return rating;
     }
 

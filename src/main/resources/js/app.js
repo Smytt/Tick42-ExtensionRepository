@@ -185,24 +185,23 @@ let app = (() => {
         if (remote.isAuth()) {
             $(this).closest('div').find('a').removeClass('current')
             $(this).addClass('current');
-            let rating = $(this).attr('id');
+            let userRating = $(this).attr('id');
             let timesRated = $('.info .rating').attr('timesRated');
             let extensionId = $(this).attr('extensionId');
             let currentRatedStatus = $('.info .rating').attr('id');
-            let displayRating = {
-                rating,
-                timesRated
-            }
-            if (rating == currentRatedStatus) {
+            if (userRating == currentRatedStatus) {
                 console.log('same rating')
             } else {
-                remote.rateExtension(extensionId, rating).then(
-                    res => {
+                remote.rateExtension(extensionId, userRating).then(
+                    rating => {
+                        let displayRating = {
+                            rating,
+                            timesRated
+                        }
                         if(currentRatedStatus == 0){
                             timesRated = parseInt(timesRated) + 1;
-                            console.log(timesRated)
                             displayRating = {
-                                rating,
+                                res,
                                 timesRated
                             }
                             $('.info .rating').attr('id', rating);

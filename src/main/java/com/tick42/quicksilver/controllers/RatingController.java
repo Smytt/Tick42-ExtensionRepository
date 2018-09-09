@@ -28,7 +28,7 @@ public class RatingController {
     }
 
     @PatchMapping(value = "/auth/rating/{id}/{rating}")
-    public int rating(@PathVariable("id") int id, @PathVariable("rating") int rating, HttpServletRequest request) {
+    public double rating(@PathVariable("id") int id, @PathVariable("rating") int rating, HttpServletRequest request) {
         int userId = validator.getUserIdFromToken(request);
         return ratingService.rate(id, rating, userId);
     }

@@ -60,7 +60,7 @@ public class Extension {
     private boolean isFeatured;
 
     @Column(name = "rating")
-    private int rating;
+    private double rating;
 
     @Column(name = "times_rated")
     private int timesRated;
@@ -179,11 +179,11 @@ public class Extension {
         this.github = github;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
