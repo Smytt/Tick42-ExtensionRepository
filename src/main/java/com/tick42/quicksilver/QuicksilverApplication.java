@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @SpringBootApplication
 //@EnableScheduling
