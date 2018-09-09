@@ -23,7 +23,6 @@ import java.util.List;
 public class GitHubServiceImpl implements GitHubService {
 
     private final GitHubRepository gitHubRepository;
-    private final GitHub gitHub;
     private final Scheduler scheduler;
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
     private SettingsRepositoryImpl settingsRepository;
@@ -36,8 +35,6 @@ public class GitHubServiceImpl implements GitHubService {
         this.scheduler = scheduler;
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;
         this.settingsRepository = settingsRepository;
-        this.settings = settingsRepository.get();
-        this.gitHub = GitHub.connect(settings.getUsername(), settings.getToken());
     }
 
     @Override
@@ -45,6 +42,7 @@ public class GitHubServiceImpl implements GitHubService {
         try {
             GHRepository repo = null;
             try {
+                GitHub gitHub = GitHub.connect(settings.getUsername(), settings.getToken());
                 repo = gitHub.getRepository(gitHubModel.getUser() + "/" + gitHubModel.getRepo());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -97,6 +95,8 @@ public class GitHubServiceImpl implements GitHubService {
     @Override
     public void createScheduledTask(ScheduledTaskRegistrar taskRegistrar, GitHubSettingSpec gitHubSettingSpec) {
 
+        settings = settingsRepository.get();
+
         if (gitHubSettingSpec != null) {
             Integer rate = gitHubSettingSpec.getRate();
             Integer wait = gitHubSettingSpec.getWait();
@@ -129,6 +129,7 @@ public class GitHubServiceImpl implements GitHubService {
 
     @Override
     public GitHubSettingSpec getSettings() {
+        settings = settingsRepository.get();
         GitHubSettingSpec currentSettings = new GitHubSettingSpec();
         currentSettings.setToken(settings.getToken());
         currentSettings.setUsername(settings.getUsername());

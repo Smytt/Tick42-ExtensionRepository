@@ -78,7 +78,7 @@ public class ExtensionServiceImplTests {
         user.setId(userId);
         when(userRepository.findById(userId)).thenReturn(user);
 
-        List<Tag> tags = Arrays.asList(new Tag("tag1"), new Tag("tag2"));
+        Set<Tag> tags = new HashSet<>(Arrays.asList(new Tag("tag1"), new Tag("tag2")));
         when(tagService.generateTags(extensionSpec.getTags())).thenReturn(tags);
 
         GitHubModel github = new GitHubModel();
@@ -471,7 +471,7 @@ public class ExtensionServiceImplTests {
         extensionSpec.setGithub("gitHubLink");
         extensionSpec.setTags("tag1, tag2");
 
-        List<Tag> tags = Arrays.asList(new Tag("tag1"), new Tag("tag2"));
+        Set<Tag> tags = new HashSet<>(Arrays.asList(new Tag("tag1"), new Tag("tag2")));
         when(tagService.generateTags(extensionSpec.getTags())).thenReturn(tags);
 
         GitHubModel github = new GitHubModel();
@@ -518,7 +518,7 @@ public class ExtensionServiceImplTests {
         extensionSpec.setGithub("gitHubLink");
         extensionSpec.setTags("tag1, tag2");
 
-        List<Tag> tags = Arrays.asList(new Tag("tag1"), new Tag("tag2"));
+        Set<Tag> tags = new HashSet<>(Arrays.asList(new Tag("tag1"), new Tag("tag2")));
         when(tagService.generateTags(extensionSpec.getTags())).thenReturn(tags);
 
         GitHubModel github = new GitHubModel();

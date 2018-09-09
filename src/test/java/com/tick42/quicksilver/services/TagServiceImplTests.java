@@ -11,7 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -53,7 +56,7 @@ public class TagServiceImplTests {
 
 
         //Act
-        List<Tag> tags = tagService.generateTags(tagsString);
+        Set<Tag> tags = new HashSet<>(tagService.generateTags(tagsString));
 
         //Assert
         Assert.assertEquals(tags.size(), 3);
@@ -68,7 +71,7 @@ public class TagServiceImplTests {
         String tagsString = "test,string,tags";
 
         //Act
-        List<Tag> tags = tagService.generateTags(tagsString);
+        Set<Tag> tags = new HashSet<>(tagService.generateTags(tagsString));
 
         //Assert
         Assert.assertEquals(tags.size(), 3);
@@ -82,7 +85,7 @@ public class TagServiceImplTests {
         String tagString = "";
 
         //Act
-        List<Tag> tags = tagService.generateTags(tagString);
+        Set<Tag> tags = new HashSet<>(tagService.generateTags(tagString));
 
         //Assert
         Assert.assertEquals(tags.size(), 0);
