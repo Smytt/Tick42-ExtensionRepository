@@ -41,6 +41,12 @@ public class User {
 
     private String role;
 
+    @Column(name = "rating")
+    private double rating;
+
+    @Column(name = "extensions_rated")
+    private int extensionsRated;
+
     public User(){
 
     }
@@ -103,5 +109,21 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public int getExtensionsRated() {
+        return extensionsRated;
+    }
+
+    public void setExtensionsRated(int extensionsRated) {
+        this.extensionsRated = extensionsRated;
     }
 }

@@ -12,6 +12,8 @@ public class UserDTO {
     private int totalExtensions;
     private List<ExtensionDTO> extensions = new ArrayList<>();
     private boolean isActive;
+    private double rating;
+    private int extensions_rated;
 
     public UserDTO() {
 
@@ -27,6 +29,8 @@ public class UserDTO {
                         .collect(Collectors.toList()));
         this.setTotalExtensions(this.extensions.size());
         this.setIsActive(user.getIsActive());
+        this.setExtensions_rated(user.getExtensionsRated());
+        this.setRating(user.getRating());
     }
 
     public int getId() {
@@ -67,5 +71,21 @@ public class UserDTO {
 
     public void setIsActive(boolean active) {
         isActive = active;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public int getExtensions_rated() {
+        return extensions_rated;
+    }
+
+    public void setExtensions_rated(int extensions_rated) {
+        this.extensions_rated = extensions_rated;
     }
 }
