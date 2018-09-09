@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.util.Arrays;
 import java.util.List;
@@ -207,11 +208,10 @@ public class UserServiceImplTests {
         //Arrange
         User user = new User();
         user.setUsername("test");
-        user.setPassword("k");
-
+        user.setPassword(BCrypt.hashpw("k",BCrypt.gensalt(4)));
         User userInvalid = new User();
         userInvalid.setUsername("test");
-        userInvalid.setPassword("wrong password");
+        userInvalid.setPassword(BCrypt.hashpw("wrong password)",BCrypt.gensalt(4)));
 
         when(userRepository.findByUsername("test")).thenReturn(user);
 
@@ -236,15 +236,17 @@ public class UserServiceImplTests {
     public void LoginUserWithBlockedUser_shouldThrow() {
 
         //Arrange
-        User userBlocked = new User();
-        userBlocked.setUsername("test");
-        userBlocked.setPassword("password");
-        userBlocked.setIsActive(false);
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("password");
 
-        when(userRepository.findByUsername("test")).thenReturn(userBlocked);
+        User foundUser = new User();
+        foundUser.setPassword(BCrypt.hashpw("password",BCrypt.gensalt(4)));
+        foundUser.setIsActive(false);
+        when(userRepository.findByUsername("test")).thenReturn(foundUser);
 
         //Act
-        userService.login(userBlocked);
+        userService.login(user);
     }
 
     @Test
@@ -255,13 +257,17 @@ public class UserServiceImplTests {
         user.setPassword("password");
         user.setIsActive(true);
 
-        when(userRepository.findByUsername("test")).thenReturn(user);
+        User foundUser = new User();
+        foundUser.setUsername("test");
+        foundUser.setPassword(BCrypt.hashpw("password",BCrypt.gensalt(4)));
+        foundUser.setIsActive(true);
+        when(userRepository.findByUsername("test")).thenReturn(foundUser);
 
         //Act
         User loggedUser = userService.login(user);
 
         //Assert
-        Assert.assertEquals(user,loggedUser);
+        Assert.assertEquals(foundUser,loggedUser);
     }
 
     @Test(expected = UsernameExistsException.class)
