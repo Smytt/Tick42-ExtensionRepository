@@ -17,5 +17,4 @@ public class QuicksilverApplication {
     public static void main(String[] args) {
         SpringApplication.run(QuicksilverApplication.class, args);
     }
-
 }

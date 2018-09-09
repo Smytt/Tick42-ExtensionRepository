@@ -660,13 +660,17 @@ let app = (() => {
     function handle(e) {
         $('.errors').empty();
         try {
-            console.log(e['responseJSON'])
             e['responseJSON'].forEach(error => $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + error + '</p>'));
+            console.log(e['responseJSON'])
         }
         catch (err) {
-        console.
-            console.log(e['responseJSON'])
-            $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseText'] + '</p>');
+            try{
+                $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseJSON'].message + '</p>');
+                console.log(e['responseJSON'].message)
+            }catch{
+                $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseText'] + '</p>');
+                console.log(e['responseText'])
+    }
         }
     }
 
