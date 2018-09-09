@@ -49,7 +49,7 @@ public class RatingRepositoryImpl implements RatingRepository {
                     .uniqueResult();
             session.getTransaction().commit();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
         }
         return rating;
 
