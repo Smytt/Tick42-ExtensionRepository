@@ -196,6 +196,7 @@ let app = (() => {
             } else {
                 remote.rateExtension(extensionId, userRating).then(
                     rating => {
+                    rating = render.extensionRating(rating);
                         let displayRating = {
                             rating,
                             timesRated

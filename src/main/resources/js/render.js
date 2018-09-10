@@ -47,12 +47,18 @@ let render = (() => {
         return extensions;
     }
 
+    let extensionRating = (rating) => {
+        rating = +rating.toFixed(2);
+    return rating;
+    }
+
     return {
         searchResults,
         extension,
         profile,
         edit,
         shortenTitle,
-        shortenTitleWhenAllLoaded
+        shortenTitleWhenAllLoaded,
+        extensionRating
     }
 })();

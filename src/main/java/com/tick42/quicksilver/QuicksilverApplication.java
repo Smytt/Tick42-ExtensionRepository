@@ -16,8 +16,5 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 public class QuicksilverApplication {
     public static void main(String[] args) {
         SpringApplication.run(QuicksilverApplication.class, args);
-        double double10 = 10;
-        System.out.println(double10 =double10/3);
-        System.out.println(double10 * 3);
     }
 }
