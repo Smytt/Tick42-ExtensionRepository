@@ -122,4 +122,50 @@ public class RatingServiceImplTests {
         Assert.assertEquals(4,user.getRating(),0);
 
     }
+
+    @Test
+    public void userRatingOnExtensionDelete_whenUserHasOnlyOneExtension_ShouldReturnZero(){
+
+        //Arrange
+        User user = new User();
+        user.setRating(4);
+        user.setExtensionsRated(1);
+
+        Extension extension = new Extension();
+        extension.setId(1);
+        extension.setRating(4);
+        extension.setTimesRated(2);
+        extension.setOwner(user);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        //Act
+        ratingService.userRatingOnExtensionDelete(extension.getId());
+        //Assert
+
+        Assert.assertEquals(0,user.getRating(),0);
+        Assert.assertEquals(0,user.getExtensionsRated(),0);
+    }
+
+    @Test
+    public void UserRatingOnExtensionDelete_WhenExtensionRatingIsZero_ShouldReturnSame(){
+
+        //Arrange
+        User user = new User();
+        user.setRating(4);
+        user.setExtensionsRated(2);
+
+        Extension extension = new Extension();
+        extension.setId(1);
+        extension.setRating(0);
+        extension.setTimesRated(0);
+        extension.setOwner(user);
+
+        when(extensionRepository.findById(1)).thenReturn(extension);
+        //Act
+        ratingService.userRatingOnExtensionDelete(extension.getId());
+        //Assert
+
+        Assert.assertEquals(4,user.getRating(),0);
+        Assert.assertEquals(2,user.getExtensionsRated(),0);
+    }
 }
