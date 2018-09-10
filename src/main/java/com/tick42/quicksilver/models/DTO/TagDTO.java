@@ -22,6 +22,8 @@ public class TagDTO {
         setTotalExtensions(tag.getExtensions().size());
         setExtensions(tag.getExtensions()
                 .stream()
+                .filter(x -> !x.getIsPending())
+                .filter(x -> x.getOwner().getIsActive())
                 .map(ExtensionDTO::new)
                 .collect(Collectors.toList()));
     }
