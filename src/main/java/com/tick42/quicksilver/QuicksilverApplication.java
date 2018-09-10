@@ -11,7 +11,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @SpringBootApplication
-//@EnableScheduling
+@EnableScheduling
 @EnableConfigurationProperties
 public class QuicksilverApplication {
     public static void main(String[] args) {

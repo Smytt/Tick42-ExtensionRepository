@@ -19,11 +19,13 @@ public class TagDTO {
 
     public TagDTO(Tag tag) {
         setTag(tag.getName());
-        setTotalExtensions(tag.getExtensions().size());
         setExtensions(tag.getExtensions()
                 .stream()
+                .filter(x -> !x.getIsPending())
+                .filter(x -> x.getOwner().getIsActive())
                 .map(ExtensionDTO::new)
                 .collect(Collectors.toList()));
+        setTotalExtensions(getExtensions().size());
     }
 
     public String getTag() {
