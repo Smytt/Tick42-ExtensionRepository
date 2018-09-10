@@ -50,8 +50,8 @@ let app = (() => {
         remote.getUsers(state).then(
             show.adminView
         ).catch(e => {
-                     handle(e);
-                 })
+            handle(e);
+        })
     }
 
     function getGithubSettingsView(e) {
@@ -62,7 +62,6 @@ let app = (() => {
                 $('.admin-buttons button').removeClass('current');
                 $(this).addClass('current');
             }
-
         )
     }
 
@@ -167,8 +166,7 @@ let app = (() => {
                     res = render.extension(res)
                     show.extension(res)
                 }
-
-                ).catch(e => {
+            ).catch(e => {
                 handle(e);
             });
         } else {
@@ -196,12 +194,12 @@ let app = (() => {
             } else {
                 remote.rateExtension(extensionId, userRating).then(
                     rating => {
-                    rating = render.extensionRating(rating);
+                        rating = render.extensionRating(rating);
                         let displayRating = {
                             rating,
                             timesRated
                         }
-                        if(currentRatedStatus == 0){
+                        if (currentRatedStatus == 0) {
                             timesRated = parseInt(timesRated) + 1;
                             displayRating = {
                                 rating,
@@ -209,9 +207,9 @@ let app = (() => {
                             }
                             $('.info .rating').attr('id', rating);
                             $('.info .rating').attr('timesRated', timesRated);
-                          show.extensionRating(displayRating)
-                          show.extensionRatingStar(displayRating)
-                        }else{
+                            show.extensionRating(displayRating)
+                            show.extensionRatingStar(displayRating)
+                        } else {
                             show.extensionRating(displayRating)
                             show.extensionRatingStar(displayRating)
                             $('.info .rating').attr('id', userRating);
@@ -616,7 +614,7 @@ let app = (() => {
                 show.pending(res)
             }
         ).catch(e => {
-                     handle(e);
+            handle(e);
         })
     }
 
@@ -671,18 +669,18 @@ let app = (() => {
             console.log(e['responseJSON'])
         }
         catch (err) {
-            try{
+            try {
                 $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseJSON'].message + '</p>');
                 console.log(e['responseJSON'].message)
-                if(e['responseJSON'].message == "Jwt token has expired."){
+                if (e['responseJSON'].message == "Jwt token has expired.") {
                     logout();
                     getLoginView();
                     $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseJSON'].message + '</p>');
                 }
-            }catch{
+            } catch (e) {
                 $('.errors').append('<p><i class="fas fa-exclamation-triangle"></i>' + e['responseText'] + '</p>');
                 console.log(e['responseText'])
-    }
+            }
         }
     }
 
