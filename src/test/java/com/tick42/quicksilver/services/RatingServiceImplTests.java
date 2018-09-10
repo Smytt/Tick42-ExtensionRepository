@@ -28,7 +28,8 @@ public class RatingServiceImplTests {
     @Mock
     private UserRepository userRepository;
 
-    @Mock RatingRepository ratingRepository;
+    @Mock
+    RatingRepository ratingRepository;
 
     @InjectMocks
     private RatingServiceImpl ratingService;
@@ -67,7 +68,7 @@ public class RatingServiceImplTests {
         Rating newRating = new Rating(3, 1, 1);
 
         //Act
-        extension = ratingService.newExtensionRating( currentUserRatingForExtension, newRating, extension);
+        extension = ratingService.newExtensionRating(currentUserRatingForExtension, newRating, extension);
 
         //Assert
         Assert.assertEquals(2.50, extension.getRating(), 0);
@@ -90,7 +91,7 @@ public class RatingServiceImplTests {
     }
 
     @Test(expected = ExtensionNotFoundException.class)
-    public void userRatingOnExtensionDelete_whitNonexistentExtension_ShouldThrow(){
+    public void userRatingOnExtensionDelete_whitNonexistentExtension_ShouldThrow() {
 
         //Arrange
 
@@ -101,7 +102,7 @@ public class RatingServiceImplTests {
     }
 
     @Test
-    public void userRatingOnExtensionDelete(){
+    public void userRatingOnExtensionDelete() {
 
         //Arrange
         User user = new User();
@@ -119,12 +120,12 @@ public class RatingServiceImplTests {
         ratingService.userRatingOnExtensionDelete(extension.getId());
         //Assert
 
-        Assert.assertEquals(4,user.getRating(),0);
+        Assert.assertEquals(4, user.getRating(), 0);
 
     }
 
     @Test
-    public void userRatingOnExtensionDelete_whenUserHasOnlyOneExtension_ShouldReturnZero(){
+    public void userRatingOnExtensionDelete_whenUserHasOnlyOneExtension_ShouldReturnZero() {
 
         //Arrange
         User user = new User();
@@ -142,12 +143,12 @@ public class RatingServiceImplTests {
         ratingService.userRatingOnExtensionDelete(extension.getId());
         //Assert
 
-        Assert.assertEquals(0,user.getRating(),0);
-        Assert.assertEquals(0,user.getExtensionsRated(),0);
+        Assert.assertEquals(0, user.getRating(), 0);
+        Assert.assertEquals(0, user.getExtensionsRated(), 0);
     }
 
     @Test
-    public void UserRatingOnExtensionDelete_WhenExtensionRatingIsZero_ShouldReturnSame(){
+    public void UserRatingOnExtensionDelete_WhenExtensionRatingIsZero_ShouldReturnSame() {
 
         //Arrange
         User user = new User();
@@ -165,7 +166,26 @@ public class RatingServiceImplTests {
         ratingService.userRatingOnExtensionDelete(extension.getId());
         //Assert
 
-        Assert.assertEquals(4,user.getRating(),0);
-        Assert.assertEquals(2,user.getExtensionsRated(),0);
+        Assert.assertEquals(4, user.getRating(), 0);
+        Assert.assertEquals(2, user.getExtensionsRated(), 0);
     }
+
+    @Test
+    public void newUserRating_whenCurrentExtensionRating_isZero() {
+        Extension extension = new Extension();
+
+        User user = new User();
+        user.setRating(2);
+        user.setExtensionsRated(1);
+
+        extension.setRating(0);
+        extension.setOwner(user);
+        double currentRating = 0;
+        int rating = 5;
+
+        user = ratingService.newUserRating(currentRating, extension, rating);
+
+        Assert.assertEquals(3.5, user.getRating(), 0);
+    }
+
 }

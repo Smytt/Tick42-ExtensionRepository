@@ -50,7 +50,8 @@ public class RatingServiceImpl implements RatingService {
         return ratingRepository.findExtensionRatingByUser(extensionId, userId);
     }
 
-    private void newUserRating(double currentExtensionRating, Extension extension, int rating) {
+    @Override
+    public User newUserRating(double currentExtensionRating, Extension extension, int rating) {
         User user = extension.getOwner();
         double userRating = user.getRating();
         int extensionsRated = user.getExtensionsRated();
@@ -63,6 +64,7 @@ public class RatingServiceImpl implements RatingService {
             user.setRating(((userRating * extensionsRated - currentExtensionRating) + extension.getRating()) / extensionsRated);
             userRepository.update(user);
         }
+        return user;
     }
 
     @Override

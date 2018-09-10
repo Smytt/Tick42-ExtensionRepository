@@ -10,6 +10,8 @@ public interface RatingService {
 
     int userRatingForExtension(int extensionId, int userId);
 
+    User newUserRating(double currentExtensionRating, Extension extension, int rating);
+
     Extension newExtensionRating(double userRatingForExtension, Rating newRating, Extension extension);
 
     User userRatingOnExtensionDelete(int userExtension);
